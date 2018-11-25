@@ -27,4 +27,20 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public static function userTypeToStr($type)
+    {
+        switch ($type) {
+            case 'manager':
+                return 'Manager';
+            case 'cook':
+                return 'Cozinheiro';
+            case 'cashier':
+                return 'Caixa';
+            case 'waiter':
+                return 'Empregado';
+        }
+
+        return 'Desconhecido';
+    }
 }
