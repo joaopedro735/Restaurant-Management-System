@@ -1,12 +1,5 @@
 <template>
     <div>
-        <!-- <div class="jumbotron">
-            <h1>Users</h1>
-        </div>
-
-        <list-users :users="users"></list-users>
-    </div> -->
-
         <div class="container">
             <div class="row">
                 <h1 class="text-center">Users</h1>

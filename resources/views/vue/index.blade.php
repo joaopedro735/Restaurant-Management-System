@@ -29,6 +29,11 @@
                         <router-link to="/users">Users</router-link>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a>
+                        <router-link to="/login">Entrar</router-link>
+                    </a>
+                </li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

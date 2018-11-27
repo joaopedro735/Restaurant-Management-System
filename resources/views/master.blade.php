@@ -82,7 +82,7 @@
         
         @yield('pagescript') 
         
-        <hr>
+        <!-- <hr>
         
         <footer class="footer">
             <div class="text-center center-block">
@@ -90,7 +90,7 @@
                 <a href="https://twitter.com/"><i id="social-tw" class="fa fa-twitter-square fa-3x social"></i></a>
                 <a href="mailto:rest@urantte.tk"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
             </div>
-        </footer>
+        </footer>-->
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"><\/script>')</script>

@@ -19,3 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('users', 'UserControllerAPI@index');
 Route::get('menu', 'ItemControllerAPI@index');
+
+Route::post('login', 'LoginControllerAPI@login');
+Route::middleware('auth:api')->post('logout', 'LoginControllerAPI@logout');

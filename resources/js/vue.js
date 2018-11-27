@@ -32,10 +32,13 @@ const menu = Vue.component('items-component', require('./components/menu.vue'));
 const dishList = Vue.component('list-dishes', require('./components/dishList.vue'));
 const drinksList = Vue.component('list-drinks', require('./components/drinkList.vue'));
 
+const login = Vue.component('login-component', require('./components/login.vue'));
+
 const routes = [
     { path: '/', redirect: '/menu' },
     { path: '/users', component: users },
-    { path: '/menu', component: menu }
+    { path: '/menu', component: menu },
+    { path: '/login', component: login }
 ];
 
 const router = new VueRouter({ routes });
