@@ -41,10 +41,15 @@ const routes = [
     { path: '/login', component: login }
 ];
 
-const router = new VueRouter({ routes });
+const router = new VueRouter({
+    routes
+});
 
 const app = new Vue({
     // Elemento que o vue vai poder "gerir"
     el: '#app',
-    router
+    router,
+    data: {
+        userToken: undefined
+    }
 });
