@@ -39,6 +39,7 @@ module.exports = {
         })
         .then(response => {
             this.$root.userToken = response.data.access_token;
+            this.$root.isUserAuthenticated = true;
             console.dir(this.$root.userToken);
         })
         .catch(error => {

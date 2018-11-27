@@ -14356,7 +14356,8 @@ var app = new Vue({
     el: '#app',
     router: router,
     data: {
-        userToken: undefined
+        userToken: undefined,
+        isUserAuthenticated: false
     }
 });
 
@@ -52201,7 +52202,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -52251,6 +52252,7 @@ module.exports = {
                 password: this.password
             }).then(function (response) {
                 _this.$root.userToken = response.data.access_token;
+                _this.$root.isUserAuthenticated = true;
                 console.dir(_this.$root.userToken);
             }).catch(function (error) {
                 console.dir(error);

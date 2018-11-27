@@ -24,7 +24,7 @@
                         <router-link to="/menu">Menu</router-link>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li v-if="isUserAuthenticated" class="nav-item">
                     <a>
                         <router-link to="/users">Users</router-link>
                     </a>

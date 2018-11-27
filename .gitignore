@@ -15,3 +15,10 @@ yarn-error.log
 .phpunit.result.cache
 /Http/Controllers/LoginControllerAPI.php
 /config/auth.php
+database/migrations/2018_10_30_102628_initial_migration.php
+database/migrations/2018_10_30_102628_initial_migration.php
+database/seeds/DatabaseSeeder.php
+database/seeds/ItemsSeeder.php
+database/seeds/MealsSeeder.php
+database/seeds/RestaurantTablesSeeder.php
+database/seeds/UsersSeeder.php

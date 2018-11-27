@@ -50,6 +50,7 @@ const app = new Vue({
     el: '#app',
     router,
     data: {
-        userToken: undefined
+        userToken: undefined,
+        isUserAuthenticated: false
     }
 });
