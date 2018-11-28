@@ -10,11 +10,11 @@
             <div class="form-group">
                 <label for="inputEmail">Endereço de email</label>
                 <input
-                type="email" class="form-control" id="inputEmail" v-model="email" placeholder="Email">
+                type="email" class="form-control" id="inputEmail" v-model.trim="user.email" placeholder="Email">
             </div>
             <div class="form-group">
                 <label for="inputPassword">Palavra pass</label>
-                <input type="password" class="form-control" id="inputPassword" v-model="password" placeholder="Palavra passe">
+                <input type="password" class="form-control" id="inputPassword" v-model="user.password" placeholder="Palavra passe">
             </div>
             <button @click.prevent="login()" class="btn btn-primary">Entrar</button>
         </form>
@@ -22,25 +22,21 @@
 </template>
 
 <script>
-module.exports = {
+export default {
   data: function() {
     return {
         title: 'Login',
-        email: '',
-        password: '',
+        user: {
+            email: '',
+            password: ''
+        },
     };
   },
   methods: {
-    login: function() {
-      axios
-        .post("/api/login", {
-            email: this.email,
-            password: this.password
-        })
+    login() {
+      axios.post("/api/login", this.user)
         .then(response => {
-            this.$root.userToken = response.data.access_token;
-            this.$root.isUserAuthenticated = true;
-            console.dir(this.$root.userToken);
+            this.$store.commit('setToken',response.data.access_token);
         })
         .catch(error => {
             console.dir(error);

@@ -24,12 +24,12 @@
                         <router-link to="/menu">Menu</router-link>
                     </a>
                 </li>
-                <li v-if="isUserAuthenticated" class="nav-item">
+                <li v-show="this.$store.state.token" class="nav-item">
                     <a>
                         <router-link to="/users">Users</router-link>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li v-show="!this.$store.state.token" class="nav-item">
                     <a>
                         <router-link to="/login">Entrar</router-link>
                     </a>

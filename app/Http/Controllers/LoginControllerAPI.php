@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-define('YOUR_SERVER_URL', 'http://projeto.dad');
+define('YOUR_SERVER_URL', env('APP_URL'));
 // Check "oauth_clients" table for next 2 values:
-define('CLIENT_ID', '2');
-define('CLIENT_SECRET','jgVYJdES12rNNFgCAR3yZhFRTV5ZQ2h3VBgJ1GLb');
+define('CLIENT_ID', env('CLIENT_ID'));
+define('CLIENT_SECRET', env('CLIENT_SECRET'));
 
+use Auth;
 use Illuminate\Http\Request;
 
 class LoginControllerAPI extends Controller
@@ -39,8 +40,8 @@ class LoginControllerAPI extends Controller
 
     public function logout()
     {
-        \Auth::guard('api')->user()->token()->revoke();
-        \Auth::guard('api')->user()->token()->delete();
+        Auth::guard('api')->user()->token()->revoke();
+        Auth::guard('api')->user()->token()->delete();
         return response()->json(['msg'=>'Token revoked'], 200);
     }
 }

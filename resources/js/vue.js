@@ -17,6 +17,7 @@ window.Vue = require('vue');
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
+import store from './stores/global-store';
 
 const users = Vue.component('users-component', require('./components/users.vue'));
 // @ Unused
@@ -52,5 +53,6 @@ const app = new Vue({
     data: {
         userToken: undefined,
         isUserAuthenticated: false
-    }
+    },
+    store
 });
