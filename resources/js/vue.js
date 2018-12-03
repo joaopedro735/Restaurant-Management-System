@@ -12,12 +12,13 @@ window.Vue = require('vue');
 
 /**
  * Importar o vue-router
- * √â necess√°rio instalar o vue-router primeiro (npm install vue-router --save)
+ * … necess·rio instalar o vue-router primeiro (npm install vue-router --save)
  */
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 import store from './stores/global-store';
+Vue.use(store);
 
 const users = Vue.component('users-component', require('./components/users.vue'));
 // @ Unused
@@ -34,12 +35,14 @@ const dishList = Vue.component('list-dishes', require('./components/dishList.vue
 const drinksList = Vue.component('list-drinks', require('./components/drinkList.vue'));
 
 const login = Vue.component('login-component', require('./components/login.vue'));
+const logout = Vue.component('logout-component', require('./components/logout.vue'));
 
 const routes = [
     { path: '/', redirect: '/menu' },
     { path: '/users', component: users },
     { path: '/menu', component: menu },
-    { path: '/login', component: login }
+    { path: '/login', component: login },
+    { path: '/logout', component: logout }
 ];
 
 const router = new VueRouter({

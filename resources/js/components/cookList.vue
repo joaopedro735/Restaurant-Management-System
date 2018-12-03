@@ -21,7 +21,7 @@
 
 <script>
 module.exports = {
-    props: ["cooks"],
+    props: ['cooks'],
     data: function() {
         return {};
     },

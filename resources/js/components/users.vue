@@ -86,12 +86,10 @@
                 this.waiters = this.users.filter(function (elem) {
                     return elem.type == 'waiter';
                 });
-                console.table(this.waiters);
 
                 this.cashiers = this.users.filter(function (elem) {
                     return elem.type == 'cashier';
                 });
-                console.table(this.cashiers);
             })
             .catch((error) => {
                 console.dir(error);
