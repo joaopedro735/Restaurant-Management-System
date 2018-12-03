@@ -5,8 +5,6 @@
 @section('content')
 
 
-
-<!-- -->
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -24,18 +22,60 @@
                         <router-link to="/menu">Menu</router-link>
                     </a>
                 </li>
+
+                {{-- SEM STORED TOKENS --}}
+
+                {{-- USERS --}}
+                {{-- <li v-if="isUserAuthenticated" class="nav-item">
+                    <a>
+                        <router-link to="/users">Users</router-link>
+                    </a>
+                </li> --}}
+
+                {{-- LOGIN LINK --}}
+                {{-- <li v-if="!isUserAuthenticated" class="nav-item">
+                    <a>
+                        <router-link to="/login">Entrar</router-link>
+                    </a>
+                </li> --}}
+
+                {{-- LOGOUT LINK --}}
+                {{-- <li v-if="isUserAuthenticated" class="nav-item">
+                    <a>
+                        <router-link to="/logout">Logout</router-link>
+                    </a>
+                </li> --}}
+
+                {{-- COM STORED TOKENS --}}
+                {{-- USERS --}}
                 <li v-show="this.$store.state.token" class="nav-item">
                     <a>
                         <router-link to="/users">Users</router-link>
                     </a>
                 </li>
+
+                {{-- ACCOUNT PAGE LINK --}}
+                <li v-show="this.$store.state.token" class="nav-item">
+                    <a>
+                        <router-link to="/account">Conta</router-link>
+                    </a>
+                </li>
+
+                {{-- LOGIN LINK --}}
                 <li v-show="!this.$store.state.token" class="nav-item">
                     <a>
                         <router-link to="/login">Entrar</router-link>
                     </a>
                 </li>
+
+                {{-- LOGOUT LINK --}}
+                <li v-if="this.$store.state.token" class="nav-item">
+                    <a>
+                        <router-link to="/logout">Logout</router-link>
+                    </a>
+                </li>
             </ul>
-        </div><!--/.nav-collapse -->
+        </div>
     </div>
 </nav>
 

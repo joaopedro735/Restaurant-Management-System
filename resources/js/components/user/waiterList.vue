@@ -2,15 +2,15 @@
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th>Nome</th>
-                <th>Categoria</th>
-                <th>Email</th>
-                <th>Fotografia</th>
+                <th><strong>Nome</strong></th>
+                <th><strong>Categoria</strong></th>
+                <th><strong>Email</strong></th>
+                <th><strong>Fotografia</strong></th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="(waiter) in waiters" :key="waiter.id">
-                <td>{{ waiter.name }}</td>
+                <td><strong>{{ waiter.name }}</strong></td>
                 <td>{{ waiter.type }}</td>
                 <td>{{ waiter.email }}</td>
                 <td align="center"><img :src="getPhoto(waiter.photo_url)"></td>

@@ -1,7 +1,6 @@
 <template>
     <div>
-        table.table-light>thead>th#header-$*5>tbody>td#elem-$*5
-        tbody>td#elem-$*5
+
     </div>
 </template>
 
@@ -33,6 +32,8 @@
                 // TODO: Use Vuex stores
                 this.$root.userToken = undefined;
                 this.$root.isUserAuthenticated = false;
+
+                this.$store.commit('setToken', undefined);
 
                 this.$router.push('/menu');
             })
