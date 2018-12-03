@@ -53510,7 +53510,7 @@ module.exports = {
             _this.$root.userToken = undefined;
             _this.$root.isUserAuthenticated = false;
 
-            _this.$store.commit('setToken', undefined);
+            _this.$store.commit('clearToken');
 
             _this.$router.push('/menu');
         }).catch(function (error) {

@@ -33,7 +33,7 @@
                 this.$root.userToken = undefined;
                 this.$root.isUserAuthenticated = false;
 
-                this.$store.commit('setToken', undefined);
+                this.$store.commit('clearToken');
 
                 this.$router.push('/menu');
             })
