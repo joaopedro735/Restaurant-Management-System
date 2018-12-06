@@ -72,6 +72,16 @@
 
         },
         mounted() {
+            /* if (!this.$root.isUserAuthenticated) {
+                this.$router.push('/login');
+                return;
+            } */
+
+            if (!this.$store.state.token) {
+                this.$router.push('/login');
+                return;
+            }
+
             axios.get('/api/users').then(response => {
                 this.users = response.data.data;
 

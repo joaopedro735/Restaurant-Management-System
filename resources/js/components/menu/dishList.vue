@@ -2,18 +2,18 @@
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th>Nome</th>
-                <th>Categoria</th>
-                <th>Email</th>
-                <th>Fotografia</th>
+                <th><strong>Prato</strong></th>
+                <th><strong>Preço</strong></th>
+                <th><strong>Descrição</strong></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(cook) in cooks" :key="cook.id">
-                <td>{{ cook.name }}</td>
-                <td>{{ cook.type }}</td>
-                <td>{{ cook.email }}</td>
-                <td align="center"><img :src="getPhoto(cook.photo_url)"></td>
+            <tr v-for="(dish) in dishes" :key="dish.id">
+                <td><strong>{{ dish.name }}</strong></td>
+                <td>{{ dish.price }}</td>
+                <td>{{ dish.description }}</td>
+                <td align="center"><img :src="getPhoto(dish.photo_url)"></td>
             </tr>
         </tbody>
     </table>
@@ -21,7 +21,7 @@
 
 <script>
 module.exports = {
-    props: ['cooks'],
+    props: ['dishes'],
     data: function() {
         return {};
     },
@@ -33,7 +33,7 @@ module.exports = {
     mounted() {}
 };
 </script>
-
+    
 <style scoped>
     img {
         max-height: 60px;

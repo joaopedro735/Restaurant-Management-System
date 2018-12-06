@@ -2,15 +2,15 @@
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th>Nome</th>
-                <th>Categoria</th>
-                <th>Email</th>
-                <th>Fotografia</th>
+                <th><strong>Nome</strong></th>
+                <th><strong>Categoria</strong></th>
+                <th><strong>Email</strong></th>
+                <th><strong>Fotografia</strong></th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="(manager) in managers" :key="manager.id">
-                <td>{{ manager.name }}</td>
+                <td><strong>{{ manager.name }}</strong></td>
                 <td>{{ manager.type }}</td>
                 <td>{{ manager.email }}</td>
                 <td align="center"><img :src="getPhoto(manager.photo_url)"></td>
