@@ -15,12 +15,14 @@ window.Vue = require('vue');
  * É necessário instalar o vue-router primeiro (npm install vue-router --save)
  */
 import VueRouter from 'vue-router';
-Vue.use(VueRouter);
-
 import store from './stores/global-store';
-Vue.use(store);
+import Vuetify from 'vuetify';
 
-const users = Vue.component('users-component', require('./components/users.vue'));
+Vue.use(VueRouter);
+Vue.use(store);
+Vue.use(Vuetify);
+
+const users = Vue.component('users-component', require('./components/users2.vue'));
 // @ Unused
 //const userList = Vue.component('list-users', require('./components/userList.vue'));
 const managerList = Vue.component('list-managers', require('./components/managerList.vue'));
@@ -32,20 +34,24 @@ const menu = Vue.component('items-component', require('./components/menu.vue'));
 // @ Unused
 //const menuList = Vue.component('list-menu', require('./components/menuList.vue'));
 const dishList = Vue.component('list-dishes', require('./components/dishList.vue'));
-const drinksList = Vue.component('list-drinks', require('./components/drinkList.vue'));
+const rinksList = Vue.component('list-drinks', require('./components/drinkList.vue'));
 
 const login = Vue.component('login-component', require('./components/login.vue'));
 const logout = Vue.component('logout-component', require('./components/logout.vue'));
+const footer = Vue.component('footer-component', require('./components/footer'));
+
+import Home from './components/home';
 
 const routes = [
-    { path: '/', redirect: '/menu' },
+    { path: '/', component: Home, name: 'home'},
     { path: '/users', component: users },
     { path: '/menu', component: menu },
-    { path: '/login', component: login },
+    // { path: '/login', component: login },
     { path: '/logout', component: logout }
 ];
 
 const router = new VueRouter({
+    mode: 'history',
     routes
 });
 
@@ -54,8 +60,6 @@ const app = new Vue({
     el: '#app',
     router,
     data: {
-        userToken: undefined,
-        isUserAuthenticated: false
     },
     store
 });
