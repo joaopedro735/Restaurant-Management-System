@@ -15,7 +15,8 @@
 
 
             {{--<v-btn flat v-show="!this.$store.state.token" to="/login">Login</v-btn>--}}
-            <login-component v-show="!this.$store.state.token">
+            <login-component v-show="!this.$store.state.token"></login-component>
+            <v-btn flat v-show="this.$store.state.token" to="/logout">Logout</v-btn>
         </v-toolbar>
 
         <v-content>

@@ -11,6 +11,7 @@
     },
     "devDependencies": {
         "axios": "^0.18",
+        "babel-plugin-syntax-dynamic-import": "^6.18.0",
         "bootstrap": "^4.0.0",
         "cross-env": "^5.1",
         "jquery": "^3.2",
@@ -19,6 +20,8 @@
         "popper.js": "^1.14.6",
         "vue": "^2.5.17",
         "vue-router": "^3.0.2",
+        "vue-toasted": "^1.1.26",
+        "vuetify-loader": "^1.0.8",
         "vuex": "^3.0.1",
         "vuex-persist": "^2.0.0"
     },
