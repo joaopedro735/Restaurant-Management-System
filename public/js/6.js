@@ -83,37 +83,34 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 //
 //
 //
-
 module.exports = {
-    data: function data() {
-        return {
-            title: 'Menu',
-            menu: [],
-            dishes: [],
-            drinks: [],
-            showDishes: true,
-            showDrinks: true,
-            showAll: true
-        };
-    },
-    methods: {},
-    mounted: function mounted() {
-        var _this = this;
+  data: function data() {
+    return {
+      title: 'Menu',
+      menu: [],
+      dishes: [],
+      drinks: [],
+      showDishes: true,
+      showDrinks: true,
+      showAll: true
+    };
+  },
+  methods: {},
+  mounted: function mounted() {
+    var _this = this;
 
-        axios.get('/api/menu').then(function (response) {
-            _this.menu = response.data.data;
-
-            _this.drinks = _this.menu.filter(function (elem) {
-                return elem.type == 'drink';
-            });
-
-            _this.dishes = _this.menu.filter(function (elem) {
-                return elem.type == 'dish';
-            });
-        }).catch(function (error) {
-            console.dir(error);
-        });
-    }
+    axios.get('/api/menu').then(function (response) {
+      _this.menu = response.data.data;
+      _this.drinks = _this.menu.filter(function (elem) {
+        return elem.type == 'drink';
+      });
+      _this.dishes = _this.menu.filter(function (elem) {
+        return elem.type == 'dish';
+      });
+    }).catch(function (error) {
+      console.dir(error);
+    });
+  }
 };
 
 /***/ }),

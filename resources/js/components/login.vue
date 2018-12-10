@@ -20,7 +20,8 @@
                         transition="scale-transition"
                         dismissible
                         outline
-                >{{ alert.error }}</v-alert>
+                >{{ alert.error }}
+                </v-alert>
 
                 <v-card-text>
                     <v-form ref="form" v-model="form.valid" lazy-validation>
@@ -66,30 +67,34 @@
 </template>
 
 <script>
+
+    function initialState() {
+        return {
+            title: 'Login',
+            user: {
+                email: '',
+                password: ''
+            },
+            dialog: false,
+            alert: {
+                show: false,
+                error: ""
+            },
+            form: {
+                valid: true,
+                loading: false,
+                p_show: false,
+                rules: {
+                    required: v => !!v || 'Required.',
+                    min: v => v.length >= 3 || 'Min 3 characters',
+                    email: v => /.+@.+/.test(v) || 'E-mail must be valid'
+                }
+            },
+        };
+    }
     export default {
         data: () => {
-            return {
-                title: 'Login',
-                user: {
-                    email: '',
-                    password: ''
-                },
-                dialog: false,
-                alert: {
-                    show: false,
-                    error: ""
-                },
-                form: {
-                    valid: true,
-                    loading: false,
-                    p_show: false,
-                    rules: {
-                        required: v => !!v || 'Required.',
-                        min: v => v.length >= 3 || 'Min 3 characters',
-                        email: v => /.+@.+/.test(v) || 'E-mail must be valid'
-                    }
-                },
-            };
+            return initialState();
         },
         methods: {
             login() {
@@ -105,7 +110,7 @@
                                 duration: 3000,
                                 icon: "fingerprint"
                             });
-                        this.clear();
+                        Object.assign(this.$data, initialState());
                     })
                     .catch(error => {
                         this.form.loading = false;
@@ -121,7 +126,7 @@
                 if (this.$refs.form.validate()) {
                     this.login();
                 }
-            }
+            },
         }
     };
 </script>

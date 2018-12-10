@@ -35,7 +35,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -114,70 +114,76 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+function initialState() {
+  return {
+    title: 'Login',
+    user: {
+      email: '',
+      password: ''
+    },
+    dialog: false,
+    alert: {
+      show: false,
+      error: ""
+    },
+    form: {
+      valid: true,
+      loading: false,
+      p_show: false,
+      rules: {
+        required: function required(v) {
+          return !!v || 'Required.';
+        },
+        min: function min(v) {
+          return v.length >= 3 || 'Min 3 characters';
+        },
+        email: function email(v) {
+          return /.+@.+/.test(v) || 'E-mail must be valid';
+        }
+      }
+    }
+  };
+}
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    data: function data() {
-        return {
-            title: 'Login',
-            user: {
-                email: '',
-                password: ''
-            },
-            dialog: false,
-            alert: {
-                show: false,
-                error: ""
-            },
-            form: {
-                valid: true,
-                loading: false,
-                p_show: false,
-                rules: {
-                    required: function required(v) {
-                        return !!v || 'Required.';
-                    },
-                    min: function min(v) {
-                        return v.length >= 3 || 'Min 3 characters';
-                    },
-                    email: function email(v) {
-                        return (/.+@.+/.test(v) || 'E-mail must be valid'
-                        );
-                    }
-                }
-            }
-        };
-    },
-    methods: {
-        login: function login() {
-            var _this = this;
+  data: function data() {
+    return initialState();
+  },
+  methods: {
+    login: function login() {
+      var _this = this;
 
-            this.form.loading = true;
-            axios.post("/api/login", this.user).then(function (response) {
-                _this.$store.commit('setToken', response.data.access_token);
-                _this.form.loading = false;
-                _this.dialog = false;
-                _this.$toasted.success("Login successful", {
-                    position: "top-center",
-                    duration: 3000,
-                    icon: "fingerprint"
-                });
-                _this.clear();
-            }).catch(function (error) {
-                _this.form.loading = false;
-                _this.alert.error = error.response.data.msg;
-                _this.alert.show = true;
-                console.dir(error);
-            });
-        },
-        clear: function clear() {
-            this.$refs.form.reset();
-        },
-        submit: function submit() {
-            if (this.$refs.form.validate()) {
-                this.login();
-            }
-        }
+      this.form.loading = true;
+      axios.post("/api/login", this.user).then(function (response) {
+        _this.$store.commit('setToken', response.data.access_token);
+
+        _this.form.loading = false;
+        _this.dialog = false;
+
+        _this.$toasted.success("Login successful", {
+          position: "top-center",
+          duration: 3000,
+          icon: "fingerprint"
+        });
+
+        Object.assign(_this.$data, initialState());
+      }).catch(function (error) {
+        _this.form.loading = false;
+        _this.alert.error = error.response.data.msg;
+        _this.alert.show = true;
+        console.dir(error);
+      });
+    },
+    clear: function clear() {
+      this.$refs.form.reset();
+    },
+    submit: function submit() {
+      if (this.$refs.form.validate()) {
+        this.login();
+      }
     }
+  }
 });
 
 /***/ }),
@@ -237,7 +243,7 @@ var render = function() {
                     outline: ""
                   }
                 },
-                [_vm._v(_vm._s(_vm.alert.error))]
+                [_vm._v(_vm._s(_vm.alert.error) + "\n            ")]
               ),
               _vm._v(" "),
               _c(

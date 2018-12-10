@@ -39,18 +39,17 @@ exports.push([module.i, "\nimg[data-v-7ff4c4f0] {\n    max-height: 60px;\n    bo
 //
 //
 //
-
 module.exports = {
-    props: ['cashiers'],
-    data: function data() {
-        return {};
-    },
-    methods: {
-        getPhoto: function getPhoto(photo_url) {
-            return photo_url;
-        }
-    },
-    mounted: function mounted() {}
+  props: ['cashiers'],
+  data: function data() {
+    return {};
+  },
+  methods: {
+    getPhoto: function getPhoto(photo_url) {
+      return photo_url;
+    }
+  },
+  mounted: function mounted() {}
 };
 
 /***/ }),

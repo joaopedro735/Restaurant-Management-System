@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.7.15 on 2018-12-03 17:34:01.
+ * Generated for Laravel 5.7.16 on 2018-12-10 22:38:59.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -10630,7 +10630,7 @@ namespace Illuminate\Support\Facades {
         /**
          * Get the currently dispatched route instance.
          *
-         * @return \Illuminate\Routing\Route 
+         * @return \Illuminate\Routing\Route|null 
          * @static 
          */ 
         public static function current()
@@ -11124,6 +11124,7 @@ namespace Illuminate\Support\Facades {
      * @method static bool exists(string|array $key)
      * @method static bool has(string|array $key)
      * @method static mixed get(string $key, $default = null)
+     * @method static mixed pull(string $key, $default = null)
      * @method static void put(string|array $key, $value = null)
      * @method static string token()
      * @method static mixed remove(string $key)
@@ -12594,13 +12595,13 @@ namespace Illuminate\Support\Facades {
         /**
          * Force the scheme for URLs.
          *
-         * @param string $schema
+         * @param string $scheme
          * @return void 
          * @static 
          */ 
-        public static function forceScheme($schema)
+        public static function forceScheme($scheme)
         {
-            \Illuminate\Routing\UrlGenerator::forceScheme($schema);
+            \Illuminate\Routing\UrlGenerator::forceScheme($scheme);
         }
         
         /**

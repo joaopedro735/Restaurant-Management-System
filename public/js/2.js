@@ -118,18 +118,17 @@ exports.push([module.i, "\nimg[data-v-685f3ee2] {\n    max-height: 60px;\n    bo
 //
 //
 //
-
 module.exports = {
-    props: ['cooks'],
-    data: function data() {
-        return {};
-    },
-    methods: {
-        getPhoto: function getPhoto(photo_url) {
-            return photo_url;
-        }
-    },
-    mounted: function mounted() {}
+  props: ['cooks'],
+  data: function data() {
+    return {};
+  },
+  methods: {
+    getPhoto: function getPhoto(photo_url) {
+      return photo_url;
+    }
+  },
+  mounted: function mounted() {}
 };
 
 /***/ }),

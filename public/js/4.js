@@ -66,18 +66,17 @@ exports.push([module.i, "\nimg[data-v-bc08e69e] {\n    max-height: 60px;\n    bo
 //
 //
 //
-
 module.exports = {
-    props: ['drinks'],
-    data: function data() {
-        return {};
-    },
-    methods: {
-        getPhoto: function getPhoto(photo_url) {
-            return photo_url;
-        }
-    },
-    mounted: function mounted() {}
+  props: ['drinks'],
+  data: function data() {
+    return {};
+  },
+  methods: {
+    getPhoto: function getPhoto(photo_url) {
+      return photo_url;
+    }
+  },
+  mounted: function mounted() {}
 };
 
 /***/ }),

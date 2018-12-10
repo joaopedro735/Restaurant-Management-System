@@ -83,48 +83,72 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
-    data: function data() {
-        return {
-            totalUsers: 0,
-            users: [],
-            loading: true,
-            pagination: {},
-            headers: [{ text: '', value: 'photo_url', align: 'left', sortable: false, width: '60px' }, { text: 'Nome', value: 'name', width: '500px' }, { text: 'Tipo', value: 'type', width: '80px' }, { text: 'Email', value: 'email', width: '200px' }]
-        };
-    },
+  data: function data() {
+    return {
+      totalUsers: 0,
+      users: [],
+      loading: true,
+      pagination: {},
+      headers: [{
+        text: '',
+        value: 'photo_url',
+        align: 'left',
+        sortable: false,
+        width: '60px'
+      }, {
+        text: 'Nome',
+        value: 'name',
+        width: '500px'
+      }, {
+        text: 'Tipo',
+        value: 'type',
+        width: '80px'
+      }, {
+        text: 'Email',
+        value: 'email',
+        width: '200px'
+      }]
+    };
+  },
+  watch: {
+    pagination: {
+      handler: function handler() {
+        var _this = this;
 
-    watch: {
-        pagination: {
-            handler: function handler() {
-                var _this = this;
-
-                this.getDataFromApi().then(function (data) {
-                    _this.users = data.data.users;
-                    _this.totalUsers = data.data.totalUsers;
-                });
-            },
-
-            deep: true
-        }
-    },
-    methods: {
-        getDataFromApi: function getDataFromApi() {
-            var _this2 = this;
-
-            this.loading = true;
-            return axios.all([axios.get('/api/users', { params: { page: this.pagination.page, rowsPerPage: this.pagination.rowsPerPage } }), axios.get('/api/users', { params: { nmr: 0 } })]).then(axios.spread(function (usersRes, nmrRes) {
-                _this2.loading = false;
-                return {
-                    data: {
-                        users: usersRes.data.data,
-                        totalUsers: nmrRes.data
-                    }
-                };
-            }));
-        }
+        this.getDataFromApi().then(function (data) {
+          _this.users = data.data.users;
+          _this.totalUsers = data.data.totalUsers;
+        });
+      },
+      deep: true
     }
+  },
+  methods: {
+    getDataFromApi: function getDataFromApi() {
+      var _this2 = this;
+
+      this.loading = true;
+      return axios.all([axios.get('/api/users', {
+        params: {
+          page: this.pagination.page,
+          rowsPerPage: this.pagination.rowsPerPage
+        }
+      }), axios.get('/api/users', {
+        params: {
+          nmr: 0
+        }
+      })]).then(axios.spread(function (usersRes, nmrRes) {
+        _this2.loading = false;
+        return {
+          data: {
+            users: usersRes.data.data,
+            totalUsers: nmrRes.data
+          }
+        };
+      }));
+    }
+  }
 });
 
 /***/ }),

@@ -51,42 +51,44 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 //
 //
 //
-
 module.exports = {
-    data: function data() {
-        return {
-            title: 'Logout'
-        };
-    },
-    methods: {},
-    mounted: function mounted() {
-        var _this = this;
+  data: function data() {
+    return {
+      title: 'Logout'
+    };
+  },
+  methods: {},
+  mounted: function mounted() {
+    var _this = this;
 
-        if (!this.$store.state.token) {
-            this.$router.push('/home');
-            return;
-        }
-
-        var config = {
-            headers: {
-                'Authorization': 'Bearer ' + this.$store.state.token,
-                'Accept': 'application/json'
-            }
-        };
-
-        axios.post('/api/logout', {}, config).then(function (response) {
-            // TODO: Use Vuex stores
-            _this.$store.commit('clearToken');
-            _this.$router.push({ name: 'home' });
-            _this.$toasted.success("Logged out", {
-                position: "top-center",
-                duration: 3000,
-                icon: "exit_to_app"
-            });
-        }).catch(function (error) {
-            console.dir(error);
-        });
+    if (!this.$store.state.token) {
+      this.$router.push('/home');
+      return;
     }
+
+    var config = {
+      headers: {
+        'Authorization': 'Bearer ' + this.$store.state.token,
+        'Accept': 'application/json'
+      }
+    };
+    axios.post('/api/logout', {}, config).then(function (response) {
+      // TODO: Use Vuex stores
+      _this.$store.commit('clearToken');
+
+      _this.$router.push({
+        name: 'home'
+      });
+
+      _this.$toasted.success("Logged out", {
+        position: "top-center",
+        duration: 3000,
+        icon: "exit_to_app"
+      });
+    }).catch(function (error) {
+      console.dir(error);
+    });
+  }
 };
 
 /***/ }),
