@@ -15,14 +15,14 @@
 
         },
         mounted () {
-            if (!this.$root.isUserAuthenticated) {
-                this.$router.push('/menu');
+            if (!this.$store.state.token) {
+                this.$router.push('/home');
                 return;
             }
 
             var config = {
                 headers: {
-                    'Authorization': 'Bearer ' + this.$root.userToken,
+                    'Authorization': 'Bearer ' + this.$store.state.token,
                     'Accept': 'application/json'
                 }
             };
@@ -30,12 +30,14 @@
             axios.post('/api/logout', {}, config)
             .then(response => {
                 // TODO: Use Vuex stores
-                this.$root.userToken = undefined;
-                this.$root.isUserAuthenticated = false;
-
                 this.$store.commit('clearToken');
-
-                this.$router.push('/menu');
+                this.$router.push({name: 'home'});
+                this.$toasted.success("Logged out",
+                    {
+                        position: "top-center",
+                        duration: 3000,
+                        icon: "exit_to_app",
+                    });
             })
             .catch(error => {
                 console.dir(error);

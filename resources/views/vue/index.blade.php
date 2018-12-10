@@ -3,84 +3,29 @@
 @section('title', 'Restaurantte')
 
 @section('content')
+    <v-app>
+        <v-toolbar class="primary lighten-1">
+            <v-toolbar-title>Restaurantte</v-toolbar-title>
+
+            <v-btn flat exact :to="{name: 'home'}">Home</v-btn>
+            <v-btn flat v-show="this.$store.state.token" to="/menu">Menu</v-btn>
+            <v-btn flat v-show="this.$store.state.token" to="/users">Users</v-btn>
+
+            <v-spacer></v-spacer>
 
 
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/">Restaurantte</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="active">
-                    <a>
-                        <router-link to="/menu">Home</router-link>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a>
-                        <router-link to="/menu">Menu</router-link>
-                    </a>
-                </li>
+            {{--<v-btn flat v-show="!this.$store.state.token" to="/login">Login</v-btn>--}}
+            <login-component v-show="!this.$store.state.token"></login-component>
+            <v-btn flat v-show="this.$store.state.token" to="/logout">Logout</v-btn>
+        </v-toolbar>
 
-                {{-- SEM STORED TOKENS --}}
-
-                {{-- USERS --}}
-                {{-- <li v-if="isUserAuthenticated" class="nav-item">
-                    <a>
-                        <router-link to="/users">Users</router-link>
-                    </a>
-                </li> --}}
-
-                {{-- LOGIN LINK --}}
-                {{-- <li v-if="!isUserAuthenticated" class="nav-item">
-                    <a>
-                        <router-link to="/login">Entrar</router-link>
-                    </a>
-                </li> --}}
-
-                {{-- LOGOUT LINK --}}
-                {{-- <li v-if="isUserAuthenticated" class="nav-item">
-                    <a>
-                        <router-link to="/logout">Logout</router-link>
-                    </a>
-                </li> --}}
-
-                {{-- COM STORED TOKENS --}}
-                {{-- USERS --}}
-                <li v-show="this.$store.state.token" class="nav-item">
-                    <a>
-                        <router-link to="/users">Users</router-link>
-                    </a>
-                </li>
-
-                {{-- ACCOUNT PAGE LINK --}}
-                <li v-show="this.$store.state.token" class="nav-item">
-                    <a>
-                        <router-link to="/account">Conta</router-link>
-                    </a>
-                </li>
-
-                {{-- LOGIN LINK --}}
-                <li v-show="!this.$store.state.token" class="nav-item">
-                    <a>
-                        <router-link to="/login">Entrar</router-link>
-                    </a>
-                </li>
-
-                {{-- LOGOUT LINK --}}
-                <li v-if="this.$store.state.token" class="nav-item">
-                    <a>
-                        <router-link to="/logout">Logout</router-link>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<router-view></router-view>
-
+        <v-content>
+            <v-container fluid>
+                <router-view></router-view>
+            </v-container>
+        </v-content>
+        <footer-component></footer-component>
+    </v-app>
 @endsection
 @section('pagescript')
 <script src="js/vue.js"></script>

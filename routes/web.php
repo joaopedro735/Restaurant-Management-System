@@ -15,4 +15,4 @@
     return view('welcome');
 });*/
 
-Route::get('/','VueController@index');
+Route::get('/{any}','VueController@index')->where('any', '.*');

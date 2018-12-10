@@ -15,29 +15,38 @@ window.Vue = require('vue');
  * É necessário instalar o vue-router primeiro (npm install vue-router --save)
  */
 import VueRouter from 'vue-router';
-Vue.use(VueRouter);
-
 import store from './stores/global-store';
+import Vuetify from 'vuetify';
+import Toasted from 'vue-toasted';
+
+Vue.use(VueRouter);
+Vue.use(store);
+Vue.use(Vuetify);
+Vue.use(Toasted);
 
 /* Components para users */
-const users = Vue.component('users-component', require('./components/users.vue'));
+//const users = Vue.component('users-component', require('./components/users.vue'));
+const users = Vue.component('users-component',() => import(/* webpackChunkName: "users" */'./components/users2'));
 // @ Unused
 //const userList = Vue.component('list-users', require('./components/userList.vue'));
-const managerList = Vue.component('list-managers', require('./components/user/managerList.vue'));
-const cookList = Vue.component('list-cooks', require('./components/user/cookList.vue'));
-const waiterList = Vue.component('list-waiters', require('./components/user/waiterList.vue'));
-const cashierList = Vue.component('list-cashiers', require('./components/user/cashierList.vue'));
+const managerList = () => Vue.component('list-managers', () => import(/* webpackChunkName: "list-managers" */'./components/user/managerList.vue'));
+const cookList = Vue.component('list-cooks', () => import('./components/user/cookList.vue'));
+const waiterList = Vue.component('list-waiters', () => import('./components/user/waiterList.vue'));
+const cashierList = Vue.component('list-cashiers', () => import('./components/user/cashierList.vue'));
 
 /* Components para menu */
-const menu = Vue.component('items-component', require('./components/menu.vue'));
+const menu = Vue.component('items-component', () => import('./components/menu.vue'));
 // @ Unused
 //const menuList = Vue.component('list-menu', require('./components/menuList.vue'));
-const dishList = Vue.component('list-dishes', require('./components/menu/dishList.vue'));
-const drinksList = Vue.component('list-drinks', require('./components/menu/drinkList.vue'));
+const dishList = Vue.component('list-dishes', () => import('./components/menu/dishList.vue'));
+const drinksList = Vue.component('list-drinks', () => import('./components/menu/drinkList.vue'));
 
 
-const login = Vue.component('login-component', require('./components/login.vue'));
-const logout = Vue.component('logout-component', require('./components/logout.vue'));
+const login = Vue.component('login-component', () => import(/* webpackChunkName: "login-component"*/'./components/login.vue'));
+const logout = Vue.component('logout-component', () => import(/* webpackChunkName: "logout"*/'./components/logout.vue'));
+const footer = Vue.component('footer-component', () => import(/* webpackChunkName: "footer"*/'./components/footer'));
+
+const home = () =>import('./components/home');
 
 /* Components para conta de utilizador */
 const accountPage = Vue.component('account-page', require('./components/account/accountPage.vue'));
@@ -48,15 +57,16 @@ const changeUserNameAndFullName = Vue.component('edit-user', require('./componen
 const changeUserPicture = Vue.component('change-profile-picture', require('./components/account/changeUserPicture.vue'));
 
 const routes = [
-    { path: '/', redirect: '/menu' },
-    { path: '/menu', component: menu },
+    { path: '/', component: home, name: 'home'},
     { path: '/users', component: users },
-    { path: '/login', component: login },
+    { path: '/menu', component: menu },
+    // { path: '/login', component: login },
     { path: '/logout', component: logout },
     { path: '/account', component: accountPage }
 ];
 
 const router = new VueRouter({
+    mode: 'history',
     routes
 });
 
@@ -66,18 +76,5 @@ const app = new Vue({
     router,
     store,
     data: {
-        userToken: undefined,
-        isUserAuthenticated: false
-    },
-    methods: {
-        // ----------------------------------------------------------------------------------------
-        // GAME LOGIC - START
-        // ----------------------------------------------------------------------------------------
-        checkUserToken: function () {
-            if (this.$store.state.token != undefined) {
-                this.userToken = this.$store.state.token;
-                this.isUserAuthenticated = true;
-            }
-        }
     },
 });
