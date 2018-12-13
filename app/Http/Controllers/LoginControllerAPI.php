@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-define('YOUR_SERVER_URL', env('APP_URL'));
+define('YOUR_SERVER_URL', env('YOUR_SERVER_URL'));
 // Check "oauth_clients" table for next 2 values:
 define('CLIENT_ID', env('CLIENT_ID'));
 define('CLIENT_SECRET', env('CLIENT_SECRET'));
 
 use Auth;
 use Illuminate\Http\Request;
+use App\User;
 
 class LoginControllerAPI extends Controller
 {
@@ -31,6 +32,7 @@ class LoginControllerAPI extends Controller
         $errorCode= $response->getStatusCode();
 
         if ($errorCode=='200') {
+            //$user = User::where('email','=',$request->email);
             return json_decode((string) $response->getBody(), true);
         } else {
             return response()->json(

@@ -29,7 +29,7 @@
 /******/
 /******/ 	// objects to store loaded and loading chunks
 /******/ 	var installedChunks = {
-/******/ 		12: 0
+/******/ 		13: 0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -86,7 +86,7 @@
 /******/ 		if (__webpack_require__.nc) {
 /******/ 			script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 		}
-/******/ 		script.src = __webpack_require__.p + "js/" + ({"1":"list-managers","7":"logout","8":"login-component","10":"users","11":"footer"}[chunkId]||chunkId) + ".js";
+/******/ 		script.src = __webpack_require__.p + "js/" + ({"2":"list-managers","8":"logout","9":"login-component","11":"users","12":"footer"}[chunkId]||chunkId) + ".js";
 /******/ 		var timeout = setTimeout(onScriptComplete, 120000);
 /******/ 		script.onerror = script.onload = onScriptComplete;
 /******/ 		function onScriptComplete() {
@@ -25584,50 +25584,50 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_3_vue_toasted___default.a);
 //const users = Vue.component('users-component', require('./components/users.vue'));
 
 var users = Vue.component('users-component', function () {
-  return __webpack_require__.e/* import() */(10).then(__webpack_require__.bind(null, 73));
+  return __webpack_require__.e/* import() */(11).then(__webpack_require__.bind(null, 73));
 }); // @ Unused
 //const userList = Vue.component('list-users', require('./components/userList.vue'));
 
 var managerList = function managerList() {
   return Vue.component('list-managers', function () {
-    return __webpack_require__.e/* import() */(1).then(__webpack_require__.bind(null, 74));
+    return __webpack_require__.e/* import() */(2).then(__webpack_require__.bind(null, 74));
   });
 };
 
 var cookList = Vue.component('list-cooks', function () {
-  return __webpack_require__.e/* import() */(2).then(__webpack_require__.bind(null, 75));
+  return __webpack_require__.e/* import() */(3).then(__webpack_require__.bind(null, 75));
 });
 var waiterList = Vue.component('list-waiters', function () {
-  return __webpack_require__.e/* import() */(0).then(__webpack_require__.bind(null, 76));
+  return __webpack_require__.e/* import() */(1).then(__webpack_require__.bind(null, 76));
 });
 var cashierList = Vue.component('list-cashiers', function () {
-  return __webpack_require__.e/* import() */(3).then(__webpack_require__.bind(null, 77));
+  return __webpack_require__.e/* import() */(4).then(__webpack_require__.bind(null, 77));
 });
 /* Components para menu */
 
 var menu = Vue.component('items-component', function () {
-  return __webpack_require__.e/* import() */(6).then(__webpack_require__.bind(null, 78));
+  return __webpack_require__.e/* import() */(7).then(__webpack_require__.bind(null, 78));
 }); // @ Unused
 //const menuList = Vue.component('list-menu', require('./components/menuList.vue'));
 
 var dishList = Vue.component('list-dishes', function () {
-  return __webpack_require__.e/* import() */(5).then(__webpack_require__.bind(null, 79));
+  return __webpack_require__.e/* import() */(6).then(__webpack_require__.bind(null, 79));
 });
 var drinksList = Vue.component('list-drinks', function () {
-  return __webpack_require__.e/* import() */(4).then(__webpack_require__.bind(null, 80));
+  return __webpack_require__.e/* import() */(5).then(__webpack_require__.bind(null, 80));
 });
 var login = Vue.component('login-component', function () {
-  return __webpack_require__.e/* import() */(8).then(__webpack_require__.bind(null, 81));
+  return __webpack_require__.e/* import() */(9).then(__webpack_require__.bind(null, 81));
 });
 var logout = Vue.component('logout-component', function () {
-  return __webpack_require__.e/* import() */(7).then(__webpack_require__.bind(null, 82));
+  return __webpack_require__.e/* import() */(8).then(__webpack_require__.bind(null, 82));
 });
 var footer = Vue.component('footer-component', function () {
-  return __webpack_require__.e/* import() */(11).then(__webpack_require__.bind(null, 83));
+  return __webpack_require__.e/* import() */(12).then(__webpack_require__.bind(null, 83));
 });
 
 var home = function home() {
-  return __webpack_require__.e/* import() */(9).then(__webpack_require__.bind(null, 84));
+  return __webpack_require__.e/* import() */(10).then(__webpack_require__.bind(null, 84));
 };
 /* Components para conta de utilizador */
 
@@ -25639,6 +25639,11 @@ var setPassword = Vue.component('set-password', __webpack_require__(56));
 var changePassword = Vue.component('change-password', __webpack_require__(61));
 var changeUserNameAndFullName = Vue.component('edit-user', __webpack_require__(66));
 var changeUserPicture = Vue.component('change-profile-picture', __webpack_require__(71));
+/* Worker options */
+
+var shiftOptions = Vue.component('shift-options', function () {
+  return __webpack_require__.e/* import() */(0).then(__webpack_require__.bind(null, 85));
+});
 var routes = [{
   path: '/',
   component: home,
@@ -25660,6 +25665,16 @@ var routes = [{
 var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
   mode: 'history',
   routes: routes
+});
+router.beforeEach(function (to, from, next) {
+  if (to.name == 'profile' || to.name == 'logout') {
+    if (!__WEBPACK_IMPORTED_MODULE_1__stores_global_store__["a" /* default */].state.user) {
+      next("/login");
+      return;
+    }
+  }
+
+  next();
 });
 var app = new Vue({
   // Elemento que o vue vai poder "gerir"
@@ -50593,6 +50608,14 @@ var vuexLocal = new __WEBPACK_IMPORTED_MODULE_2_vuex_persist__["a" /* default */
       state.token = token;
       sessionStorage.setItem('token', token);
       axios.defaults.headers.common.Authorization = "Bearer " + token;
+    },
+    clearUser: function clearUser(state) {
+      state.user = null;
+      sessionStorage.removeItem('user');
+    },
+    setUser: function setUser(state, user) {
+      state.user = user;
+      sessionStorage.setItem('user', JSON.stringify(user));
     }
   },
   plugins: [vuexLocal.plugin]
@@ -76924,7 +76947,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -76990,14 +77013,10 @@ module.exports = function listToStyles (parentId, list) {
 //
 //
 module.exports = {
+  props: ["user"],
   data: function data() {
     return {
       title: 'Conta de utilizador',
-      user: {
-        name: 'First Manager',
-        email: 'm0@mail.com',
-        username: 'm0'
-      },
       currentUser: {},
       dadosPessoais: true,
       turnos: false,

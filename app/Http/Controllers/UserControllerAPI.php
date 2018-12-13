@@ -31,4 +31,9 @@ class UserControllerAPI extends Controller
             return UserResource::collection(User::all());
         }
     }
+
+    public function myProfile(Request $request)
+    {
+        return new UserResource($request->user());
+    }
 }

@@ -102,6 +102,7 @@
                 axios.post("/api/login", this.user)
                     .then(response => {
                         this.$store.commit('setToken', response.data.access_token);
+                        //this.$store.commit('user',response.user);
                         this.form.loading = false;
                         this.dialog = false;
                         this.$toasted.success("Login successful",
@@ -111,6 +112,12 @@
                                 icon: "fingerprint"
                             });
                         Object.assign(this.$data, initialState());
+                        return axios.get('api/users/me');
+                    })
+                    .then(response => {
+                        this.$store.commit('setUser', response.data.data);
+                        console.log("wtv");
+                        //this.$socket.emit('user_enter', response.data.data);
                     })
                     .catch(error => {
                         this.form.loading = false;

@@ -56,6 +56,10 @@ const changePassword = Vue.component('change-password', require('./components/ac
 const changeUserNameAndFullName = Vue.component('edit-user', require('./components/account/changeUserNameAndFullName.vue'));
 const changeUserPicture = Vue.component('change-profile-picture', require('./components/account/changeUserPicture.vue'));
 
+
+/* Worker options */
+const shiftOptions = Vue.component('shift-options', () => import('./components/worker/shiftOptions.vue'));
+
 const routes = [
     { path: '/', component: home, name: 'home'},
     { path: '/users', component: users },
@@ -68,6 +72,16 @@ const routes = [
 const router = new VueRouter({
     mode: 'history',
     routes
+});
+
+router.beforeEach((to, from, next) => {
+    if ((to.name == 'profile') || (to.name == 'logout')) {
+        if (!store.state.user) {
+            next("/login");
+            return;
+        }
+    }
+    next();
 });
 
 const app = new Vue({

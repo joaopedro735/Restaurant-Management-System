@@ -23,6 +23,14 @@ export default new Vuex.Store({
             sessionStorage.setItem('token', token);
             axios.defaults.headers.common.Authorization = "Bearer " + token;
         },
+        clearUser: (state) => {
+            state.user = null;
+            sessionStorage.removeItem('user');
+        },
+       setUser: (state, user) => {
+            state.user =  user;
+            sessionStorage.setItem('user', JSON.stringify(user));
+        },
     },
     plugins: [vuexLocal.plugin]
 });

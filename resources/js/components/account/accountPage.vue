@@ -23,14 +23,10 @@
 
 <script>
     module.exports = {
+        props: ["user"],
         data: function() {
             return {
                 title: 'Conta de utilizador',
-                user: {
-                    name: 'First Manager',
-                    email: 'm0@mail.com',
-                    username: 'm0'
-                },
                 currentUser: {},
                 dadosPessoais: true,
                 turnos: false,
