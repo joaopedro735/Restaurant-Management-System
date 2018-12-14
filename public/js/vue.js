@@ -36,11 +36,7 @@
 /******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 	// Promise = chunk loading, 0 = chunk loaded
 /******/ 	var installedChunks = {
-<<<<<<< HEAD
 /******/ 		"/js/vue": 0
-=======
-/******/ 		13: 0
->>>>>>> master
 /******/ 	};
 /******/
 /******/
@@ -95,7 +91,6 @@
 /******/ 				});
 /******/ 				promises.push(installedChunkData[2] = promise);
 /******/
-<<<<<<< HEAD
 /******/ 				// start chunk loading
 /******/ 				var head = document.getElementsByTagName('head')[0];
 /******/ 				var script = document.createElement('script');
@@ -105,22 +100,6 @@
 /******/ 				script.timeout = 120;
 /******/ 				if (__webpack_require__.nc) {
 /******/ 					script.setAttribute("nonce", __webpack_require__.nc);
-=======
-/******/ 		if (__webpack_require__.nc) {
-/******/ 			script.setAttribute("nonce", __webpack_require__.nc);
-/******/ 		}
-/******/ 		script.src = __webpack_require__.p + "js/" + ({"2":"list-managers","8":"logout","9":"login-component","11":"users","12":"footer"}[chunkId]||chunkId) + ".js";
-/******/ 		var timeout = setTimeout(onScriptComplete, 120000);
-/******/ 		script.onerror = script.onload = onScriptComplete;
-/******/ 		function onScriptComplete() {
-/******/ 			// avoid mem leaks in IE.
-/******/ 			script.onerror = script.onload = null;
-/******/ 			clearTimeout(timeout);
-/******/ 			var chunk = installedChunks[chunkId];
-/******/ 			if(chunk !== 0) {
-/******/ 				if(chunk) {
-/******/ 					chunk[1](new Error('Loading chunk ' + chunkId + ' failed.'));
->>>>>>> master
 /******/ 				}
 /******/ 				script.src = jsonpScriptSrc(chunkId);
 /******/
@@ -1919,14 +1898,10 @@ module.exports = {
 //
 //
 module.exports = {
+  props: ["user"],
   data: function data() {
     return {
       title: 'Conta de utilizador',
-      user: {
-        name: 'First Manager',
-        email: 'm0@mail.com',
-        username: 'm0'
-      },
       currentUser: {},
       dadosPessoais: true,
       turnos: false,
@@ -2306,6 +2281,36 @@ module.exports = {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 module.exports = {
   data: function data() {
     return {
@@ -2315,7 +2320,8 @@ module.exports = {
       drinks: [],
       showDishes: true,
       showDrinks: true,
-      showAll: true
+      showAll: true,
+      showProfile: true
     };
   },
   methods: {},
@@ -6522,7 +6528,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -6598,7 +6604,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -21503,7 +21509,6 @@ module.exports = merge;
       return length ? array[baseRandom(0, length - 1)] : undefined;
     }
 
-<<<<<<< HEAD
     /**
      * A specialized version of `_.sampleSize` for arrays.
      *
@@ -21596,55 +21601,6 @@ module.exports = merge;
       });
       return accumulator;
     }
-=======
-var users = Vue.component('users-component', function () {
-  return __webpack_require__.e/* import() */(11).then(__webpack_require__.bind(null, 73));
-}); // @ Unused
-//const userList = Vue.component('list-users', require('./components/userList.vue'));
-
-var managerList = function managerList() {
-  return Vue.component('list-managers', function () {
-    return __webpack_require__.e/* import() */(2).then(__webpack_require__.bind(null, 74));
-  });
-};
-
-var cookList = Vue.component('list-cooks', function () {
-  return __webpack_require__.e/* import() */(3).then(__webpack_require__.bind(null, 75));
-});
-var waiterList = Vue.component('list-waiters', function () {
-  return __webpack_require__.e/* import() */(1).then(__webpack_require__.bind(null, 76));
-});
-var cashierList = Vue.component('list-cashiers', function () {
-  return __webpack_require__.e/* import() */(4).then(__webpack_require__.bind(null, 77));
-});
-/* Components para menu */
-
-var menu = Vue.component('items-component', function () {
-  return __webpack_require__.e/* import() */(7).then(__webpack_require__.bind(null, 78));
-}); // @ Unused
-//const menuList = Vue.component('list-menu', require('./components/menuList.vue'));
-
-var dishList = Vue.component('list-dishes', function () {
-  return __webpack_require__.e/* import() */(6).then(__webpack_require__.bind(null, 79));
-});
-var drinksList = Vue.component('list-drinks', function () {
-  return __webpack_require__.e/* import() */(5).then(__webpack_require__.bind(null, 80));
-});
-var login = Vue.component('login-component', function () {
-  return __webpack_require__.e/* import() */(9).then(__webpack_require__.bind(null, 81));
-});
-var logout = Vue.component('logout-component', function () {
-  return __webpack_require__.e/* import() */(8).then(__webpack_require__.bind(null, 82));
-});
-var footer = Vue.component('footer-component', function () {
-  return __webpack_require__.e/* import() */(12).then(__webpack_require__.bind(null, 83));
-});
-
-var home = function home() {
-  return __webpack_require__.e/* import() */(10).then(__webpack_require__.bind(null, 84));
-};
-/* Components para conta de utilizador */
->>>>>>> master
 
     /**
      * The base implementation of `_.assign` without support for multiple sources
@@ -21672,7 +21628,6 @@ var home = function home() {
       return object && copyObject(source, keysIn(source), object);
     }
 
-<<<<<<< HEAD
     /**
      * The base implementation of `assignValue` and `assignMergeValue` without
      * value checks.
@@ -21694,55 +21649,6 @@ var home = function home() {
         object[key] = value;
       }
     }
-=======
-var changePassword = Vue.component('change-password', __webpack_require__(61));
-var changeUserNameAndFullName = Vue.component('edit-user', __webpack_require__(66));
-var changeUserPicture = Vue.component('change-profile-picture', __webpack_require__(71));
-/* Worker options */
-
-var shiftOptions = Vue.component('shift-options', function () {
-  return __webpack_require__.e/* import() */(0).then(__webpack_require__.bind(null, 85));
-});
-var routes = [{
-  path: '/',
-  component: home,
-  name: 'home'
-}, {
-  path: '/users',
-  component: users
-}, {
-  path: '/menu',
-  component: menu
-}, // { path: '/login', component: login },
-{
-  path: '/logout',
-  component: logout
-}, {
-  path: '/account',
-  component: accountPage
-}];
-var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
-  mode: 'history',
-  routes: routes
-});
-router.beforeEach(function (to, from, next) {
-  if (to.name == 'profile' || to.name == 'logout') {
-    if (!__WEBPACK_IMPORTED_MODULE_1__stores_global_store__["a" /* default */].state.user) {
-      next("/login");
-      return;
-    }
-  }
-
-  next();
-});
-var app = new Vue({
-  // Elemento que o vue vai poder "gerir"
-  el: '#app',
-  router: router,
-  store: __WEBPACK_IMPORTED_MODULE_1__stores_global_store__["a" /* default */],
-  data: {}
-});
->>>>>>> master
 
     /**
      * The base implementation of `_.at` without support for individual paths.
@@ -40752,122 +40658,171 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _c("hr"),
-    _vm._v(" "),
-    _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "btn-group btn-group-justified" }, [
-        _c("div", { staticClass: "btn-group" }, [
+  return _c(
+    "v-container",
+    { attrs: { fluid: "", "grid-list-md": "", "text-xs-center": "" } },
+    [
+      _c(
+        "v-layout",
+        { attrs: { row: "" } },
+        [
           _c(
-            "button",
-            {
-              staticClass: "btn ",
-              class: {
-                "btn-primary": _vm.showAll,
-                "btn-secondary": !_vm.showAll
-              },
-              attrs: { id: "all", type: "button" },
-              on: {
-                click: function($event) {
-                  _vm.showDishes = true
-                  _vm.showDrinks = true
-                  _vm.showAll = true
-                }
-              }
-            },
-            [_vm._v("Tudo")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "btn-group" }, [
+            "v-flex",
+            { attrs: { xs6: "" } },
+            [
+              _c(
+                "v-card",
+                { staticClass: "px-0" },
+                [
+                  _c("v-card-title", { attrs: { "primary-title": "" } }, [
+                    _c("div", [
+                      _c("h3", { staticClass: "headline mb-0" }, [
+                        _vm._v("Drinks")
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-list",
+                    _vm._l(_vm.drinks, function(drink) {
+                      return _c(
+                        "v-list-tile",
+                        {
+                          key: drink.name,
+                          attrs: { avatar: "" },
+                          on: { click: function($event) {} }
+                        },
+                        [
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c("v-tooltip", { attrs: { bottom: "" } }, [
+                                _c(
+                                  "div",
+                                  {
+                                    attrs: { slot: "activator" },
+                                    slot: "activator"
+                                  },
+                                  [
+                                    _c("v-list-tile-title", {
+                                      domProps: {
+                                        textContent: _vm._s(drink.name)
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("v-list-tile-sub-title", {
+                                      domProps: {
+                                        textContent: _vm._s(drink.price)
+                                      }
+                                    })
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c("span", [_vm._v(_vm._s(drink.description))])
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("v-list-tile-avatar", [
+                            _c("img", { attrs: { src: drink.photo_url } })
+                          ])
+                        ],
+                        1
+                      )
+                    }),
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
           _c(
-            "button",
-            {
-              staticClass: "btn ",
-              class: {
-                "btn-primary": _vm.showDishes && !_vm.showAll,
-                "btn-secondary": !_vm.showDishes
-              },
-              attrs: { id: "dishes", type: "button" },
-              on: {
-                click: function($event) {
-                  _vm.showDishes = true
-                  _vm.showDrinks = false
-                  _vm.showAll = false
-                }
-              }
-            },
-            [_vm._v("Pratos")]
+            "v-flex",
+            { attrs: { xs6: "" } },
+            [
+              _c(
+                "v-card",
+                { staticClass: "px-0" },
+                [
+                  _c("v-card-title", { attrs: { "primary-title": "" } }, [
+                    _c("div", [
+                      _c("h3", { staticClass: "headline mb-0" }, [
+                        _vm._v("Dishes")
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-list",
+                    _vm._l(_vm.dishes, function(dish) {
+                      return _c(
+                        "v-list-tile",
+                        {
+                          key: dish.name,
+                          attrs: { avatar: "" },
+                          on: { click: function($event) {} }
+                        },
+                        [
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c("v-tooltip", { attrs: { bottom: "" } }, [
+                                _c(
+                                  "div",
+                                  {
+                                    attrs: { slot: "activator" },
+                                    slot: "activator"
+                                  },
+                                  [
+                                    _c("v-list-tile-title", {
+                                      domProps: {
+                                        textContent: _vm._s(dish.name)
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("v-list-tile-sub-title", {
+                                      domProps: {
+                                        textContent: _vm._s(dish.price)
+                                      }
+                                    })
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c("span", [_vm._v(_vm._s(dish.description))])
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("v-list-tile-avatar", [
+                            _c("img", { attrs: { src: dish.photo_url } })
+                          ])
+                        ],
+                        1
+                      )
+                    }),
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
           )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "btn-group" }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn ",
-              class: {
-                "btn-primary": _vm.showDrinks && !_vm.showAll,
-                "btn-secondary": !_vm.showDrinks
-              },
-              attrs: { id: "drinks", type: "button" },
-              on: {
-                click: function($event) {
-                  _vm.showDishes = false
-                  _vm.showDrinks = true
-                  _vm.showAll = false
-                }
-              }
-            },
-            [_vm._v("Bebidas")]
-          )
-        ])
-      ])
-    ]),
-    _vm._v(" "),
-    _vm.showDishes
-      ? _c(
-          "div",
-          { staticClass: "container" },
-          [
-            _c("h2", [_vm._v("Pratos")]),
-            _vm._v(" "),
-            _c("list-dishes", { attrs: { dishes: _vm.dishes } })
-          ],
-          1
-        )
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.showDishes && _vm.showDrinks
-      ? _c("div", { staticClass: "container" }, [_c("hr")])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.showDrinks
-      ? _c(
-          "div",
-          { staticClass: "container" },
-          [
-            _c("h2", [_vm._v("Bebidas")]),
-            _vm._v(" "),
-            _c("list-drinks", { attrs: { drinks: _vm.drinks } })
-          ],
-          1
-        )
-      : _vm._e()
-  ])
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("h1", { staticClass: "text-center" }, [_vm._v("Menu")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -51243,7 +51198,6 @@ function removeTransitionClass (el, cls) {
   removeClass(el, cls);
 }
 
-<<<<<<< HEAD
 function whenTransitionEnds (
   el,
   expectedType,
@@ -51265,34 +51219,6 @@ function whenTransitionEnds (
       if (++ended >= propCount) {
         end();
       }
-=======
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */]);
-var vuexLocal = new __WEBPACK_IMPORTED_MODULE_2_vuex_persist__["a" /* default */]({
-  storage: window.localStorage
-});
-/* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
-  state: {
-    token: ""
-  },
-  mutations: {
-    clearToken: function clearToken(state) {
-      state.token = "";
-      sessionStorage.removeItem('token');
-      axios.defaults.headers.common.Authorization = undefined;
-    },
-    setToken: function setToken(state, token) {
-      state.token = token;
-      sessionStorage.setItem('token', token);
-      axios.defaults.headers.common.Authorization = "Bearer " + token;
-    },
-    clearUser: function clearUser(state) {
-      state.user = null;
-      sessionStorage.removeItem('user');
-    },
-    setUser: function setUser(state, user) {
-      state.user = user;
-      sessionStorage.setItem('user', JSON.stringify(user));
->>>>>>> master
     }
   };
   setTimeout(function () {
@@ -78491,13 +78417,8 @@ function makeLocalContext (store, namespace, path) {
         }
       }
 
-<<<<<<< HEAD
       return store.dispatch(type, payload)
     },
-=======
-// module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
->>>>>>> master
 
     commit: noNamespace ? store.commit : function (_type, _payload, _options) {
       var args = unifyObjectStyle(_type, _payload, _options);
@@ -78541,55 +78462,8 @@ function makeLocalGetters (store, namespace) {
     // skip if the target getter is not match this namespace
     if (type.slice(0, splitPos) !== namespace) { return }
 
-<<<<<<< HEAD
     // extract local getter type
     var localType = type.slice(splitPos);
-=======
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-module.exports = {
-  props: ["user"],
-  data: function data() {
-    return {
-      title: 'Conta de utilizador',
-      currentUser: {},
-      dadosPessoais: true,
-      turnos: false,
-      seguranca: false,
-      definicoes: false
-    };
-  },
-  methods: {
-    saveUser: function saveUser() {// TODO: Guardar utilizador
-    },
-    changeUserPassword: function changeUserPassword() {}
-  },
-  mounted: function mounted() {
-    this.currentUser = Object.assign({}, this.user);
-  }
-};
->>>>>>> master
 
     // Add a port to the getters proxy.
     // Define as getter property because
@@ -79620,6 +79494,11 @@ var changeUserPicture = Vue.component('change-profile-picture', __webpack_requir
 var activateAccount = Vue.component('activate-account', function () {
   return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ./components/activateAccount.vue */ "./resources/js/components/activateAccount.vue"));
 });
+/* Worker options */
+
+var shiftOptions = Vue.component('shift-options', function () {
+  return __webpack_require__.e(/*! import() */ 7).then(__webpack_require__.bind(null, /*! ./components/worker/shiftOptions.vue */ "./resources/js/components/worker/shiftOptions.vue"));
+});
 var routes = [{
   path: '/',
   component: home,
@@ -79643,6 +79522,16 @@ var routes = [{
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
   mode: 'history',
   routes: routes
+});
+router.beforeEach(function (to, from, next) {
+  if (to.name == 'profile' || to.name == 'logout') {
+    if (!_stores_global_store__WEBPACK_IMPORTED_MODULE_1__["default"].state.user) {
+      next("/login");
+      return;
+    }
+  }
+
+  next();
 });
 var app = new Vue({
   // Elemento que o vue vai poder "gerir"
