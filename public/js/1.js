@@ -82,7 +82,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      user: {},
+      showAll: false,
+      showWorker: false,
+      showCashier: false,
+      showManager: false
+    };
+  },
+  methods: {
+    getInformationFromLoggedUser: function getInformationFromLoggedUser() {
+      this.user = this.$store.state.user;
+    },
+    isUserAWorker: function isUserAWorker(user) {
+      console.log(user.type);
+
+      if (user.type == "cashier" || user.type == "waiter" || user.type == "cook") {
+        this.showWorker = true;
+      }
+    }
+  },
+  mounted: function mounted() {
+    this.getInformationFromLoggedUser();
+    this.isUserAWorker(this.user);
+  }
+});
 
 /***/ }),
 
@@ -98,7 +125,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -161,202 +188,17 @@ var render = function() {
             attrs: { column: "", wrap: "", "align-center": "" }
           },
           [
-            _c(
-              "v-flex",
-              { staticClass: "my-3", attrs: { xs12: "", sm4: "" } },
-              [
-                _c("div", { staticClass: "text-xs-center" }, [
-                  _c("h2", { staticClass: "headline" }, [
-                    _vm._v("The best way to start developing")
-                  ]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "subheading" }, [
-                    _vm._v(
-                      "\n            Cras facilisis mi vitae nunc\n          "
-                    )
-                  ])
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "v-flex",
-              { attrs: { xs12: "" } },
-              [
-                _c(
-                  "v-container",
-                  { attrs: { "grid-list-xl": "" } },
-                  [
-                    _c(
-                      "v-layout",
-                      { attrs: { row: "", wrap: "", "align-center": "" } },
-                      [
-                        _c(
-                          "v-flex",
-                          { attrs: { xs12: "", md4: "" } },
-                          [
-                            _c(
-                              "v-card",
-                              { staticClass: "elevation-0 transparent" },
-                              [
-                                _c(
-                                  "v-card-text",
-                                  { staticClass: "text-xs-center" },
-                                  [
-                                    _c(
-                                      "v-icon",
-                                      {
-                                        staticClass:
-                                          "blue--text text--lighten-2",
-                                        attrs: { "x-large": "" }
-                                      },
-                                      [_vm._v("color_lens")]
-                                    )
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-card-title",
-                                  {
-                                    staticClass: "layout justify-center",
-                                    attrs: { "primary-title": "" }
-                                  },
-                                  [
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass: "headline text-xs-center"
-                                      },
-                                      [_vm._v("Material Design")]
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c("v-card-text", [
-                                  _vm._v(
-                                    "\n                                Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.\n                                Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.\n                                Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.\n                            "
-                                  )
-                                ])
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "v-flex",
-                          { attrs: { xs12: "", md4: "" } },
-                          [
-                            _c(
-                              "v-card",
-                              { staticClass: "elevation-0 transparent" },
-                              [
-                                _c(
-                                  "v-card-text",
-                                  { staticClass: "text-xs-center" },
-                                  [
-                                    _c(
-                                      "v-icon",
-                                      {
-                                        staticClass:
-                                          "blue--text text--lighten-2",
-                                        attrs: { "x-large": "" }
-                                      },
-                                      [_vm._v("flash_on")]
-                                    )
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-card-title",
-                                  {
-                                    staticClass: "layout justify-center",
-                                    attrs: { "primary-title": "" }
-                                  },
-                                  [
-                                    _c("div", { staticClass: "headline" }, [
-                                      _vm._v("Fast development")
-                                    ])
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c("v-card-text", [
-                                  _vm._v(
-                                    "\n                                Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.\n                                Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.\n                                Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.\n                            "
-                                  )
-                                ])
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "v-flex",
-                          { attrs: { xs12: "", md4: "" } },
-                          [
-                            _c(
-                              "v-card",
-                              { staticClass: "elevation-0 transparent" },
-                              [
-                                _c(
-                                  "v-card-text",
-                                  { staticClass: "text-xs-center" },
-                                  [
-                                    _c(
-                                      "v-icon",
-                                      {
-                                        staticClass:
-                                          "blue--text text--lighten-2",
-                                        attrs: { "x-large": "" }
-                                      },
-                                      [_vm._v("build")]
-                                    )
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-card-title",
-                                  {
-                                    staticClass: "layout justify-center",
-                                    attrs: { "primary-title": "" }
-                                  },
-                                  [
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass: "headline text-xs-center"
-                                      },
-                                      [_vm._v("Completely Open Sourced")]
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c("v-card-text", [
-                                  _vm._v(
-                                    "\n                                Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.\n                                Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.\n                                Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.\n                            "
-                                  )
-                                ])
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    )
-                  ],
-                  1
-                )
+            _c("shift-options", {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.showWorker,
+                  expression: "showWorker"
+                }
               ],
-              1
-            )
+              attrs: { user: "user" }
+            })
           ],
           1
         )

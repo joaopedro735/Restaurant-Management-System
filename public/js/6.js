@@ -1,56 +1,10 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[6],{
 
-<<<<<<< HEAD
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/user/waiterList.vue?vue&type=script&lang=js&":
 /*!**************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/user/waiterList.vue?vue&type=script&lang=js& ***!
   \**************************************************************************************************************************************************************************/
 /*! no static exports found */
-=======
-/***/ 108:
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(109);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(4)("5b893a4f", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5d8553cd\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./dishList.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5d8553cd\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./dishList.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
-/***/ 109:
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(3)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\nimg[data-v-5d8553cd] {\n    max-height: 60px;\n    border-radius: 3px;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ 110:
->>>>>>> master
 /***/ (function(module, exports) {
 
 //
@@ -75,11 +29,7 @@ exports.push([module.i, "\nimg[data-v-5d8553cd] {\n    max-height: 60px;\n    bo
 //
 //
 module.exports = {
-<<<<<<< HEAD
   props: ['waiters'],
-=======
-  props: ['dishes'],
->>>>>>> master
   data: function data() {
     return {};
   },
@@ -93,15 +43,11 @@ module.exports = {
 
 /***/ }),
 
-<<<<<<< HEAD
 /***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/user/waiterList.vue?vue&type=style&index=0&id=2f2813e9&scoped=true&lang=css&":
 /*!*********************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/user/waiterList.vue?vue&type=style&index=0&id=2f2813e9&scoped=true&lang=css& ***!
   \*********************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
-=======
-/***/ 111:
->>>>>>> master
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
@@ -166,7 +112,6 @@ var render = function() {
     _vm._v(" "),
     _c(
       "tbody",
-<<<<<<< HEAD
       _vm._l(_vm.waiters, function(waiter) {
         return _c("tr", { key: waiter.id }, [
           _c("td", [_c("strong", [_vm._v(_vm._s(waiter.name))])]),
@@ -181,21 +126,6 @@ var render = function() {
         ])
       }),
       0
-=======
-      _vm._l(_vm.dishes, function(dish) {
-        return _c("tr", { key: dish.id }, [
-          _c("td", [_c("strong", [_vm._v(_vm._s(dish.name))])]),
-          _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(dish.price))]),
-          _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(dish.description))]),
-          _vm._v(" "),
-          _c("td", { attrs: { align: "center" } }, [
-            _c("img", { attrs: { src: _vm.getPhoto(dish.photo_url) } })
-          ])
-        ])
-      })
->>>>>>> master
     )
   ])
 }
@@ -206,7 +136,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-<<<<<<< HEAD
         _c("th", [_c("strong", [_vm._v("Nome")])]),
         _vm._v(" "),
         _c("th", [_c("strong", [_vm._v("Categoria")])]),
@@ -214,21 +143,11 @@ var staticRenderFns = [
         _c("th", [_c("strong", [_vm._v("Email")])]),
         _vm._v(" "),
         _c("th", [_c("strong", [_vm._v("Fotografia")])])
-=======
-        _c("th", [_c("strong", [_vm._v("Prato")])]),
-        _vm._v(" "),
-        _c("th", [_c("strong", [_vm._v("Preço")])]),
-        _vm._v(" "),
-        _c("th", [_c("strong", [_vm._v("Descrição")])]),
-        _vm._v(" "),
-        _c("th")
->>>>>>> master
       ])
     ])
   }
 ]
 render._withStripped = true
-<<<<<<< HEAD
 
 
 
@@ -319,64 +238,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_waiterList_vue_vue_type_template_id_2f2813e9_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_waiterList_vue_vue_type_template_id_2f2813e9_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-=======
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-5d8553cd", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ 79:
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(108)
-}
-var normalizeComponent = __webpack_require__(2)
-/* script */
-var __vue_script__ = __webpack_require__(110)
-/* template */
-var __vue_template__ = __webpack_require__(111)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = "data-v-5d8553cd"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/js/components/menu/dishList.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5d8553cd", Component.options)
-  } else {
-    hotAPI.reload("data-v-5d8553cd", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
->>>>>>> master
 
 
 
