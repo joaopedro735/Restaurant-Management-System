@@ -21,6 +21,9 @@ Route::group([
 });
 
 Route::get('users', 'UserControllerAPI@index');
+Route::middleware('auth:api')->get('users/me', 'UserControllerAPI@myProfile');
+
+
 Route::get('menu', 'ItemControllerAPI@index');
 
 Route::post('login', 'LoginControllerAPI@login');

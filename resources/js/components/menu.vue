@@ -1,39 +1,69 @@
 <template>
-    <div class="container">
-        <div class="row">
-            <h1 class="text-center">Menu</h1>
-        </div>
+    <v-container fluid grid-list-md text-xs-center>
+        <v-layout row>
+            <v-flex xs6>
+                <v-card class="px-0">
+                    <v-card-title primary-title>
+                        <div>
+                            <h3 class="headline mb-0">Drinks</h3>
+                        </div>
+                    </v-card-title>
+                    <v-list>
+                        <v-list-tile
+                                v-for="drink in drinks"
+                                :key="drink.name"
+                                avatar
+                                @click="">
+                            <v-list-tile-content>
+                                <v-tooltip bottom>
+                                    <div slot="activator">
+                                        <v-list-tile-title v-text="drink.name"></v-list-tile-title>
+                                        <v-list-tile-sub-title v-text="drink.price"></v-list-tile-sub-title>
+                                    </div>
+                                    <span>{{drink.description}}</span>
+                                </v-tooltip>
+                            </v-list-tile-content>
 
-        <hr>
+                            <v-list-tile-avatar>
+                                <img :src="drink.photo_url">
+                            </v-list-tile-avatar>
+                        </v-list-tile>
+                    </v-list>
+                </v-card>
+            </v-flex>
+            <v-flex xs6>
+                <v-card class="px-0">
+                    <v-card-title primary-title>
+                        <div>
+                            <h3 class="headline mb-0">Dishes</h3>
+                        </div>
+                    </v-card-title>
+                    <v-list>
+                        <v-list-tile
+                                v-for="dish in dishes"
+                                :key="dish.name"
+                                avatar
+                                @click="">
 
-        <div class="container">
-            <div class="btn-group btn-group-justified">
-                <div class="btn-group">
-                    <button @click="showDishes = true; showDrinks = true; showAll = true" id="all" type="button" class="btn " v-bind:class="{'btn-primary': showAll, 'btn-secondary': !showAll}">Tudo</button>
-                </div>
-                <div class="btn-group">
-                    <button @click="showDishes = true; showDrinks = false; showAll = false" id="dishes" type="button" class="btn " v-bind:class="{'btn-primary': showDishes && !showAll, 'btn-secondary': !showDishes}">Pratos</button>
-                </div>
-                <div class="btn-group">
-                    <button @click="showDishes = false; showDrinks = true; showAll = false" id="drinks" type="button" class="btn " v-bind:class="{'btn-primary': showDrinks && !showAll, 'btn-secondary': !showDrinks}">Bebidas</button>
-                </div>
-            </div>
-        </div>
+                            <v-list-tile-content>
+                                <v-tooltip bottom>
+                                    <div slot="activator">
+                                        <v-list-tile-title v-text="dish.name"></v-list-tile-title>
+                                        <v-list-tile-sub-title v-text="dish.price"></v-list-tile-sub-title>
+                                    </div>
+                                    <span>{{dish.description}}</span>
+                                </v-tooltip>
+                            </v-list-tile-content>
 
-        <div class="container" v-if="showDishes">
-            <h2>Pratos</h2>
-            <list-dishes :dishes="dishes"></list-dishes>
-        </div>
-
-        <div class="container" v-if="showDishes && showDrinks">
-            <hr>
-        </div>
-
-        <div class="container" v-if="showDrinks">
-            <h2>Bebidas</h2>
-            <list-drinks :drinks="drinks"></list-drinks>
-        </div>
-    </div>
+                            <v-list-tile-avatar>
+                                <img :src="dish.photo_url">
+                            </v-list-tile-avatar>
+                        </v-list-tile>
+                    </v-list>
+                </v-card>
+            </v-flex>
+        </v-layout>
+    </v-container>
 </template>
 
 <script>
@@ -46,11 +76,11 @@
                 drinks: [],
                 showDishes: true,
                 showDrinks: true,
-                showAll: true
+                showAll: true,
+                showProfile: true,
             };
         },
-        methods: {
-        },
+        methods: {},
         mounted() {
             axios.get('/api/menu').then(response => {
                 this.menu = response.data.data;

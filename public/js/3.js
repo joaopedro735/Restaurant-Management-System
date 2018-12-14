@@ -1,10 +1,108 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[3],{
 
+<<<<<<< HEAD
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/menu/drinkList.vue?vue&type=script&lang=js&":
 /*!*************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/menu/drinkList.vue?vue&type=script&lang=js& ***!
   \*************************************************************************************************************************************************************************/
 /*! no static exports found */
+=======
+/***/ 75:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(92)
+}
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(94)
+/* template */
+var __vue_template__ = __webpack_require__(95)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-685f3ee2"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/user/cookList.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-685f3ee2", Component.options)
+  } else {
+    hotAPI.reload("data-v-685f3ee2", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 92:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(93);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("021d58d8", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-685f3ee2\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./cookList.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-685f3ee2\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./cookList.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ 93:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\nimg[data-v-685f3ee2] {\n    max-height: 60px;\n    border-radius: 3px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ 94:
+>>>>>>> master
 /***/ (function(module, exports) {
 
 //
@@ -29,7 +127,11 @@
 //
 //
 module.exports = {
+<<<<<<< HEAD
   props: ['drinks'],
+=======
+  props: ['cooks'],
+>>>>>>> master
   data: function data() {
     return {};
   },
@@ -43,11 +145,15 @@ module.exports = {
 
 /***/ }),
 
+<<<<<<< HEAD
 /***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/menu/drinkList.vue?vue&type=style&index=0&id=bc08e69e&scoped=true&lang=css&":
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/menu/drinkList.vue?vue&type=style&index=0&id=bc08e69e&scoped=true&lang=css& ***!
   \********************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
+=======
+/***/ 95:
+>>>>>>> master
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
@@ -112,6 +218,7 @@ var render = function() {
     _vm._v(" "),
     _c(
       "tbody",
+<<<<<<< HEAD
       _vm._l(_vm.drinks, function(drink) {
         return _c("tr", { key: drink.id }, [
           _c("td", [_c("strong", [_vm._v(_vm._s(drink.name))])]),
@@ -122,6 +229,18 @@ var render = function() {
           _vm._v(" "),
           _c("td", { attrs: { align: "center" } }, [
             _c("img", { attrs: { src: _vm.getPhoto(drink.photo_url) } })
+=======
+      _vm._l(_vm.cooks, function(cook) {
+        return _c("tr", { key: cook.id }, [
+          _c("td", [_c("strong", [_vm._v(_vm._s(cook.name))])]),
+          _vm._v(" "),
+          _c("td", [_vm._v(_vm._s(cook.type))]),
+          _vm._v(" "),
+          _c("td", [_vm._v(_vm._s(cook.email))]),
+          _vm._v(" "),
+          _c("td", { attrs: { align: "center" } }, [
+            _c("img", { attrs: { src: _vm.getPhoto(cook.photo_url) } })
+>>>>>>> master
           ])
         ])
       }),
@@ -148,6 +267,7 @@ var staticRenderFns = [
   }
 ]
 render._withStripped = true
+<<<<<<< HEAD
 
 
 
@@ -241,6 +361,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+=======
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-685f3ee2", module.exports)
+  }
+}
+
+>>>>>>> master
 /***/ })
 
 }]);
