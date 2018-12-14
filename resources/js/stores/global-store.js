@@ -36,6 +36,7 @@ export default new Vuex.Store({
             sessionStorage.removeItem('user');
         },
         setUser: (state, user) => {
+            console.log(user);
             state.user =  user;
             sessionStorage.setItem('user', JSON.stringify(user));
         },

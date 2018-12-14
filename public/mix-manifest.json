@@ -1,9 +1,9 @@
 {
-    "/js/list-managers.js": "/js/list-managers.js",
-    "/js/logout.js": "/js/logout.js",
-    "/js/login-component.js": "/js/login-component.js",
-    "/js/users.js": "/js/users.js",
-    "/js/footer.js": "/js/footer.js",
     "/js/vue.js": "/js/vue.js",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/js/footer.js": "/js/footer.js",
+    "/js/list-managers.js": "/js/list-managers.js",
+    "/js/login-component.js": "/js/login-component.js",
+    "/js/logout.js": "/js/logout.js",
+    "/js/users.js": "/js/users.js"
 }
