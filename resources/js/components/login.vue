@@ -67,7 +67,6 @@
 </template>
 
 <script>
-
     function initialState() {
         return {
             title: 'Login',
@@ -87,11 +86,15 @@
                 rules: {
                     required: v => !!v || 'Required.',
                     min: v => v.length >= 3 || 'Min 3 characters',
-                    email: v => /.+@.+/.test(v) || 'E-mail must be valid'
+                    email: value => {
+                        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                        return pattern.test(value) || 'Invalid e-mail.';
+                    }
                 }
             },
         };
     }
+
     export default {
         data: () => {
             return initialState();
@@ -102,8 +105,10 @@
                 axios.post("/api/login", this.user)
                     .then(response => {
                         this.$store.commit('setToken', response.data.access_token);
-                        //this.$store.commit('user',response.user);
-                        this.form.loading = false;
+                        return axios.get("api/users/me");
+                    })
+                    .then(response => {
+                        this.$store.commit("setUser", response.data.data);
                         this.dialog = false;
                         this.$toasted.success("Login successful",
                             {
@@ -120,11 +125,13 @@
                         //this.$socket.emit('user_enter', response.data.data);
                     })
                     .catch(error => {
-                        this.form.loading = false;
                         this.alert.error = error.response.data.msg;
                         this.alert.show = true;
                         console.dir(error);
-                    });
+                    })
+                    .finally(() => {
+                        this.form.loading = false;
+                });
             },
             clear() {
                 this.$refs.form.reset();

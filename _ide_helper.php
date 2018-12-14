@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.7.16 on 2018-12-10 22:38:59.
+ * Generated for Laravel 5.7.17 on 2018-12-13 23:46:54.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -15481,6 +15481,21 @@ namespace  {
             }
          
             /**
+             * Add a "having between " clause to the query.
+             *
+             * @param string $column
+             * @param array $values
+             * @param string $boolean
+             * @param bool $not
+             * @return \Illuminate\Database\Query\Builder|static 
+             * @static 
+             */ 
+            public static function havingBetween($column, $values, $boolean = 'and', $not = false)
+            {    
+                return \Illuminate\Database\Query\Builder::havingBetween($column, $values, $boolean, $not);
+            }
+         
+            /**
              * Add a raw having clause to the query.
              *
              * @param string $sql
@@ -15870,6 +15885,19 @@ namespace  {
             public static function insertGetId($values, $sequence = null)
             {    
                 return \Illuminate\Database\Query\Builder::insertGetId($values, $sequence);
+            }
+         
+            /**
+             * Insert new records into the table using a subquery.
+             *
+             * @param array $columns
+             * @param \Closure|\Illuminate\Database\Query\Builder|string $query
+             * @return bool 
+             * @static 
+             */ 
+            public static function insertUsing($columns, $query)
+            {    
+                return \Illuminate\Database\Query\Builder::insertUsing($columns, $query);
             }
          
             /**
