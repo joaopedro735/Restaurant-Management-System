@@ -22,12 +22,13 @@
 
         <v-content>
             <v-container fluid>
-                <router-view></router-view>
+                <router-view>
+                </router-view>
             </v-container>
         </v-content>
         <footer-component></footer-component>
     </v-app>
 @endsection
 @section('pagescript')
-<script src="js/vue.js"></script>
+<script src="/js/vue.js"></script>
 @stop

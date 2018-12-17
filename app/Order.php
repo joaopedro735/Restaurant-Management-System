@@ -25,4 +25,9 @@ class Order extends Model
 
         return 'Desconhecido';
     }
+
+    public function item()
+    {
+        return $this->hasOne('App\Item', 'id', 'item_id');
+    }
 }
