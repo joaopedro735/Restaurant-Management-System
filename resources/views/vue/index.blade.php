@@ -10,6 +10,7 @@
             <v-btn flat exact :to="{name: 'home'}">Home</v-btn>
             <v-btn flat v-show="this.$store.state.token" to="/menu">Menu</v-btn>
             <v-btn flat v-show="this.$store.state.token" to="/users">Users</v-btn>
+            <v-btn flat v-show="this.$store.state.token" to="/orders">Orders</v-btn>
 
             <v-spacer></v-spacer>
 

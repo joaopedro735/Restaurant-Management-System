@@ -25595,26 +25595,26 @@ var managerList = function managerList() {
 };
 
 var cookList = Vue.component('list-cooks', function () {
-  return __webpack_require__.e/* import() */(2).then(__webpack_require__.bind(null, 75));
+  return __webpack_require__.e/* import() */(14).then(__webpack_require__.bind(null, 75));
 });
 var waiterList = Vue.component('list-waiters', function () {
-  return __webpack_require__.e/* import() */(0).then(__webpack_require__.bind(null, 76));
+  return __webpack_require__.e/* import() */(13).then(__webpack_require__.bind(null, 76));
 });
 var cashierList = Vue.component('list-cashiers', function () {
-  return __webpack_require__.e/* import() */(3).then(__webpack_require__.bind(null, 77));
+  return __webpack_require__.e/* import() */(15).then(__webpack_require__.bind(null, 77));
 });
 /* Components para menu */
 
 var menu = Vue.component('items-component', function () {
-  return __webpack_require__.e/* import() */(6).then(__webpack_require__.bind(null, 78));
+  return __webpack_require__.e/* import() */(19).then(__webpack_require__.bind(null, 78));
 }); // @ Unused
 //const menuList = Vue.component('list-menu', require('./components/menuList.vue'));
 
 var dishList = Vue.component('list-dishes', function () {
-  return __webpack_require__.e/* import() */(5).then(__webpack_require__.bind(null, 79));
+  return __webpack_require__.e/* import() */(18).then(__webpack_require__.bind(null, 79));
 });
 var drinksList = Vue.component('list-drinks', function () {
-  return __webpack_require__.e/* import() */(4).then(__webpack_require__.bind(null, 80));
+  return __webpack_require__.e/* import() */(17).then(__webpack_require__.bind(null, 80));
 });
 var login = Vue.component('login-component', function () {
   return __webpack_require__.e/* import() */(8).then(__webpack_require__.bind(null, 81));
@@ -25627,7 +25627,7 @@ var footer = Vue.component('footer-component', function () {
 });
 
 var home = function home() {
-  return __webpack_require__.e/* import() */(9).then(__webpack_require__.bind(null, 84));
+  return __webpack_require__.e/* import() */(20).then(__webpack_require__.bind(null, 84));
 };
 /* Components para conta de utilizador */
 
@@ -25638,12 +25638,17 @@ var setPassword = Vue.component('set-password', __webpack_require__(56));
 
 var changePassword = Vue.component('change-password', __webpack_require__(61));
 var changeUserNameAndFullName = Vue.component('edit-user', __webpack_require__(66));
-var changeUserPicture = Vue.component('change-profile-picture', __webpack_require__(71));
+var changeUserPicture = Vue.component('change-profile-picture', __webpack_require__(71)); // Orders
+
+var orders = Vue.component('orders', function () {
+  return __webpack_require__.e/* import() */(16).then(__webpack_require__.bind(null, 139));
+});
 var routes = [{
   path: '/',
   component: home,
   name: 'home'
-}, {
+}, // { path: '/', redirect: '/menu' },
+{
   path: '/users',
   component: users
 }, {
@@ -25656,6 +25661,10 @@ var routes = [{
 }, {
   path: '/account',
   component: accountPage
+}, // Orders
+{
+  path: '/orders',
+  component: orders
 }];
 var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
   mode: 'history',

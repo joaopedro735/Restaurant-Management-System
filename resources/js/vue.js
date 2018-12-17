@@ -56,13 +56,19 @@ const changePassword = Vue.component('change-password', require('./components/ac
 const changeUserNameAndFullName = Vue.component('edit-user', require('./components/account/changeUserNameAndFullName.vue'));
 const changeUserPicture = Vue.component('change-profile-picture', require('./components/account/changeUserPicture.vue'));
 
+// Orders
+const orders = Vue.component('orders', () => import('./components/orders.vue'));
+
 const routes = [
     { path: '/', component: home, name: 'home'},
+    // { path: '/', redirect: '/menu' },
     { path: '/users', component: users },
     { path: '/menu', component: menu },
     // { path: '/login', component: login },
     { path: '/logout', component: logout },
-    { path: '/account', component: accountPage }
+    { path: '/account', component: accountPage },
+    // Orders
+    { path: '/orders', component: orders }
 ];
 
 const router = new VueRouter({

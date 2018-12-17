@@ -25,6 +25,4 @@ class ItemControllerAPI extends Controller
             return ItemResource::collection(Item::all());
         }
     }
-
-    
 }
