@@ -1,23 +1,33 @@
 <template>
     <div>
         <v-card>
-            <v-card-title class="headline light-blue lighten-3" primary-title>Users</v-card-title>
+            <v-card-title class="headline light-blue lighten-3" primary-title>Orders</v-card-title>
             <v-data-table
                     :headers="headers"
-                    :items="users"
+                    :items="orders"
                     :pagination.sync="pagination"
-                    :total-items="totalUsers"
+                    :total-items="totalOrders"
                     :loading="loading"
+                    item-key="created_at"
                     class="elevation-1">
                 <template slot="items" slot-scope="props">
-                    <td>
-                        <!-- <v-avatar size="56px">
-                            <img v-bind:src=props.item.photo_url alt="miau">
-                        </v-avatar> -->
-                    </td>
-                    <td>{{ props.item.name }}</td>
-                    <td>{{ props.item.type }}</td>
-                    <td>{{ props.item.email }}</td>
+                    <tr @click="props.expanded = !props.expanded">
+                        <td>{{ props.item.state }}</td>
+                        <td>{{ props.item.responsable_cook }}</td>
+                        <td>{{ props.item.created_at }}</td>
+                        <td>{{ props.item.start }}</td>
+                        <td>{{ props.item.end }}</td>
+                    </tr>
+                </template>
+                <template slot="no-data">
+                    <v-alert :value="true" color="error" icon="warning">
+                        No orders available
+                    </v-alert>
+                </template>
+                <template slot="expand" slot-scope="props">
+                    <v-card flat>
+                        <v-card-text>Last update: {{ props.item.updated_at }}</v-card-text>
+                    </v-card>
                 </template>
             </v-data-table>
     </v-card>
@@ -31,12 +41,16 @@
                 totalOrders: 0,
                 orders: [],
                 loading: true,
-                pagination: {},
+                pagination: {
+                    sortBy: 'responsable_cook'
+                },
                 headers: [
-                    /* { text: '', value: 'photo_url', align: 'left', sortable: false, width: '60px' }, */
-                    { text: 'Estado', value: 'state', width: '500px'},
-                    { text: 'Tipo', value: 'type', width: '80px'},
-                    { text: 'Data & Hora', value: 'datetime', width: '200px'},
+                    { text: 'Status', value: 'state'},
+                    { text: 'Cook', value: 'responsable_cook'},
+                    { text: 'Ordered at', value: 'created_at'},
+                    { text: 'Begin', value: 'start'},
+                    { text: 'End', value: 'end'},
+                    //{ text: 'Atualizado', value: 'updated_at'}
                 ]
             }
         },
@@ -58,10 +72,14 @@
                 return axios.all([
                     axios.get('/api/orders', {
                         params: {
-                            page: this.pagination.page, rowsPerPage: this.pagination.rowsPerPage
+                            page: this.pagination.page, rowsPerPage: this.pagination.rowsPerPage, cook_id: 38
                         }
                     }),
-                    axios.get('/api/orders', {params: {nmr: 0}})
+                    axios.get('/api/orders', {
+                        params: {
+                            nmr: 0
+                        }
+                    })
                 ]).then(axios.spread((ordersRes, nmrRes) => {
                     this.loading = false;
                     return {
@@ -71,6 +89,17 @@
                         }
                     }
                 }));
+            },
+            changeSort (column) {
+                if (this.pagination.sortBy === column)
+                {
+                    this.pagination.descending = !this.pagination.descending
+                }
+                else 
+                {
+                    this.pagination.sortBy = column
+                    this.pagination.descending = false
+                }
             }
         }
     }
