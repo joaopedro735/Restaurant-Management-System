@@ -35,7 +35,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -83,9 +83,6 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 //
 //
 //
-//
-//
-//
 module.exports = {
   data: function data() {
     return {
@@ -95,8 +92,7 @@ module.exports = {
       drinks: [],
       showDishes: true,
       showDrinks: true,
-      showAll: true,
-      showProfile: true
+      showAll: true
     };
   },
   methods: {},
@@ -197,32 +193,7 @@ var render = function() {
             },
             [_vm._v("Bebidas")]
           )
-        ]),
-        _vm._v(" "),
-        _vm.logged
-          ? _c("div", { staticClass: "btn-group" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn ",
-                  class: {
-                    "btn-primary": _vm.showDrinks && !_vm.showAll,
-                    "btn-secondary": !_vm.showDrinks
-                  },
-                  attrs: { id: "profile", type: "button" },
-                  on: {
-                    click: function($event) {
-                      _vm.showDishes = false
-                      _vm.showDrinks = false
-                      _vm.showAll = false
-                      _vm.showProfile = true
-                    }
-                  }
-                },
-                [_vm._v("Bebidas")]
-              )
-            ])
-          : _vm._e()
+        ])
       ])
     ]),
     _vm._v(" "),

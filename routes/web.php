@@ -15,4 +15,6 @@
     return view('welcome');
 });*/
 
-Route::get('/{any}','VueController@index')->where('any', '.*');
+if ( ! request()->ajax() ) {
+    Route::get('/{any}', 'VueController@index')->where('any', '.*');
+}
