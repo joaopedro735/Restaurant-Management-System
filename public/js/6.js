@@ -107,6 +107,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _ref;
@@ -117,6 +125,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       showPage: false,
       totalOrders: 0,
       orders: [],
+      order: [{
+        name: 'Please wait'
+      }],
       loading: true,
       pagination: {},
       rowsPerPageItems: [10, 25, 50, 100]
@@ -169,20 +180,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           rowsPerPage: this.pagination.rowsPerPage,
           cookID: this.cookID
         }
-      }), axios.get('/api/orders', {
+      })
+      /* ,
+      axios.get('/api/orders', {
         params: {
-          nmr: 0,
-          cookID: this.cookID
+            nmr: 0,
+            cookID: this.cookID
         }
-      })]).then(axios.spread(function (ordersRes, nmrRes) {
+      }) */
+      ]).then(axios.spread(function (ordersRes, nmrRes) {
         _this2.loading = false;
         return {
           data: {
             orders: ordersRes.data.data,
-            totalOrders: nmrRes.data
+            totalOrders: ordersRes.data.meta.total
           }
         };
       }));
+    },
+    getOrderDataFromApi: function getOrderDataFromApi(id) {
+      var _this3 = this;
+
+      this.order[0].name = 'Please wait';
+      this.loading = true;
+      axios.get('/api/order', {
+        params: {
+          orderID: id
+        }
+      }).then(function (response) {
+        _this3.loading = false;
+        _this3.order = response.data;
+        console.log(_this3.order);
+      });
     },
     changeSort: function changeSort(column) {
       if (this.pagination.sortBy === column) {
@@ -282,7 +311,8 @@ var render = function() {
                           },
                           on: {
                             click: function($event) {
-                              props.expanded = !props.expanded
+                              ;(props.expanded = !props.expanded),
+                                _vm.getOrderDataFromApi(props.item.id)
                             }
                           }
                         },
@@ -338,9 +368,9 @@ var render = function() {
                                         attrs: { small: "", color: "success" },
                                         nativeOn: {
                                           click: function($event) {
-                                            _vm.$emit(
-                                              "status-changed",
-                                              props.item
+                                            _vm.changeState(
+                                              props.item,
+                                              "prepared"
                                             )
                                           }
                                         }
@@ -364,9 +394,9 @@ var render = function() {
                                         attrs: { small: "", color: "error" },
                                         nativeOn: {
                                           click: function($event) {
-                                            _vm.$emit(
-                                              "status-changed",
-                                              props.item
+                                            _vm.changeState(
+                                              props.item,
+                                              "cancel"
                                             )
                                           }
                                         }
@@ -385,12 +415,28 @@ var render = function() {
                                     _c(
                                       "v-btn",
                                       {
+                                        attrs: { small: "", color: "success" },
+                                        nativeOn: {
+                                          click: function($event) {
+                                            _vm.changeState(
+                                              props.item,
+                                              "cancel"
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Mark as prepared")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-btn",
+                                      {
                                         attrs: { small: "", color: "info" },
                                         nativeOn: {
                                           click: function($event) {
-                                            _vm.$emit(
-                                              "status-changed",
-                                              props.item
+                                            _vm.changeState(
+                                              props.item,
+                                              "cancel"
                                             )
                                           }
                                         }
@@ -417,8 +463,8 @@ var render = function() {
                         [
                           _c("v-card-text", [
                             _vm._v(
-                              "\n                        Responsible cook: " +
-                                _vm._s(props.item.responsible_cook) +
+                              "\n                        Order details: " +
+                                _vm._s(_vm.order[0].name) +
                                 "\n                    "
                             )
                           ])

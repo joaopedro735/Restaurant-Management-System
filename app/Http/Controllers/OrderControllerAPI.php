@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Order;
 use App\User;
+use App\Item;
 use App\StoreUserRequest;
 use Hash;
 
@@ -58,54 +59,28 @@ class OrderControllerAPI extends Controller
         {
             if ($request->has('rowsPerPage') && $request->input('rowsPerPage') == -1)
             {
-                return OrderResource::collection($user->orders()
+                return OrderResource::collection(DB::table('orders')
                     ->whereRaw('responsible_cook_id = ? AND (state = "in preparation" OR state = "confirmed")', $user->id)
-                    ->orderByRaw('state desc, created_at asc')
-                    ->get());
+                    ->union(DB::table('orders')
+                        ->whereRaw('(responsible_cook_id != ? OR responsible_cook_id IS NULL) AND state = "confirmed"', $user->id))
+                    ->orderByRaw("FIELD(responsible_cook_id, '$user->id') desc, responsible_cook_id is NULL desc, state desc, created_at asc")
+                    ->paginate($request->input('rowsPerPage', 10)));
             }
 
             return OrderResource::collection(DB::table('orders')
                     ->whereRaw('responsible_cook_id = ? AND (state = "in preparation" OR state = "confirmed")', $user->id)
-                    /* ->orderByRaw('state desc, created_at asc') */
                     ->union(DB::table('orders')
                         ->whereRaw('(responsible_cook_id != ? OR responsible_cook_id IS NULL) AND state = "confirmed"', $user->id))
                     ->orderByRaw("FIELD(responsible_cook_id, '$user->id') desc, responsible_cook_id is NULL desc, state desc, created_at asc")
-                    ->paginate(10));
-
-            /* return OrderResource::collection(DB::table('orders')
-                    ->whereRaw('responsible_cook_id != ? AND state = "confirmed"', $user->id)
-                    ->orderByRaw('state desc, created_at asc')
-                    ->union(DB::table('orders')
-                        ->whereRaw('responsible_cook_id = ? AND (state = "in preparation" OR state = "confirmed")', $user->id))
-                    ->paginate(10)); */
+                    ->paginate($request->input('rowsPerPage', 10)));
         }
-        elseif ($request->has('nmr'))
-        {
-            return (DB::table('orders')
-            ->whereRaw('responsible_cook_id = ? AND (state = "in preparation" OR state = "confirmed")', $user->id)
-            ->union(DB::table('orders')
-                ->whereRaw('(responsible_cook_id != ? OR responsible_cook_id IS NULL) AND state = "confirmed"', $user->id))
-            /* ->union(DB::table('orders')
-                ->whereRaw('responsible_cook_id IS NULL AND state = "confirmed"')) */
-            ->count());
-            /* $cookOrdersInPrepAndConfCount = $user->orders()
-            ->whereRaw('responsible_cook_id = ? AND (state = "in preparation" OR state = "confirmed")', $user->id)
-            ->count();
+    }
 
-            $allConfOrdersCount = DB::table('orders')
-            ->whereRaw('responsible_cook_id != ? AND state = "confirmed"', $user->id)
-            ->count();
+    public function getOrderData(Request $request) {
+        $id = $request->input('orderID');
+        $itemID = DB::table('orders')->select('item_id')->where('id', $id)->get();
 
-            $nullCookOrderCount = DB::table('orders')
-            ->whereRaw('responsible_cook_id IS NULL AND state = "confirmed"')
-            ->count();
-
-            return ($cookOrdersInPrepAndConfCount + $allConfOrdersCount + $nullCookOrderCount); */
-        }
-        else
-        {
-            return $user->orders()->count();
-        }
+        return DB::table('items')->select('name')->where('id', $itemID[0]->item_id)->get();
     }
 
     public static function getCookName($id) {

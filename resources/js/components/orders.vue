@@ -12,7 +12,14 @@
                     item-key="created_at"
                     class="elevation-1">
                 <template slot="items" slot-scope="props">
-                    <tr :key="props.item.created_at" :class="{'in-prep': (props.item.responsible_cook_id == user.id & props.item.state == 'In preparation'), 'this-cook-conf': (props.item.responsible_cook_id == user.id & props.item.state == 'Confirmed'), 'other-cook-conf': props.item.responsible_cook_id != user.id, 'no-cook': props.item.responsible_cook == 'No cook assigned'}" @click="props.expanded = !props.expanded">
+                    <tr :key="props.item.created_at"
+                        :class="{
+                                'in-prep': (props.item.responsible_cook_id == user.id & props.item.state == 'In preparation'),
+                                'this-cook-conf': (props.item.responsible_cook_id == user.id & props.item.state == 'Confirmed'),
+                                'other-cook-conf': props.item.responsible_cook_id != user.id,
+                                'no-cook': props.item.responsible_cook == 'No cook assigned'
+                            }"
+                            @click="props.expanded = !props.expanded, getOrderDataFromApi(props.item.id)">
                         <td>
                             <v-chip v-if="props.item.state == 'Confirmed'" outline color="primary">&nbsp;&nbsp;{{ props.item.state }}&nbsp;&nbsp;&nbsp;</v-chip>
                             <v-chip v-if="props.item.state == 'In preparation'" outline color="primary">{{ props.item.state }}</v-chip>
@@ -23,13 +30,14 @@
                         <td>{{ props.item.updated_at }}</td>
                         <td class="text-xs-right">
                             <span v-if="props.item.state == 'In preparation'">
-                                <v-btn small color="success" @click.native="$emit('status-changed', props.item)">Mark as prepared</v-btn>
+                                <v-btn small color="success" @click.native="changeState(props.item, 'prepared')">Mark as prepared</v-btn>
                             </span>
                             <span v-if="props.item.state == 'In preparation' || (props.item.responsible_cook_id == user.id & props.item.state == 'Confirmed')">
-                                <v-btn small color="error" @click.native="$emit('status-changed', props.item)">Cancel</v-btn>
+                                <v-btn small color="error" @click.native="changeState(props.item, 'cancel')">Cancel</v-btn>
                             </span>
                             <span v-if="props.item.responsible_cook == 'No cook assigned'">
-                                <v-btn small color="info" @click.native="$emit('status-changed', props.item)">Prepare</v-btn>
+                                <v-btn small color="success" @click.native="changeState(props.item, 'cancel')">Mark as prepared</v-btn>
+                                <v-btn small color="info" @click.native="changeState(props.item, 'cancel')">Prepare</v-btn>
                             </span>
                         </td>
                     </tr>
@@ -47,7 +55,7 @@
                 <template slot="expand" slot-scope="props">
                     <v-card flat>
                         <v-card-text>
-                            Responsible cook: {{ props.item.responsible_cook }}
+                            Order details: {{ order[0].name }}
                         </v-card-text>
                     </v-card>
                 </template>
@@ -65,6 +73,9 @@
                 showPage: false,
                 totalOrders: 0,
                 orders: [],
+                order: [{
+                    name: 'Please wait'
+                }],
                 loading: true,
                 pagination: {},
                 rowsPerPageItems: [10, 25, 50, 100],
@@ -103,22 +114,36 @@
                         params: {
                             page: this.pagination.page, rowsPerPage: this.pagination.rowsPerPage, cookID: this.cookID
                         }
-                    }),
+                    })/* ,
                     axios.get('/api/orders', {
                         params: {
                             nmr: 0,
                             cookID: this.cookID
                         }
-                    })
+                    }) */
                 ]).then(axios.spread((ordersRes, nmrRes) => {
                     this.loading = false;
                     return {
                         data: {
                             orders: ordersRes.data.data,
-                            totalOrders: nmrRes.data
+                            totalOrders: ordersRes.data.meta.total
                         }
                     }
                 }));
+            },
+            getOrderDataFromApi (id) {
+                this.order[0].name = 'Please wait';
+                this.loading = true;
+                axios.get('/api/order', {
+                    params: {
+                        orderID: id
+                    }
+                }).then(response => {
+                    this.loading = false;
+                    this.order = response.data
+                    
+                    console.log(this.order);
+                });
             },
             changeSort (column) {
                 if (this.pagination.sortBy === column)

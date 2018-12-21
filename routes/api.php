@@ -26,6 +26,7 @@ Route::middleware('auth:api')->get('users/me', 'UserControllerAPI@myProfile');
 
 Route::get('menu', 'ItemControllerAPI@index');
 Route::get('orders', 'OrderControllerAPI@index');
+Route::get('order', 'OrderControllerAPI@getOrderData');
 
 Route::post('login', 'LoginControllerAPI@login');
 Route::post('/account/confirm', 'UserControllerAPI@confirm');
