@@ -10,20 +10,20 @@ class Order extends Model
     {
         switch ($orderState) {
             case 'pending':
-                return 'Pendente';
+                return 'Pending';
             case 'confirmed':
-                return 'Confirmado';
+                return 'Confirmed';
             case 'in preparation':
-                return 'Em preparação';
+                return 'In preparation';
             case 'prepared':
-                return 'Preparado';
+                return 'Prepared';
             case 'delivered':
-                return 'Entregue';
+                return 'Delivered';
             case 'not delivered':
-                return 'Não entregue';
+                return 'Not delivered';
         }
 
-        return 'Desconhecido';
+        return 'Unknown';
     }
 
     public function item()

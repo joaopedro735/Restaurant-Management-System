@@ -18,7 +18,8 @@ class OrderResource extends JsonResource
     {
         return [
             'state' => Order::orderStateToStr($this->state),
-            'responsable_cook' => OrderControllerAPI::getCookName($this->responsible_cook_id)->name,
+            'responsible_cook' => OrderControllerAPI::getCookName($this->responsible_cook_id),
+            'responsible_cook_id' => OrderControllerAPI::getCookID($this->responsible_cook_id),
             'created_at' => OrderControllerAPI::timestampToString($this->created_at),
             'start' => $this->start,
             'end' => $this->end,
