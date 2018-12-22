@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.7.17 on 2018-12-13 23:46:54.
+ * Generated for Laravel 5.7.19 on 2018-12-19 00:42:28.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -5809,7 +5809,7 @@ namespace Illuminate\Support\Facades {
          * @param string $key
          * @param array $replace
          * @param string $locale
-         * @return string|array|null 
+         * @return string|array 
          * @static 
          */ 
         public static function trans($key, $replace = array(), $locale = null)
@@ -5824,7 +5824,7 @@ namespace Illuminate\Support\Facades {
          * @param array $replace
          * @param string|null $locale
          * @param bool $fallback
-         * @return string|array|null 
+         * @return string|array 
          * @static 
          */ 
         public static function get($key, $replace = array(), $locale = null, $fallback = true)
@@ -5838,7 +5838,7 @@ namespace Illuminate\Support\Facades {
          * @param string $key
          * @param array $replace
          * @param string $locale
-         * @return string|array|null 
+         * @return string|array 
          * @static 
          */ 
         public static function getFromJson($key, $replace = array(), $locale = null)

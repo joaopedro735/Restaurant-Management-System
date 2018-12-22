@@ -18,6 +18,7 @@ Route::group([
     Route::get('/users/me', 'UserControllerAPI@myProfile');
     Route::post('logout', 'LoginControllerAPI@logout');
     Route::post('/account/create', 'UserControllerAPI@create');
+    Route::put('/account/changePassword', 'UserControllerAPI@changePassword');
 });
 
 Route::get('users', 'UserControllerAPI@index');

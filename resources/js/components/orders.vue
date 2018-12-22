@@ -31,6 +31,18 @@
                 </template>
             </v-data-table>
     </v-card>
+        <v-btn
+                color="pink"
+                dark
+                big
+                absolute
+                open-on-hover
+                right
+                bottom
+                fab
+        >
+            <v-icon>add</v-icon>
+        </v-btn>
     </div>
 </template>
 

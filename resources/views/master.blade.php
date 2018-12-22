@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>@yield('title')</title>
+        <base href="/">
         @yield('extrastyles') 
         <!-- Latest compiled and minified CSS & JS -->
         <link rel="stylesheet" href="{{ URL::asset('css/app.css') }}">

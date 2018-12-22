@@ -18,11 +18,13 @@ import VueRouter from 'vue-router';
 import store from './stores/global-store';
 import Vuetify from 'vuetify';
 import Toasted from 'vue-toasted';
+import Vuelidate from 'vuelidate';
 
 Vue.use(VueRouter);
 Vue.use(store);
 Vue.use(Vuetify);
 Vue.use(Toasted);
+Vue.use(Vuelidate);
 
 /* Components para users */
 //const users = Vue.component('users-component', require('./components/users.vue'));
@@ -35,7 +37,7 @@ const waiterList = Vue.component('list-waiters', () => import('./components/user
 const cashierList = Vue.component('list-cashiers', () => import('./components/user/cashierList.vue'));
 
 /* Components para menu */
-const menu = Vue.component('items-component', require('./components/menu.vue'));
+const menu = Vue.component('items-component', () => import('./components/menu/menu.vue'));
 // @ Unused
 //const menuList = Vue.component('list-menu', require('./components/menuList.vue'));
 const dishList = Vue.component('list-dishes', () => import('./components/menu/dishList.vue'));
@@ -52,17 +54,18 @@ const home = () =>import('./components/home');
 const accountPage = Vue.component('account-page', require('./components/account/accountPage.vue'));
 const setPassword = Vue.component('set-password', require('./components/account/setAccountPassword.vue'));
 /* User profile options */
-const changePassword = Vue.component('change-password', require('./components/account/changePassword.vue'));
 const changeUserNameAndFullName = Vue.component('edit-user', require('./components/account/changeUserNameAndFullName.vue'));
 const changeUserPicture = Vue.component('change-profile-picture', require('./components/account/changeUserPicture.vue'));
 const activateAccount = Vue.component('activate-account', () => import('./components/activateAccount.vue'));
-
+const changePassword = Vue.component('change-password',() => import('./components/account/changePassword1.vue'));
 
 /* Worker options */
 const shiftOptions = Vue.component('shift-options', () => import('./components/worker/shiftOptions.vue'));
 
 // Orders
 const orders = Vue.component('orders', () => import('./components/orders.vue'));
+
+const userNav = Vue.component('user-nav', () => import("./components/nav/user.vue"));
 
 const routes = [
     { path: '/', component: home, name: 'home'},
@@ -75,7 +78,8 @@ const routes = [
     // Orders
     { path: '/orders', component: orders },
     //{ path: '/account', component: accountPage },
-    { path: '/account/activate', component: activateAccount, name: 'activate'}
+    { path: '/account/activate', component: activateAccount, name: 'activate'},
+    { path: '/account/changePassword', component: changePassword}
 ];
 
 const router = new VueRouter({

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Notifications\PasswordResetSuccess;
 use App\Notifications\UserRegisteredSuccessfully;
 use App\PasswordReset;
+use Auth;
 use function GuzzleHttp\Promise\all;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Support\Jsonable;
@@ -34,10 +35,10 @@ class UserControllerAPI extends Controller
     public function create(Request $request)
     {
         $validatedData = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|string|email|max:255|unique:users',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
             'username' => 'required|string|max:255|unique:users',
-            'type'     => ['required', Rule::in(["manager", "cook", "waiter", "cashier"])],
+            'type' => ['required', Rule::in(["manager", "cook", "waiter", "cashier"])],
         ]);
         $user = new User($validatedData);
         $user->blocked = 1;
@@ -53,14 +54,15 @@ class UserControllerAPI extends Controller
         );
         if ($user && $passwordReset)
             $user->notify(
-                new UserRegisteredSuccessfully($user,$passwordReset->token)
+                new UserRegisteredSuccessfully($user, $passwordReset->token)
             );
         return response()->json([
             'message' => 'We have e-mailed your password reset link!'
         ]);
     }
 
-    public function confirm(Request $request) {
+    public function confirm(Request $request)
+    {
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string|confirmed',
@@ -85,6 +87,35 @@ class UserControllerAPI extends Controller
         $passwordReset->delete();
         $user->notify(new PasswordResetSuccess($passwordReset));
         return response()->json($user);
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required|string',
+            'new_password' => 'required|string|confirmed',
+        ]);
+        //$user = User::where('email', $request->email)->first();
+        $user = Auth::guard('api')->user();
+        if (!$user)
+            return response()->json([
+                'message' => 'We cant find a user with that e-mail address.'
+            ], 404);
+        $check  = Auth::guard('web')->attempt([
+            'email' => $user->email,
+            'password' => $request->old_password,
+        ]);
+
+        if ($check) {
+            $user->password = bcrypt($request->new_password);
+            $user->token->revoke();
+            $token = $user->createToken('newToken')->accessToken;
+            $user->save();
+        }
+
+        return response()->json([
+            'message' => 'Current password incorrect.'
+        ], 404);
     }
 
     public function myProfile(Request $request)

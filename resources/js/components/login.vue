@@ -119,11 +119,6 @@
                         Object.assign(this.$data, initialState());
                         return axios.get('api/users/me');
                     })
-                    .then(response => {
-                        this.$store.commit('setUser', response.data.data);
-                        console.log("wtv");
-                        //this.$socket.emit('user_enter', response.data.data);
-                    })
                     .catch(error => {
                         this.alert.error = error.response.data.msg;
                         this.alert.show = true;
