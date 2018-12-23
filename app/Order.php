@@ -6,6 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
+      /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'state', 'responsible_cook_id'
+    ];
+
     public static function orderStateToStr($orderState)
     {
         switch ($orderState) {
@@ -29,5 +38,9 @@ class Order extends Model
     public function item()
     {
         return $this->hasOne('App\Item', 'id', 'item_id');
+    }
+
+    public static function timestampToString($timestamp) {
+        return mb_convert_encoding($timestamp, "UTF-8");;
     }
 }

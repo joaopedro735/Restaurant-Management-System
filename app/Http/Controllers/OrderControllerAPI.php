@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 
 use App\Order;
 use App\User;
-use App\Item;
 use App\StoreUserRequest;
 use Hash;
 
@@ -76,30 +75,16 @@ class OrderControllerAPI extends Controller
         }
     }
 
-    public function getOrderData(Request $request) {
-        $id = $request->input('orderID');
-        $itemID = DB::table('orders')->select('item_id')->where('id', $id)->get();
+    public function update(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
 
-        return DB::table('items')->select('name')->where('id', $itemID[0]->item_id)->get();
-    }
+        $request->validate([
+            'state' => 'in:confirmed,in preparation,prepared'
+        ]);
 
-    public static function getCookName($id) {
-        if ($id == null) {
-            return 'No cook assigned';
-        }
+        $order->update($request->all());
 
-        return DB::table('users')->select('name')->where('id', $id)->first()->name;
-    }
-
-    public static function getCookID($id) {
-        if ($id == null) {
-            return 0;
-        }
-
-        return $id;
-    }
-
-    public static function timestampToString($timestamp) {
-        return mb_convert_encoding($timestamp, "UTF-8");;
+        return new OrderResource($order);
     }
 }

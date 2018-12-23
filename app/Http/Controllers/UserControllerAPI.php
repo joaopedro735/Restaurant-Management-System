@@ -91,4 +91,20 @@ class UserControllerAPI extends Controller
     {
         return new UserResource($request->user());
     }
+
+    public static function getCookName($id) {
+        if ($id == null) {
+            return 'No cook assigned';
+        }
+
+        return DB::table('users')->select('name')->where('id', $id)->first()->name;
+    }
+
+    public static function getCookID($id) {
+        if ($id == null) {
+            return 0;
+        }
+
+        return $id;
+    }
 }

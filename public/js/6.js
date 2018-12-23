@@ -115,6 +115,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _ref;
@@ -125,14 +127,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       showPage: false,
       totalOrders: 0,
       orders: [],
-      order: [{
-        name: 'Please wait'
-      }],
+      currentOrder: {},
       loading: true,
       pagination: {},
-      rowsPerPageItems: [10, 25, 50, 100]
+      rowsPerPageItems: [15, 25, 50, 100]
     }, _defineProperty(_ref, "pagination", {
-      rowsPerPage: 10
+      rowsPerPage: 15
     }), _defineProperty(_ref, "headers", [{
       text: 'Status',
       align: 'left',
@@ -150,6 +150,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }, {
       text: 'Last update',
       value: 'updated_at'
+    }, {
+      text: 'Order ID',
+      value: 'id'
     }, {
       text: '',
       value: 'actions'
@@ -198,20 +201,83 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         };
       }));
     },
-    getOrderDataFromApi: function getOrderDataFromApi(id) {
+
+    /* getOrderDataFromApi (id) {
+        this.order[0].name = 'Please wait';
+        this.loading = true;
+        axios.get('/api/order', {
+            params: {
+                orderID: id
+            }
+        }).then(response => {
+            this.loading = false;
+            this.order = response.data
+            
+            console.log(this.order);
+        });
+    }, */
+    changeOrderState: function changeOrderState(index, order, state) {
       var _this3 = this;
 
-      this.order[0].name = 'Please wait';
-      this.loading = true;
-      axios.get('/api/order', {
-        params: {
-          orderID: id
-        }
-      }).then(function (response) {
-        _this3.loading = false;
-        _this3.order = response.data;
-        console.log(_this3.order);
-      });
+      console.clear();
+      this.currentOrder = Object.assign({}, order);
+      var orderToUpdate = this.currentOrder;
+      console.log('[Checkpoint 1] Order ID: ' + orderToUpdate.id);
+      console.log('               Responsible cook ID: ' + this.cookID);
+      console.log('               Current state: ' + orderToUpdate.state);
+      console.log('               New state: ' + state); // Order already has a cook
+
+      if (order.responsible_cook_id != 0) {
+        /** Server needs : {
+         * order.id
+         * order
+         * new state
+         * } */
+        console.log('Order already had this cook');
+        axios.put('/api/orders/' + orderToUpdate.id + '?state=' + state).then(function (response) {
+          console.log(response.data.data);
+          Vue.set(_this3.orders, index, response.data.data);
+
+          if (state == 'prepared') {
+            _this3.orders.splice(index, 1);
+
+            _this3.totalOrders--;
+          }
+
+          _this3.$toasted.success('Order updated', {
+            position: "top-center",
+            duration: 3000,
+            icon: "error_outline"
+          });
+        }).catch(function (error) {
+          console.dir(error);
+        });
+      } else {
+        // Order doesn't have a cook
+
+        /** Server needs : {
+         * order.id
+         * cook.id
+         * order
+         * order.state
+         * } */
+        console.log('Order had no cook');
+        axios.put('/api/orders/' + orderToUpdate.id + '?state=' + state + '&responsible_cook_id=' + this.cookID).then(function (response) {
+          Vue.set(_this3.orders, index, response.data.data);
+
+          if (state == 'prepared') {
+            _this3.orders.splice(index, 1);
+          }
+
+          _this3.$toasted.success('Order updated', {
+            position: "top-center",
+            duration: 3000,
+            icon: "error_outline"
+          });
+        }).catch(function (error) {
+          console.dir(error);
+        });
+      }
     },
     changeSort: function changeSort(column) {
       if (this.pagination.sortBy === column) {
@@ -311,8 +377,7 @@ var render = function() {
                           },
                           on: {
                             click: function($event) {
-                              ;(props.expanded = !props.expanded),
-                                _vm.getOrderDataFromApi(props.item.id)
+                              props.expanded = !props.expanded
                             }
                           }
                         },
@@ -348,7 +413,9 @@ var render = function() {
                           ),
                           _vm._v(" "),
                           _c("td", [
-                            _vm._v(_vm._s(props.item.responsible_cook))
+                            _c("strong", [
+                              _vm._v(_vm._s(props.item.responsible_cook))
+                            ])
                           ]),
                           _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(props.item.created_at))]),
@@ -357,8 +424,11 @@ var render = function() {
                           _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(props.item.updated_at))]),
                           _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(props.item.id))]),
+                          _vm._v(" "),
                           _c("td", { staticClass: "text-xs-right" }, [
-                            props.item.state == "In preparation"
+                            (props.item.state == "In preparation") &
+                            (props.item.responsible_cook_id == _vm.user.id)
                               ? _c(
                                   "span",
                                   [
@@ -368,7 +438,8 @@ var render = function() {
                                         attrs: { small: "", color: "success" },
                                         nativeOn: {
                                           click: function($event) {
-                                            _vm.changeState(
+                                            _vm.changeOrderState(
+                                              props.index,
                                               props.item,
                                               "prepared"
                                             )
@@ -382,26 +453,43 @@ var render = function() {
                                 )
                               : _vm._e(),
                             _vm._v(" "),
-                            props.item.state == "In preparation" ||
                             (props.item.responsible_cook_id == _vm.user.id) &
-                              (props.item.state == "Confirmed")
+                            (props.item.state == "Confirmed")
                               ? _c(
                                   "span",
                                   [
                                     _c(
                                       "v-btn",
                                       {
-                                        attrs: { small: "", color: "error" },
+                                        attrs: { small: "", color: "info" },
                                         nativeOn: {
                                           click: function($event) {
-                                            _vm.changeState(
+                                            _vm.changeOrderState(
+                                              props.index,
                                               props.item,
-                                              "cancel"
+                                              "in preparation"
                                             )
                                           }
                                         }
                                       },
-                                      [_vm._v("Cancel")]
+                                      [_vm._v("Prepare")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: { small: "", color: "success" },
+                                        nativeOn: {
+                                          click: function($event) {
+                                            _vm.changeOrderState(
+                                              props.index,
+                                              props.item,
+                                              "prepared"
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Mark as Prepared")]
                                     )
                                   ],
                                   1
@@ -415,33 +503,35 @@ var render = function() {
                                     _c(
                                       "v-btn",
                                       {
-                                        attrs: { small: "", color: "success" },
-                                        nativeOn: {
-                                          click: function($event) {
-                                            _vm.changeState(
-                                              props.item,
-                                              "cancel"
-                                            )
-                                          }
-                                        }
-                                      },
-                                      [_vm._v("Mark as prepared")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-btn",
-                                      {
                                         attrs: { small: "", color: "info" },
                                         nativeOn: {
                                           click: function($event) {
-                                            _vm.changeState(
+                                            _vm.changeOrderState(
+                                              props.index,
                                               props.item,
-                                              "cancel"
+                                              "in preparation"
                                             )
                                           }
                                         }
                                       },
                                       [_vm._v("Prepare")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: { small: "", color: "success" },
+                                        nativeOn: {
+                                          click: function($event) {
+                                            _vm.changeOrderState(
+                                              props.index,
+                                              props.item,
+                                              "prepared"
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Mark as prepared")]
                                     )
                                   ],
                                   1
@@ -464,7 +554,7 @@ var render = function() {
                           _c("v-card-text", [
                             _vm._v(
                               "\n                        Order details: " +
-                                _vm._s(_vm.order[0].name) +
+                                _vm._s(props.item.item) +
                                 "\n                    "
                             )
                           ])
