@@ -25647,7 +25647,7 @@ var shiftOptions = Vue.component('shift-options', function () {
 }); // Orders
 
 var orders = Vue.component('orders', function () {
-  return __webpack_require__.e/* import() */(6).then(__webpack_require__.bind(null, 91));
+  return __webpack_require__.e/* import() */(6).then(__webpack_require__.bind(null, 161));
 });
 var routes = [{
   path: '/',

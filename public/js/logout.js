@@ -74,7 +74,7 @@ module.exports = {
     };
     axios.post('/api/logout', {}, config).then(function (response) {
       // TODO: Use Vuex stores
-      _this.$store.commit('clearToken');
+      _this.$store.commit('clearUserAndToken');
 
       _this.$router.push({
         name: 'home'

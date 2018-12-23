@@ -30,7 +30,7 @@
             axios.post('/api/logout', {}, config)
             .then(response => {
                 // TODO: Use Vuex stores
-                this.$store.commit('clearToken');
+                this.$store.commit('clearUserAndToken');
                 this.$router.push({name: 'home'});
                 this.$toasted.success("Logged out",
                     {
