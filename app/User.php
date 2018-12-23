@@ -44,4 +44,8 @@ class User extends Authenticatable
 
         return 'Desconhecido';
     }
+
+    public function orders() {
+        return $this->hasMany('App\Order', 'responsible_cook_id', 'id');
+    }
 }

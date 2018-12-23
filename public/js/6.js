@@ -35,7 +35,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n.in-prep[data-v-31cf3a70] {\n    background-color: #BBDEFB;\n}\n.this-cook-conf[data-v-31cf3a70] {\n    background-color: #C8E6C9;\n}\n.other-cook-conf[data-v-31cf3a70] {\n    background-color: #FFCDD2;\n}\n.no-cook[data-v-31cf3a70] {\n    background-color: #FFECB3;\n}\n", ""]);
 
 // exports
 
@@ -47,6 +47,40 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -85,30 +119,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {
+    var _ref;
+
+    return _ref = {
+      user: {},
+      cookID: '',
+      showPage: false,
       totalOrders: 0,
       orders: [],
+      currentOrder: {},
       loading: true,
-      pagination: {
-        sortBy: 'responsable_cook'
-      },
-      headers: [{
-        text: 'Status',
-        value: 'state'
-      }, {
-        text: 'Cook',
-        value: 'responsable_cook'
-      }, {
-        text: 'Ordered at',
-        value: 'created_at'
-      }, {
-        text: 'Begin',
-        value: 'start'
-      }, {
-        text: 'End',
-        value: 'end'
-      }]
-    };
+      pagination: {},
+      rowsPerPageItems: [15, 25, 50, 100]
+    }, _defineProperty(_ref, "pagination", {
+      rowsPerPage: 15
+    }), _defineProperty(_ref, "headers", [{
+      text: 'Status',
+      align: 'left',
+      sortable: false,
+      value: 'state'
+    }, {
+      text: 'Cook',
+      value: 'responsible_cook'
+    }, {
+      text: 'Ordered at',
+      value: 'created_at'
+    }, {
+      text: 'Begin',
+      value: 'start'
+    }, {
+      text: 'Last update',
+      value: 'updated_at'
+    }, {
+      text: 'Order ID',
+      value: 'id'
+    }, {
+      text: '',
+      value: 'actions'
+    }]), _ref;
   },
   watch: {
     pagination: {
@@ -117,7 +165,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         this.getDataFromApi().then(function (data) {
           _this.orders = data.data.orders;
-          _this.totalOrders = data.data.totalOrders;
+          _this.totalOrders = data.data.totalOrders; //console.table(this.orders);
         });
       },
       deep: true
@@ -127,26 +175,109 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     getDataFromApi: function getDataFromApi() {
       var _this2 = this;
 
-      this.loading = true;
+      this.loading = true; //console.log('Cook ID: ' + this.user.id);
+
       return axios.all([axios.get('/api/orders', {
         params: {
           page: this.pagination.page,
           rowsPerPage: this.pagination.rowsPerPage,
-          cook_id: 38
+          cookID: this.cookID
         }
-      }), axios.get('/api/orders', {
+      })
+      /* ,
+      axios.get('/api/orders', {
         params: {
-          nmr: 0
+            nmr: 0,
+            cookID: this.cookID
         }
-      })]).then(axios.spread(function (ordersRes, nmrRes) {
+      }) */
+      ]).then(axios.spread(function (ordersRes, nmrRes) {
         _this2.loading = false;
         return {
           data: {
             orders: ordersRes.data.data,
-            totalOrders: nmrRes.data
+            totalOrders: ordersRes.data.meta.total
           }
         };
       }));
+    },
+
+    /* getOrderDataFromApi (id) {
+        this.order[0].name = 'Please wait';
+        this.loading = true;
+        axios.get('/api/order', {
+            params: {
+                orderID: id
+            }
+        }).then(response => {
+            this.loading = false;
+            this.order = response.data
+            
+            console.log(this.order);
+        });
+    }, */
+    changeOrderState: function changeOrderState(index, order, state) {
+      var _this3 = this;
+
+      console.clear();
+      this.currentOrder = Object.assign({}, order);
+      var orderToUpdate = this.currentOrder;
+      console.log('[Checkpoint 1] Order ID: ' + orderToUpdate.id);
+      console.log('               Responsible cook ID: ' + this.cookID);
+      console.log('               Current state: ' + orderToUpdate.state);
+      console.log('               New state: ' + state); // Order already has a cook
+
+      if (order.responsible_cook_id != 0) {
+        /** Server needs : {
+         * order.id
+         * order
+         * new state
+         * } */
+        console.log('Order already had this cook');
+        axios.put('/api/orders/' + orderToUpdate.id + '?state=' + state).then(function (response) {
+          console.log(response.data.data);
+          Vue.set(_this3.orders, index, response.data.data);
+
+          if (state == 'prepared') {
+            _this3.orders.splice(index, 1);
+
+            _this3.totalOrders--;
+          }
+
+          _this3.$toasted.success('Order updated', {
+            position: "top-center",
+            duration: 3000,
+            icon: "error_outline"
+          });
+        }).catch(function (error) {
+          console.dir(error);
+        });
+      } else {
+        // Order doesn't have a cook
+
+        /** Server needs : {
+         * order.id
+         * cook.id
+         * order
+         * order.state
+         * } */
+        console.log('Order had no cook');
+        axios.put('/api/orders/' + orderToUpdate.id + '?state=' + state + '&responsible_cook_id=' + this.cookID).then(function (response) {
+          Vue.set(_this3.orders, index, response.data.data);
+
+          if (state == 'prepared') {
+            _this3.orders.splice(index, 1);
+          }
+
+          _this3.$toasted.success('Order updated', {
+            position: "top-center",
+            duration: 3000,
+            icon: "error_outline"
+          });
+        }).catch(function (error) {
+          console.dir(error);
+        });
+      }
     },
     changeSort: function changeSort(column) {
       if (this.pagination.sortBy === column) {
@@ -155,7 +286,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.pagination.sortBy = column;
         this.pagination.descending = false;
       }
+    },
+    getInformationFromLoggedUser: function getInformationFromLoggedUser() {
+      this.user = this.$store.state.user;
+    },
+    isUserAWorker: function isUserAWorker(user) {
+      //console.log(user);
+      if (user.type == "cook") {
+        this.showPage = true;
+        this.cookID = user.id;
+      } else {
+        console.log('Not authorized to see this page!');
+        this.$toasted.error('You are not authorized to see this page', {
+          position: "top-center",
+          duration: 3000,
+          icon: "error_outline"
+        });
+        this.$router.push('/');
+      }
     }
+  },
+  mounted: function mounted() {
+    this.getInformationFromLoggedUser();
+    this.isUserAWorker(this.user);
   }
 });
 
@@ -191,6 +344,7 @@ var render = function() {
                 headers: _vm.headers,
                 items: _vm.orders,
                 pagination: _vm.pagination,
+                "rows-per-page-items": _vm.rowsPerPageItems,
                 "total-items": _vm.totalOrders,
                 loading: _vm.loading,
                 "item-key": "created_at"
@@ -208,6 +362,19 @@ var render = function() {
                       _c(
                         "tr",
                         {
+                          key: props.item.created_at,
+                          class: {
+                            "in-prep":
+                              (props.item.responsible_cook_id == _vm.user.id) &
+                              (props.item.state == "In preparation"),
+                            "this-cook-conf":
+                              (props.item.responsible_cook_id == _vm.user.id) &
+                              (props.item.state == "Confirmed"),
+                            "other-cook-conf":
+                              props.item.responsible_cook_id != _vm.user.id,
+                            "no-cook":
+                              props.item.responsible_cook == "No cook assigned"
+                          },
                           on: {
                             click: function($event) {
                               props.expanded = !props.expanded
@@ -215,17 +382,162 @@ var render = function() {
                           }
                         },
                         [
-                          _c("td", [_vm._v(_vm._s(props.item.state))]),
+                          _c(
+                            "td",
+                            [
+                              props.item.state == "Confirmed"
+                                ? _c(
+                                    "v-chip",
+                                    {
+                                      attrs: { outline: "", color: "primary" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "  " + _vm._s(props.item.state) + "   "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              props.item.state == "In preparation"
+                                ? _c(
+                                    "v-chip",
+                                    {
+                                      attrs: { outline: "", color: "primary" }
+                                    },
+                                    [_vm._v(_vm._s(props.item.state))]
+                                  )
+                                : _vm._e()
+                            ],
+                            1
+                          ),
                           _vm._v(" "),
                           _c("td", [
-                            _vm._v(_vm._s(props.item.responsable_cook))
+                            _c("strong", [
+                              _vm._v(_vm._s(props.item.responsible_cook))
+                            ])
                           ]),
                           _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(props.item.created_at))]),
                           _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(props.item.start))]),
                           _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(props.item.end))])
+                          _c("td", [_vm._v(_vm._s(props.item.updated_at))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(props.item.id))]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-xs-right" }, [
+                            (props.item.state == "In preparation") &
+                            (props.item.responsible_cook_id == _vm.user.id)
+                              ? _c(
+                                  "span",
+                                  [
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: { small: "", color: "success" },
+                                        nativeOn: {
+                                          click: function($event) {
+                                            _vm.changeOrderState(
+                                              props.index,
+                                              props.item,
+                                              "prepared"
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Mark as prepared")]
+                                    )
+                                  ],
+                                  1
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            (props.item.responsible_cook_id == _vm.user.id) &
+                            (props.item.state == "Confirmed")
+                              ? _c(
+                                  "span",
+                                  [
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: { small: "", color: "info" },
+                                        nativeOn: {
+                                          click: function($event) {
+                                            _vm.changeOrderState(
+                                              props.index,
+                                              props.item,
+                                              "in preparation"
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Prepare")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: { small: "", color: "success" },
+                                        nativeOn: {
+                                          click: function($event) {
+                                            _vm.changeOrderState(
+                                              props.index,
+                                              props.item,
+                                              "prepared"
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Mark as Prepared")]
+                                    )
+                                  ],
+                                  1
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            props.item.responsible_cook == "No cook assigned"
+                              ? _c(
+                                  "span",
+                                  [
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: { small: "", color: "info" },
+                                        nativeOn: {
+                                          click: function($event) {
+                                            _vm.changeOrderState(
+                                              props.index,
+                                              props.item,
+                                              "in preparation"
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Prepare")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: { small: "", color: "success" },
+                                        nativeOn: {
+                                          click: function($event) {
+                                            _vm.changeOrderState(
+                                              props.index,
+                                              props.item,
+                                              "prepared"
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Mark as prepared")]
+                                    )
+                                  ],
+                                  1
+                                )
+                              : _vm._e()
+                          ])
                         ]
                       )
                     ]
@@ -241,7 +553,9 @@ var render = function() {
                         [
                           _c("v-card-text", [
                             _vm._v(
-                              "Last update: " + _vm._s(props.item.updated_at)
+                              "\n                        Order details: " +
+                                _vm._s(props.item.item) +
+                                "\n                    "
                             )
                           ])
                         ],
@@ -253,13 +567,19 @@ var render = function() {
               ])
             },
             [
+              _c("template", { slot: "footer" }, [
+                _c("td", { attrs: { colspan: _vm.headers.length } }, [
+                  _c("strong", [_vm._v("Click order for details")])
+                ])
+              ]),
+              _vm._v(" "),
               _c(
                 "template",
                 { slot: "no-data" },
                 [
                   _c(
                     "v-alert",
-                    { attrs: { value: true, color: "error", icon: "warning" } },
+                    { attrs: { value: true, color: "info", icon: "info" } },
                     [
                       _vm._v(
                         "\n                    No orders available\n                "
