@@ -30,4 +30,8 @@ class Order extends Model
     {
         return $this->hasOne('App\Item', 'id', 'item_id');
     }
+
+    public function responsibleCook() {
+        return $this->hasOne('App\User', 'id', 'responsible_cook_id');
+    }
 }
