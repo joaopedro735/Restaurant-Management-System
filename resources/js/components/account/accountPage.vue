@@ -1,49 +1,49 @@
 <template>
-    <div class="container">
-
-        <div class="row">
-            <h1 class="text-center">Conta de utilizador</h1>
-        </div>
-
-        <div class="row">
-            <div class="col-md-3 ">
-                <div class="list-group ">
-                    <a @click="dadosPessoais = true; turnos = false; seguranca = false; definicoes = false" class="list-group-item list-group-item-action " v-bind:class="{'active': dadosPessoais}">Dados pessoais</a>
-                    <a @click="dadosPessoais = false; turnos = true; seguranca = false; definicoes = false" class="list-group-item list-group-item-action " v-bind:class="{'active': turnos}">Turnos</a>
-                    <a @click="dadosPessoais = false; turnos = false; seguranca = true; definicoes = false" class="list-group-item list-group-item-action " v-bind:class="{'active': seguranca}">Segurança</a>
-                    <a @click="dadosPessoais = false; turnos = false; seguranca = false; definicoes = true" class="list-group-item list-group-item-action " v-bind:class="{'active': definicoes}">Definições</a>
-                </div>
-            </div>
-            <!-- TEMPLATES HERE -->
-            <edit-user :user="currentUser" :dados-pessoais="dadosPessoais" @save-user="saveUser"></edit-user>
-            <change-password :user="user" :seguranca="seguranca" @change-password="changeUserPassword"></change-password>
-        </div>
-    </div>
+    <v-layout>
+        <v-flex xs12 sm6 offset-sm3>
+            <v-card>
+                <v-img
+                        height="200px"
+                        :src="getPhoto(user.photo_url)"
+                >
+                </v-img>
+                <v-card-title>
+                    <div>
+                        <span class="grey--text">{{user.email}}</span><br>
+                        <span v-model="user.name">{{user.name}}</span><br>
+                        <span v-model="user.type">{{user.type | capitalize}}</span>
+                    </div>
+                </v-card-title>
+                <v-card-actions>
+                    <v-btn flat color="blue" @click="showEdit = true">Edit</v-btn>
+                </v-card-actions>
+                <edit-user v-show="showEdit" v-bind:user="user" v-on:user-cancel="showEdit=false" v-on:user-saved="showEdit=false"></edit-user>
+            </v-card>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
-    module.exports = {
-        props: ["user"],
-        data: function() {
+    export default {
+        data: function () {
             return {
-                title: 'Conta de utilizador',
-                currentUser: {},
-                dadosPessoais: true,
-                turnos: false,
-                seguranca: false,
-                definicoes: false
+                user: "",
+                showEdit: false,
             };
         },
         methods: {
-            saveUser: function() {
-                // TODO: Guardar utilizador
+            getInformationFromLoggedUser() {
+                this.user = this.$store.state.user;
+                if (this.user == undefined) {
+                    axios.get("api/users");
+                }
             },
-            changeUserPassword: function() {
-
+            getPhoto(photo_url){
+                return "/" + photo_url;
             }
         },
-        mounted() {
-            this.currentUser = Object.assign({}, this.user);
+        created() {
+            this.getInformationFromLoggedUser();
         }
     }
 
