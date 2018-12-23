@@ -35,7 +35,7 @@ const waiterList = Vue.component('list-waiters', () => import('./components/user
 const cashierList = Vue.component('list-cashiers', () => import('./components/user/cashierList.vue'));
 
 /* Components para menu */
-const menu = Vue.component('items-component', require('./components/menu.vue'));
+const menu = Vue.component('items-component', () => import('./components/menu.vue'));
 // @ Unused
 //const menuList = Vue.component('list-menu', require('./components/menuList.vue'));
 const dishList = Vue.component('list-dishes', () => import('./components/menu/dishList.vue'));
@@ -49,11 +49,11 @@ const footer = Vue.component('footer-component', () => import(/* webpackChunkNam
 const home = () =>import('./components/home');
 
 /* Components para conta de utilizador */
-const accountPage = Vue.component('account-page', require('./components/account/accountPage.vue'));
+const accountPage = Vue.component('account-page', () => import('./components/account/accountPage.vue'));
 const setPassword = Vue.component('set-password', require('./components/account/setAccountPassword.vue'));
 /* User profile options */
 const changePassword = Vue.component('change-password', require('./components/account/changePassword.vue'));
-const changeUserNameAndFullName = Vue.component('edit-user', require('./components/account/changeUserNameAndFullName.vue'));
+const editUser = Vue.component('edit-user', () => import('./components/account/editUser.vue'));
 const changeUserPicture = Vue.component('change-profile-picture', require('./components/account/changeUserPicture.vue'));
 const activateAccount = Vue.component('activate-account', () => import('./components/activateAccount.vue'));
 
@@ -69,9 +69,9 @@ const routes = [
     // { path: '/', redirect: '/menu' },
     { path: '/users', component: users },
     { path: '/menu', component: menu },
-    // { path: '/login', component: login },
+    //{ path: '/login', component: login },
     { path: '/logout', component: logout },
-    { path: '/account', component: accountPage },
+    { path: '/users/me', component: accountPage },
     // Orders
     { path: '/orders', component: orders },
     //{ path: '/account', component: accountPage },
@@ -92,6 +92,13 @@ router.beforeEach((to, from, next) => {
     }
     next();
 });
+
+Vue.filter('capitalize', function (value) {
+    if (!value) return ''
+    value = value.toString()
+    return value.charAt(0).toUpperCase() + value.slice(1)
+});
+
 
 const app = new Vue({
     // Elemento que o vue vai poder "gerir"

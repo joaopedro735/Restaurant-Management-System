@@ -2,19 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ImageUploadRequest;
+use App\Http\Resources\UserResource as UserResource;
 use App\Notifications\PasswordResetSuccess;
 use App\Notifications\UserRegisteredSuccessfully;
 use App\PasswordReset;
-use function GuzzleHttp\Promise\all;
-use Illuminate\Http\Request;
-use Illuminate\Contracts\Support\Jsonable;
-
-use App\Http\Resources\UserResource as UserResource;
-use Illuminate\Support\Facades\DB;
-
-use App\User;
 use App\StoreUserRequest;
-use Hash;
+use App\User;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class UserControllerAPI extends Controller
@@ -34,10 +29,10 @@ class UserControllerAPI extends Controller
     public function create(Request $request)
     {
         $validatedData = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|string|email|max:255|unique:users',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
             'username' => 'required|string|max:255|unique:users',
-            'type'     => ['required', Rule::in(["manager", "cook", "waiter", "cashier"])],
+            'type' => ['required', Rule::in(["manager", "cook", "waiter", "cashier"])],
         ]);
         $user = new User($validatedData);
         $user->blocked = 1;
@@ -53,14 +48,15 @@ class UserControllerAPI extends Controller
         );
         if ($user && $passwordReset)
             $user->notify(
-                new UserRegisteredSuccessfully($user,$passwordReset->token)
+                new UserRegisteredSuccessfully($user, $passwordReset->token)
             );
         return response()->json([
             'message' => 'We have e-mailed your password reset link!'
         ]);
     }
 
-    public function confirm(Request $request) {
+    public function confirm(Request $request)
+    {
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string|confirmed',
@@ -89,6 +85,20 @@ class UserControllerAPI extends Controller
 
     public function myProfile(Request $request)
     {
+        return new UserResource($request->user());
+    }
+
+    public function save(Request $request)
+    {
+        \Debugbar::info($request);
+        $user = User::where('email', $request->input('email'))->first();
+        if ($request->has('username') && !empty($request->input('username')))
+            $user->username = $request->input('username');
+        if ($request->has('name') && !empty($request->input('name')))
+            $user->name = $request->input('name');
+        if ($request->has('photo_url') && !empty($request->input('photo_url')))
+            $user->photo_url = $request->input('photo_url');
+        $user->save();
         return new UserResource($request->user());
     }
 }
