@@ -23,9 +23,10 @@ Route::group([
 Route::get('users', 'UserControllerAPI@index');
 Route::middleware('auth:api')->get('users/me', 'UserControllerAPI@myProfile');
 
-
 Route::get('menu', 'ItemControllerAPI@index');
-Route::get('orders', 'OrderControllerAPI@index');
+
+Route::get('orders', 'OrderControllerAPI@index')/* ->middleware(['auth:api', 'scopes:manage-order']) */;
+Route::put('orders/{id}', 'OrderControllerAPI@update')/* ->middleware(['auth:api', 'scopes:manage-order']) */;
 
 Route::post('login', 'LoginControllerAPI@login');
 Route::post('/account/confirm', 'UserControllerAPI@confirm');

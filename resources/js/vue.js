@@ -62,7 +62,7 @@ const activateAccount = Vue.component('activate-account', () => import('./compon
 const shiftOptions = Vue.component('shift-options', () => import('./components/worker/shiftOptions.vue'));
 
 // Orders
-const orders = Vue.component('orders', () => import('./components/orders.vue'));
+const orders = Vue.component('orders', () => import('./components/orders/orders.vue'));
 
 const routes = [
     { path: '/', component: home, name: 'home'},

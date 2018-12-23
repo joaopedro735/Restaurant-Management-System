@@ -18,12 +18,12 @@ class LoginControllerAPI extends Controller
 
         $response = $http->post(YOUR_SERVER_URL.'/oauth/token', [
             'form_params' => [
-            'grant_type' => 'password',
-            'client_id' => CLIENT_ID,
-            'client_secret' => CLIENT_SECRET,
-            'username' => $request->email,
-            'password' => $request->password,
-            'scope' => ''
+                'grant_type' => 'password',
+                'client_id' => CLIENT_ID,
+                'client_secret' => CLIENT_SECRET,
+                'username' => $request->email,
+                'password' => $request->password,
+                'scope' => ''
             ],
             'exceptions' => false,
         ]);
