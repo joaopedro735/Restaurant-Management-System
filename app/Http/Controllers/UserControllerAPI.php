@@ -7,17 +7,10 @@ use App\Http\Resources\UserResource as UserResource;
 use App\Notifications\PasswordResetSuccess;
 use App\Notifications\UserRegisteredSuccessfully;
 use App\PasswordReset;
-use function GuzzleHttp\Promise\all;
 use Illuminate\Http\Request;
 use App\StoreUserRequest;
 use App\User;
-use Illuminate\Contracts\Support\Jsonable;
-
-use App\Http\Resources\UserResource as UserResource;
 use Illuminate\Support\Facades\DB;
-
-use App\User;
-use App\StoreUserRequest;
 use Hash;
 use Illuminate\Validation\Rule;
 
@@ -115,7 +108,7 @@ class UserControllerAPI extends Controller
 
     public function save(Request $request)
     {
-        \Debugbar::info($request);
+        //\Debugbar::info($request);
         $user = User::where('email', $request->input('email'))->first();
         if ($request->has('username') && !empty($request->input('username')))
             $user->username = $request->input('username');
