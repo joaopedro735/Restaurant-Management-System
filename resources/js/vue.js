@@ -72,7 +72,7 @@ const routes = [
     // { path: '/', redirect: '/menu' },
     { path: '/users', component: users },
     { path: '/menu', component: menu },
-    // { path: '/login', component: login },
+     { path: '/login', component: login },
     { path: '/logout', component: logout },
     { path: '/account', component: accountPage },
     // Orders
@@ -104,4 +104,22 @@ const app = new Vue({
     store,
     data: {
     },
+    created() {
+        store.commit('loadTokenAndUserFromSession');
+    }
 });
+
+axios.interceptors.response.use(
+    response => response,
+    (error) => {
+        if (error.response.status === 401) {
+            if (!store.state.user) {
+                // Clear token and redirect
+                store.commit('clearUserAndToken');
+                router.push({name: 'home'});
+                //window.location.replace(`${window.location.origin}/login`);
+            }
+        }
+        return Promise.reject(error);
+    },
+);
