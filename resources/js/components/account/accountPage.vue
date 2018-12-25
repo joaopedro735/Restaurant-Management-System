@@ -25,7 +25,7 @@
 
 <script>
     export default {
-        data: {
+        data: () => {
             return {
                 user: "",
                 showEdit: false,
