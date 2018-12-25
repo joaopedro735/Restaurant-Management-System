@@ -66,7 +66,9 @@
                          </v-layout>
                      </v-container>
                 </v-flex>-->
+<!--
                 <shift-options v-show="showWorker" user="user"></shift-options>
+-->
             </v-layout>
         </section>
     </div>
@@ -76,15 +78,15 @@
     export default {
         data: function () {
             return {
-                user: {},
+                /*user: {},
                 showAll: false,
                 showWorker: false,
                 showCashier: false,
-                showManager: false,
+                showManager: false,*/
             }
         },
         methods: {
-            getInformationFromLoggedUser() {
+            /*getInformationFromLoggedUser() {
                 this.user = this.$store.state.user;
             },
             isUserAWorker(user){
@@ -92,11 +94,11 @@
                 if(user.type == "cashier" || user.type == "waiter" || user.type == "cook"){
                     this.showWorker = true;
                 }
-            }
+            }*/
         },
         mounted() {
-            this.getInformationFromLoggedUser();
-            this.isUserAWorker(this.user);
+           /* this.getInformationFromLoggedUser();
+            this.isUserAWorker(this.user);*/
         }
     }
 </script>

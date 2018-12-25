@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ImageUploadRequest;
-use App\Http\Resources\UserResource as UserResource;
 use App\Notifications\PasswordResetSuccess;
 use App\Notifications\UserRegisteredSuccessfully;
 use App\PasswordReset;
+use Auth;
+use function GuzzleHttp\Promise\all;
 use Illuminate\Http\Request;
-use App\StoreUserRequest;
-use App\User;
+use Illuminate\Contracts\Support\Jsonable;
+use App\Http\Resources\UserResource as UserResource;
 use Illuminate\Support\Facades\DB;
+use App\User;
+use App\StoreUserRequest;
 use Hash;
 use Illuminate\Validation\Rule;
 
@@ -31,10 +34,10 @@ class UserControllerAPI extends Controller
     public function create(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users',
             'username' => 'required|string|max:255|unique:users',
-            'type' => ['required', Rule::in(["manager", "cook", "waiter", "cashier"])],
+            'type'     => ['required', Rule::in(["manager", "cook", "waiter", "cashier"])],
         ]);
         $user = new User($validatedData);
         $user->blocked = 1;
@@ -83,6 +86,36 @@ class UserControllerAPI extends Controller
         $passwordReset->delete();
         $user->notify(new PasswordResetSuccess($passwordReset));
         return response()->json($user);
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required|string',
+            'new_password' => 'required|string|confirmed',
+        ]);
+        //$user = User::where('email', $request->email)->first();
+        $user = Auth::guard('api')->user();
+        if (!$user)
+            return response()->json([
+                'message' => 'We cant find a user with that e-mail address.'
+            ], 404);
+        $check  = Auth::guard('web')->attempt([
+            'email' => $user->email,
+            'password' => $request->old_password,
+        ]);
+
+        if ($check) {
+            $user->password = bcrypt($request->new_password);
+            $user->token()->revoke();
+            $user->token()->delete();
+            $token = $user->createToken('newToken')->accessToken;
+            $user->save();
+            return json_encode(array('token' => $token));
+        }
+        return response()->json([
+            'message' => 'Current password incorrect.'
+        ], 404);
     }
 
     public function myProfile(Request $request)
