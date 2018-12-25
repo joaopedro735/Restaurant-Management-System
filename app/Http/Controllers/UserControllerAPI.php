@@ -108,11 +108,12 @@ class UserControllerAPI extends Controller
 
         if ($check) {
             $user->password = bcrypt($request->new_password);
-            $user->token->revoke();
+            $user->token()->revoke();
+            $user->token()->delete();
             $token = $user->createToken('newToken')->accessToken;
             $user->save();
+            return json_encode(array('token' => $token));
         }
-
         return response()->json([
             'message' => 'Current password incorrect.'
         ], 404);

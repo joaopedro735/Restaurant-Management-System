@@ -15,14 +15,25 @@ use Illuminate\Http\Request;
 Route::group([
     'middleware' => 'auth:api'
 ], function() {
-    Route::get('/users/me', 'UserControllerAPI@myProfile');
     Route::post('logout', 'LoginControllerAPI@logout');
-    Route::post('/account/create', 'UserControllerAPI@create');
-    Route::put('/account/changePassword', 'UserControllerAPI@changePassword');
+    Route::group([
+        'prefix' => 'users'
+    ], function() {
+        Route::get('/', 'UserControllerAPI@index');
+        Route::get('/me', 'UserControllerAPI@myProfile');
+    });
+
+
+    Route::group([
+        'prefix' => 'account'
+    ], function() {
+        Route::post('/create', 'UserControllerAPI@create');
+        Route::put('/changePassword', 'UserControllerAPI@changePassword');
+    });
+
 });
 
-Route::get('users', 'UserControllerAPI@index');
-Route::middleware('auth:api')->get('users/me', 'UserControllerAPI@myProfile');
+
 
 
 Route::get('menu', 'ItemControllerAPI@index');

@@ -11,14 +11,14 @@
 
                     <v-divider light></v-divider>
 
-                    <!-- <v-alert
+                    <v-alert v-model="alert.show"
                              :value="alert.show"
                              type="error"
                              transition="scale-transition"
                              dismissible
                              outline
                      >{{ alert.error }}
-                     </v-alert>-->
+                     </v-alert>
 
                     <v-card-text>
                         <form ref="form">
@@ -51,7 +51,7 @@
                                     label="Password Confirmation"
                                     counter
                                     @click:append="p_show = !p_show"
-                                    @input="$v.user.new_password_confirmationf.$touch()"
+                                    @input="$v.user.new_password_confirmation.$touch()"
                                     @blur="$v.user.new_password_confirmation.$touch()"
                             ></v-text-field>
                         </form>
@@ -99,6 +99,10 @@
             },
             p_show: false,
             p_old_show: false,
+            alert: {
+                show: false,
+                error: "",
+            }
         }),
 
         computed: {
@@ -128,12 +132,22 @@
         methods: {
             submit() {
                 this.$v.$touch();
-                this.$store.commit('loadTokenAndUserFromSession');
-                console.log(axios.defaults.headers.common.Authorization);
                 if (!this.$v.$invalid) {
                     axios.put('/api/account/changePassword', this.user)
                         .then(response => {
-                            console.log(response.data);
+                            this.$store.commit('setToken', response.data.token);
+                            this.$toasted.success("Password changed successfully",
+                                {
+                                    position: "top-center",
+                                    duration: 3000,
+                                    icon: "security"
+                                });
+                            this.$router.push('/account/myprofile');
+                        })
+                        .catch(error => {
+                            this.alert.error = error.response.data.message;
+                            this.alert.show = true;
+                            console.dir(error);
                         });
                 }
             },
