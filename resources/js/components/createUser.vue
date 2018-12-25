@@ -75,12 +75,12 @@
 
     function initialState() {
         return {
-            title: 'Login',
+            title: "Login",
             user: {
-                name: '',
-                email: '',
-                username: '',
-                type: '',
+                name: "",
+                email: "",
+                username: "",
+                type: ""
             },
             alert: {
                 show: false,
@@ -91,20 +91,20 @@
                 loading: false,
                 p_show: false,
                 rules: {
-                    required: v => !!v || 'Required.',
-                    min: v => v.length >= 3 || 'Min 3 characters',
+                    required: v => !!v || "Required.",
+                    min: v => v.length >= 3 || "Min 3 characters",
                     email: value => {
-                        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                        return pattern.test(value) || 'Invalid e-mail.'
+                        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                        return pattern.test(value) || "Invalid e-mail.";
                     }
                 }
             },
             types: [
-                {text: 'Manager', value: 'manager'},
-                {text: 'Cook', value: 'cook'},
-                {text: 'Waiter', value: 'waiter'},
-                {text: 'Cashier', value: 'cashier'}
-                ]
+                {text: "Manager", value: "manager"},
+                {text: "Cook", value: "cook"},
+                {text: "Waiter", value: "waiter"},
+                {text: "Cashier", value: "cashier"}
+            ]
         };
     }
 
@@ -126,15 +126,15 @@
                 this.$refs.form.reset();
             },
             register() {
-                let config = {
+                const config = {
                     headers: {
-                        'Authorization': 'Bearer ' + this.$store.state.token,
-                        'Accept': 'application/json'
+                        "Authorization": "Bearer " + this.$store.state.token,
+                        "Accept": "application/json"
                     }
                 };
-                axios.post('/api/account/create', this.user, config)
+                axios.post("/api/account/create", this.user, config)
                     .then(response => {
-                        this.$toasted.success('User created successfully');
+                        this.$toasted.success("User created successfully");
                     })
                     .catch(error => {
                         console.log(error);
@@ -148,12 +148,12 @@
                 },
                 set(value) {
                     if (!value) {
-                        this.$emit('close');
+                        this.$emit("close");
                     }
                 }
             }
         }
-    }
+    };
 </script>
 
 <style scoped>

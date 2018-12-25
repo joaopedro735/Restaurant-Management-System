@@ -20,4 +20,24 @@ class Meal extends Model
     {
         return $this->hasOne('App\User', 'id', 'responsible_waiter_id');
     }
+
+    public static function stateToStr($orderState)
+    {
+        switch ($orderState) {
+            case 'active':
+                return 'Active';
+            case 'terminated':
+                return 'Terminated';
+            case 'paid':
+                return 'Paid';
+            case 'not paid':
+                return 'Not paid';
+        }
+
+        return 'Unknown';
+    }
+
+    public static function timestampToString($timestamp) {
+        return mb_convert_encoding($timestamp, "UTF-8");;
+    }
 }

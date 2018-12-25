@@ -15,7 +15,7 @@ class Order extends Model
         'state', 'responsible_cook_id'
     ];
 
-    public static function orderStateToStr($orderState)
+    public static function stateToStr($orderState)
     {
         switch ($orderState) {
             case 'pending':
@@ -38,6 +38,10 @@ class Order extends Model
     public function item()
     {
         return $this->hasOne('App\Item', 'id', 'item_id');
+    }
+
+    public function responsibleCook() {
+        return $this->hasOne('App\User', 'id', 'responsible_cook_id');
     }
 
     public static function timestampToString($timestamp) {

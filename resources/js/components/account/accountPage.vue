@@ -25,7 +25,7 @@
 
 <script>
     export default {
-        data: function () {
+        data: () => {
             return {
                 user: "",
                 showEdit: false,
@@ -34,18 +34,18 @@
         methods: {
             getInformationFromLoggedUser() {
                 this.user = this.$store.state.user;
-                if (this.user == undefined) {
+                if (this.user === undefined) {
                     axios.get("api/users");
                 }
             },
-            getPhoto(photo_url){
-                return "/" + photo_url;
+            getPhoto(photoUrl){
+                return "/" + photoUrl;
             }
         },
         created() {
             this.getInformationFromLoggedUser();
         }
-    }
+    };
 
 </script>
 

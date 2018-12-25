@@ -22,13 +22,13 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'state' => Order::orderStateToStr($this->state),
-            'responsible_cook' => UserControllerAPI::getCookName($this->responsible_cook_id),
+            'responsable_cook' => $this->responsibleCook->name,
+            'created_at' => OrderControllerAPI::timestampToString($this->created_at),
             'responsible_cook_id' => $this->responsible_cook_id == null ? 0 : $this->responsible_cook_id,
-            'created_at' => Order::timestampToString($this->created_at),
-            'item' => ItemControllerAPI::getItemName($this->item_id),
             'start' => $this->start,
             'end' => $this->end,
-            'updated_at' => Order::timestampToString($this->updated_at)
+            'updated_at' => OrderControllerAPI::timestampToString($this->updated_at),
+            'item' => $this->item->name,
         ];
     }
 }
