@@ -70,7 +70,6 @@
                 email: '',
                 password: ''
             },
-            dialog: false,
             alert: {
                 show: false,
                 error: ""
@@ -108,7 +107,7 @@
                     })
                     .then(response => {
                         this.$store.commit("setUser", response.data.data);
-                        this.dialog = false;
+                        this.show = false;
                         this.$toasted.success("Login successful",
                             {
                                 position: "top-center",
@@ -116,7 +115,6 @@
                                 icon: "fingerprint"
                             });
                         Object.assign(this.$data, initialState());
-                        return axios.get('api/users/me');
                     })
                     .catch(error => {
                         this.alert.error = error.response.data.msg;

@@ -3,7 +3,7 @@
 
         <v-dialog max-width="600" v-model="dialog">
             <v-btn flat slot="activator">Login</v-btn>
-            <login></login>
+            <login @close="dialog = false"></login>
         </v-dialog>
     </div>
 </template>
@@ -16,6 +16,9 @@
         data: () => ({
             dialog: false,
         }),
+        methods: {
+
+        },
         components: {
             "login": Login
         }
