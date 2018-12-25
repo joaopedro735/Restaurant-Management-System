@@ -17,7 +17,8 @@
 
             {{--<v-btn flat v-show="!this.$store.state.token" to="/login">Login</v-btn>--}}
             <user-nav v-if="this.$store.state.user"></user-nav>
-            <login-component v-show="!this.$store.state.token"></login-component>
+            {{--<login-component v-show="!this.$store.state.token"></login-component>--}}
+            <login-modal></login-modal>
             <v-btn flat v-show="this.$store.state.token" to="/users/me">Profile</v-btn>
             <v-btn flat v-show="this.$store.state.token" to="/logout">Logout</v-btn>
         </v-toolbar>
