@@ -20,6 +20,7 @@
                         <td>{{ props.item.created_at }}</td>
                         <td>{{ props.item.updated_at }}</td>
                         <td>{{ props.item.deleted_at }}</td>
+                        <td>{{ props.item.total_meals }}</td>
                         <td class="text-xs-right">
                                 <span>
                                     <v-btn small round color="error" @click.native="deleteTable(items.index), props.expanded=!props.expanded">Delete</v-btn>
@@ -61,27 +62,33 @@
                     { text: 'Created', value: 'created_at'},
                     { text: 'Updated at', value: 'updated_at'},
                     { text: 'Deleted at', value: 'deleted_at'},
+                    { text: 'Total meals', value: 'total_meals'},
                     { text: '' , value : 'actions' }
                 ],
                 showCreateTable: false
             }
         },
         watch: {
+            
             pagination: {
                 handler () {
-                    this.getDataFromApi()
+                    if (this.user.type == 'manager') {
+                        this.getDataFromApi()
                         .then(data => {
                             this.tables = data.data.tables;
                             this.totalTables = data.data.totalTables;
-                            console.log('Got here');
-                            console.table(this.tables);
                         });
+                    } 
                 },
                 deep: true
             }
         },
         methods: {
             getDataFromApi () {
+                if (this.user.type != 'manager') {
+                    this.showPage = false;
+                    return;
+                }
                 this.loading = true;
 
                 var config = {
@@ -137,7 +144,8 @@
                         }
                     });
 
-                    this.$router.push('/');
+                    this.$router.go(-1);
+
                 }
             }
         },

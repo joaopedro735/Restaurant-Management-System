@@ -6,6 +6,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 use App\Table;
 
+use App\Http\Controllers\MealControllerAPI;
+
 class TableResource extends JsonResource
 {
     /**
@@ -20,7 +22,8 @@ class TableResource extends JsonResource
             'table_number' => $this->table_number,
             'deleted_at' => Table::timestampToString($this->deleted_at),
             'created_at' => Table::timestampToString($this->created_at),
-            'updated_at' => Table::timestampToString($this->updated_at)
+            'updated_at' => Table::timestampToString($this->updated_at),
+            'total_meals' => MealControllerAPI::getMealCountPerTable($this->table_number)
         ];
     }
 }

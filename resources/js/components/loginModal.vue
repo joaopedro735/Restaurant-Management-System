@@ -2,7 +2,7 @@
     <div>
 
         <v-dialog max-width="600" v-model="dialog">
-            <v-btn flat slot="activator">Login</v-btn>
+            <v-btn color="white" round flat slot="activator">Login</v-btn>
             <login @close="dialog = false"></login>
         </v-dialog>
     </div>

@@ -27,7 +27,7 @@
                             <!-- IN PREPARATION BY LOGGED COOK-->
                             <v-chip v-if="(props.item.responsible_cook_id == user.id && props.item.state == 'In preparation')" outline color="blue darken-1">
                                 <v-avatar>
-                                    <v-icon>check_circle</v-icon>
+                                    <v-icon>timer</v-icon>
                                 </v-avatar>
                                 <strong>{{ props.item.state }}</strong>
                             </v-chip>
@@ -41,7 +41,13 @@
                             </v-chip>
 
                             <!-- CONFIRMED WITH NO COOK -->
-                            <v-chip v-if="(props.item.responsible_cook_id == 0)" outline color="black">
+                            <v-chip v-if="(user.type == 'cook' & props.item.responsible_cook_id == 0)" outline color="black">
+                                <v-avatar>
+                                    <v-icon>check_circle</v-icon>
+                                </v-avatar>
+                                <strong>{{ props.item.state }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
+                            </v-chip>
+                            <v-chip v-if="(user.type == 'manager' & props.item.responsible_cook_id == 0)" outline color="red darken-1">
                                 <v-avatar>
                                     <v-icon>check_circle</v-icon>
                                 </v-avatar>

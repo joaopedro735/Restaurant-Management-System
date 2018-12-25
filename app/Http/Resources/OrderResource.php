@@ -5,7 +5,6 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Order;
 use App\User;
-use App\Http\Controllers\OrderControllerAPI;
 use App\Http\Controllers\ItemControllerAPI;
 use App\Http\Controllers\UserControllerAPI;
 
@@ -22,15 +21,16 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'state' => Order::stateToStr($this->state),
-            'responsible_cook' => UserControllerAPI::getCookName($this->responsible_cook_id),
-            /* 'responsable_cook' => $this->responsibleCook->name, */
-            'created_at' => Order::timestampToString($this->created_at),
-            'responsible_cook_id' => $this->responsible_cook_id == null ? 0 : $this->responsible_cook_id,
-            'start' => $this->start,
-            'end' => $this->end,
-            'updated_at' => Order::timestampToString($this->updated_at),
             'item' => ItemControllerAPI::getItemName($this->item_id),
             /* 'item' => $this->item->name, */
+            'responsible_cook_id' => $this->responsible_cook_id == null ? 0 : $this->responsible_cook_id,
+            'responsible_cook' => UserControllerAPI::getCookName($this->responsible_cook_id),
+            /* 'responsable_cook' => $this->responsibleCook->name, */
+            'start' => $this->start,
+            'end' => $this->end,
+            'created_at' => Order::timestampToString($this->created_at),
+            'updated_at' => Order::timestampToString($this->updated_at),
+            
         ];
     }
 }
