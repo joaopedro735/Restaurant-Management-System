@@ -69,7 +69,6 @@ const userNav = Vue.component("user-nav", () => import("./components/nav/user.vu
 
 const routes = [
     { path: "/", component: home, name: "home" },
-    // { path: '/', redirect: '/menu' },
     { path: "/users", component: users },
     { path: "/menu", component: menu },
     { path: "/login", component: login },
@@ -79,7 +78,8 @@ const routes = [
     { path: "/orders", component: orders },
     // { path: '/account', component: accountPage },
     { path: "/account/activate", component: activateAccount, name: "activate" },
-    { path: "/account/changePassword", component: changePassword }
+    { path: "/account/changePassword", component: changePassword },
+    { path: '/management/tables', component: tables, name: 'tables' }
 ];
 
 const router = new VueRouter({

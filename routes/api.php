@@ -36,8 +36,8 @@ Route::group([
     Route::group([
         'prefix' => 'orders'
     ], function() {
-        Route::get('/', 'OrderControllerAPI@index')/* ->middleware(['auth:api', 'scopes:manage-order']) */;
-        Route::put('/{id}', 'OrderControllerAPI@update')/* ->middleware(['auth:api', 'scopes:manage-order']) */;
+        Route::get('/', 'OrderControllerAPI@index');
+        Route::put('/{id}', 'OrderControllerAPI@update');
     });
 
 });
