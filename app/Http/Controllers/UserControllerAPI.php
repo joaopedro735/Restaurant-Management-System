@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ImageUploadRequest;
 use App\Notifications\PasswordResetSuccess;
 use App\Notifications\UserRegisteredSuccessfully;
 use App\PasswordReset;
@@ -9,10 +10,8 @@ use Auth;
 use function GuzzleHttp\Promise\all;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Support\Jsonable;
-
 use App\Http\Resources\UserResource as UserResource;
 use Illuminate\Support\Facades\DB;
-
 use App\User;
 use App\StoreUserRequest;
 use Hash;
@@ -35,10 +34,10 @@ class UserControllerAPI extends Controller
     public function create(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users',
             'username' => 'required|string|max:255|unique:users',
-            'type' => ['required', Rule::in(["manager", "cook", "waiter", "cashier"])],
+            'type'     => ['required', Rule::in(["manager", "cook", "waiter", "cashier"])],
         ]);
         $user = new User($validatedData);
         $user->blocked = 1;
@@ -121,6 +120,36 @@ class UserControllerAPI extends Controller
 
     public function myProfile(Request $request)
     {
+        return new UserResource($request->user());
+    }
+
+    public static function getCookName($id) {
+        if ($id == null) {
+            return 'No cook assigned';
+        }
+
+        return DB::table('users')->select('name')->where('id', $id)->first()->name;
+    }
+
+    public static function getCookID($id) {
+        if ($id == null) {
+            return 0;
+        }
+
+        return $id;
+    }
+
+    public function save(Request $request)
+    {
+        //\Debugbar::info($request);
+        $user = User::where('email', $request->input('email'))->first();
+        if ($request->has('username') && !empty($request->input('username')))
+            $user->username = $request->input('username');
+        if ($request->has('name') && !empty($request->input('name')))
+            $user->name = $request->input('name');
+        if ($request->has('photo_url') && !empty($request->input('photo_url')))
+            $user->photo_url = $request->input('photo_url');
+        $user->save();
         return new UserResource($request->user());
     }
 }

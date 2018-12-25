@@ -25,4 +25,8 @@ class ItemControllerAPI extends Controller
             return ItemResource::collection(Item::all());
         }
     }
+
+    public static function getItemName($id) {
+        return Item::find($id)->name;
+    }
 }

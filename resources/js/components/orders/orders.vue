@@ -31,15 +31,15 @@
                         <td>{{ props.item.id }}</td>
                         <td class="text-xs-right">
                             <span v-if="props.item.state == 'In preparation' & props.item.responsible_cook_id == user.id">
-                                <v-btn small color="success" @click.native="changeOrderState(props.index, props.item, 'prepared')">Mark as prepared</v-btn>
+                                <v-btn small color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">Mark as prepared</v-btn>
                             </span>
                             <span v-if="props.item.responsible_cook_id == user.id & props.item.state == 'Confirmed'">
-                                <v-btn small color="info" @click.native="changeOrderState(props.index, props.item, 'in preparation')">Prepare</v-btn>
-                                <v-btn small color="success" @click.native="changeOrderState(props.index, props.item, 'prepared')">Mark as Prepared</v-btn>
+                                <v-btn small color="info" @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">Prepare</v-btn>
+                                <v-btn small color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">Mark as Prepared</v-btn>
                             </span>
                             <span v-if="props.item.responsible_cook == 'No cook assigned'">
-                                <v-btn small color="info" @click.native="changeOrderState(props.index, props.item, 'in preparation')">Prepare</v-btn>
-                                <v-btn small color="success" @click.native="changeOrderState(props.index, props.item, 'prepared')">Mark as prepared</v-btn>
+                                <v-btn small color="info" @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">Prepare</v-btn>
+                                <v-btn small color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">Mark as prepared</v-btn>
                             </span>
                         </td>
                     </tr>
@@ -63,18 +63,6 @@
                 </template>
             </v-data-table>
     </v-card>
-        <v-btn
-                color="pink"
-                dark
-                big
-                absolute
-                open-on-hover
-                right
-                bottom
-                fab
-        >
-            <v-icon>add</v-icon>
-        </v-btn>
     </div>
 </template>
 

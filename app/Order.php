@@ -6,28 +6,45 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
+      /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'state', 'responsible_cook_id'
+    ];
+
     public static function orderStateToStr($orderState)
     {
         switch ($orderState) {
             case 'pending':
-                return 'Pendente';
+                return 'Pending';
             case 'confirmed':
-                return 'Confirmado';
+                return 'Confirmed';
             case 'in preparation':
-                return 'Em preparação';
+                return 'In preparation';
             case 'prepared':
-                return 'Preparado';
+                return 'Prepared';
             case 'delivered':
-                return 'Entregue';
+                return 'Delivered';
             case 'not delivered':
-                return 'Não entregue';
+                return 'Not delivered';
         }
 
-        return 'Desconhecido';
+        return 'Unknown';
     }
 
     public function item()
     {
         return $this->hasOne('App\Item', 'id', 'item_id');
+    }
+
+    public function responsibleCook() {
+        return $this->hasOne('App\User', 'id', 'responsible_cook_id');
+    }
+
+    public static function timestampToString($timestamp) {
+        return mb_convert_encoding($timestamp, "UTF-8");;
     }
 }
