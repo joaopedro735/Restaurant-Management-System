@@ -1,64 +1,68 @@
 <template>
     <div class="text-xs-center">
-        <v-card max-width="600" class="center">
-            <v-card-title
-                    class="headline light-blue lighten-3"
-                    primary-title
-                    color="purple"
-            >
-                Login
-            </v-card-title>
+        <v-dialog width="500" v-model="dialog">
+            <v-btn flat slot="activator">Login</v-btn>
 
-            <v-divider light></v-divider>
-
-            <v-alert
-                    :value="alert.show"
-                    type="error"
-                    transition="scale-transition"
-                    dismissible
-                    outline
-            >{{ alert.error }}
-            </v-alert>
-
-            <v-card-text>
-                <v-form ref="form" v-model="form.valid" lazy-validation>
-                    <v-text-field
-                            v-model="user.email"
-                            :rules="[form.rules.required, form.rules.email]"
-                            label="E-mail"
-                            autofocus
-                            required
-                    ></v-text-field>
-                    <v-text-field
-                            v-model="user.password"
-                            :append-icon="form.p_show ? 'visibility_off' : 'visibility'"
-                            :rules="[form.rules.required, form.rules.min]"
-                            :type="form.p_show ? 'text' : 'password'"
-                            name="input-10-1"
-                            label="Password"
-                            hint="At least 3 characters"
-                            counter
-                            @click:append="form.p_show = !form.p_show"
-                            @keypress.enter="submit">
-                    </v-text-field>
-                </v-form>
-
-            </v-card-text>
-
-            <v-divider></v-divider>
-
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                        :disabled="!form.valid"
-                        :loading="form.loading"
-                        @click="submit"
+            <v-card>
+                <v-card-title
+                        class="headline light-blue lighten-3"
+                        primary-title
+                        color="purple"
                 >
-                    submit
-                </v-btn>
-                <v-btn @click="clear">clear</v-btn>
-            </v-card-actions>
-        </v-card>
+                    Login
+                </v-card-title>
+
+                <v-divider light></v-divider>
+
+                <v-alert
+                        :value="alert.show"
+                        type="error"
+                        transition="scale-transition"
+                        dismissible
+                        outline
+                >{{ alert.error }}
+                </v-alert>
+
+                <v-card-text>
+                    <v-form ref="form" v-model="form.valid" lazy-validation>
+                        <v-text-field
+                                v-model="user.email"
+                                :rules="[form.rules.required, form.rules.email]"
+                                label="E-mail"
+                                autofocus
+                                required
+                        ></v-text-field>
+                        <v-text-field
+                                v-model="user.password"
+                                :append-icon="form.p_show ? 'visibility_off' : 'visibility'"
+                                :rules="[form.rules.required, form.rules.min]"
+                                :type="form.p_show ? 'text' : 'password'"
+                                name="input-10-1"
+                                label="Password"
+                                hint="At least 3 characters"
+                                counter
+                                @click:append="form.p_show = !form.p_show"
+                                @keypress.enter="submit">
+                        </v-text-field>
+                    </v-form>
+
+                </v-card-text>
+
+                <v-divider></v-divider>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                            :disabled="!form.valid"
+                            :loading="form.loading"
+                            @click="submit"
+                    >
+                        submit
+                    </v-btn>
+                    <v-btn @click="clear">clear</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -92,9 +96,6 @@
     }
 
     export default {
-        props: {
-            visible: Boolean
-        },
         data: () => {
             return initialState();
         },
@@ -125,7 +126,7 @@
                     })
                     .finally(() => {
                         this.form.loading = false;
-                    });
+                });
             },
             clear() {
                 this.$refs.form.reset();
@@ -135,24 +136,9 @@
                     this.login();
                 }
             },
-        },
-        computed: {
-            show: {
-                get() {
-                    return this.visible;
-                },
-                set(value) {
-                    if (!value) {
-                        this.$emit('close');
-                    }
-                }
-            }
-        },
+        }
     };
 </script>
 
 <style scoped>
-    .center {
-        margin: auto
-    }
 </style>
