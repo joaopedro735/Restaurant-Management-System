@@ -144,12 +144,20 @@
         methods: {
             getDataFromApi () {
                 this.loading = true;
-                //console.log('Cook ID: ' + this.user.id);
+                
+                var config = {
+                    headers: {
+                        'Authorization': 'Bearer ' + this.$store.state.token,
+                        'Accept': 'application/json'
+                    }
+                };
+
                 return axios.all([
                     axios.get('/api/orders', {
                         params: {
                             page: this.pagination.page, rowsPerPage: this.pagination.rowsPerPage, cookID: this.cookID
-                        }
+                        },
+                        config
                     })
                 ]).then(axios.spread((ordersRes) => {
                     this.loading = false;

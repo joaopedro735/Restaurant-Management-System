@@ -84,11 +84,19 @@
             getDataFromApi () {
                 this.loading = true;
 
+                var config = {
+                    headers: {
+                        'Authorization': 'Bearer ' + this.$store.state.token,
+                        'Accept': 'application/json'
+                    }
+                };
+
                 return axios.all([
                     axios.get('/api/tables', {
                         params: {
                             page: this.pagination.page, rowsPerPage: this.pagination.rowsPerPage
-                        }
+                        },
+                        config
                     })
                 ]).then(axios.spread((tablesRes) => {
                     this.loading = false;

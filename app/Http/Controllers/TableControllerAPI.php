@@ -18,12 +18,12 @@ class TableControllerAPI extends Controller
         {
             if ($request->has('rowsPerPage') && $request->input('rowsPerPage') == -1)
             {
-                return TableResource::collection(Table::all()
+                return TableResource::collection(DB::table('restaurant_tables')
                     ->paginate($request->input('rowsPerPage', 10))
                 );
             }
 
-            return TableResource::collection(Table::all()
+            return TableResource::collection(DB::table('restaurant_tables')
                 ->paginate($request->input('rowsPerPage', 10))
             );
         }

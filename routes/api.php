@@ -40,14 +40,14 @@ Route::group([
         Route::put('/{id}', 'OrderControllerAPI@update');
     });
 
+    Route::get('tables', 'TableControllerAPI@index');
+
 });
 
 Route::get('users', 'UserControllerAPI@index');
 Route::middleware('auth:api')->get('users/me', 'UserControllerAPI@myProfile');
 
 Route::get('menu', 'ItemControllerAPI@index');
-
-Route::get('tables', 'TableControllerAPI@index');
 
 Route::post('login', 'LoginControllerAPI@login');
 Route::post('/account/confirm', 'UserControllerAPI@confirm');

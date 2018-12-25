@@ -9,6 +9,11 @@
             <v-flex red lighten-2 py-3 text-xs-center white--text xs12>
                 &copy;2018 — <strong>Restaurantte</strong>
             </v-flex>
+            <v-card>
+                <v-label>
+                    {{ this.$store.state.token }}
+                </v-label>
+            </v-card>
         </v-layout>
     </v-footer>
 </template>
