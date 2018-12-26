@@ -1,5 +1,5 @@
 <template>
-    <v-hover>
+    <v-hover class="margin">
         <v-menu
                 slot-scope="{ hover }"
                 offset-y
@@ -33,7 +33,7 @@
         data: () => ({
             showMenu: false,
             items: [
-                {title: 'My Profile', value: "/users"},
+                {title: 'My Profile', value: "/users/me"},
                 {title: "Change Password", value: "/account/changePassword"},
                 {title: 'Logout', value: "/logout"},
             ],
@@ -62,5 +62,7 @@
 </script>
 
 <style scoped>
-
+    .margin{
+        margin-left: 2%;
+    }
 </style>

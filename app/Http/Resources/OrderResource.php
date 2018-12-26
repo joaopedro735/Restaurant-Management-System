@@ -21,16 +21,16 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'state' => Order::stateToStr($this->state),
-            'item' => ItemControllerAPI::getItemName($this->item_id),
-            /* 'item' => $this->item->name, */
+            /*'item' => ItemControllerAPI::getItemName($this->item_id),*/
+            'item' => $this->item->name,
             'responsible_cook_id' => $this->responsible_cook_id == null ? 0 : $this->responsible_cook_id,
-            'responsible_cook' => UserControllerAPI::getCookName($this->responsible_cook_id),
-            /* 'responsable_cook' => $this->responsibleCook->name, */
+            /*'responsible_cook' => UserControllerAPI::getCookName($this->responsible_cook_id),*/
+            'responsible_cook' => $this->responsibleCook()->value('name'),
             'start' => $this->start,
             'end' => $this->end,
             'created_at' => Order::timestampToString($this->created_at),
             'updated_at' => Order::timestampToString($this->updated_at),
-            
+
         ];
     }
 }

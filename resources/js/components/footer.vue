@@ -11,7 +11,7 @@
             </v-flex>
             <v-card>
                 <v-label>
-                    {{ this.$store.state.token }}
+                    <!--{{ this.$store.state.token }}-->
                 </v-label>
             </v-card>
         </v-layout>

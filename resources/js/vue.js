@@ -67,7 +67,7 @@ const orders = Vue.component("orders", () => import("./components/orders/orders.
 
 const userNav = Vue.component("user-nav", () => import("./components/nav/user.vue"));
 
-const mainNav = Vue.component("main-nav", () => import("./components/mainNav.vue"));
+const mainNav = Vue.component("main-nav", () => import("./components/nav/mainNav.vue"));
 
 const routes = [
     { path: "/", component: home, name: "home" },

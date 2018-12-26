@@ -53,7 +53,7 @@
                                 </v-avatar>
                                 <strong>{{ props.item.state }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
                             </v-chip>
-                            
+
                             <!-- OTHER COOKS CONFIRMED -->
                             <v-chip v-if="(props.item.responsible_cook_id != user.id && props.item.responsible_cook_id != 0)" outline color="red darken-1">
                                 <v-avatar>
@@ -150,7 +150,7 @@
         methods: {
             getDataFromApi () {
                 this.loading = true;
-                
+
                 var config = {
                     headers: {
                         'Authorization': 'Bearer ' + this.$store.state.token,
@@ -158,14 +158,12 @@
                     }
                 };
 
-                return axios.all([
-                    axios.get('/api/orders', {
-                        params: {
-                            page: this.pagination.page, rowsPerPage: this.pagination.rowsPerPage, cookID: this.cookID
-                        },
-                        config
-                    })
-                ]).then(axios.spread((ordersRes) => {
+                return axios.get('/api/orders', {
+                    params: {
+                        page: this.pagination.page, rowsPerPage: this.pagination.rowsPerPage, cookID: this.cookID
+                    }
+                })
+                    .then((ordersRes) => {
                     this.loading = false;
                     return {
                         data: {
@@ -173,7 +171,7 @@
                             totalOrders: ordersRes.data.meta.total
                         }
                     }
-                }));
+                });
             },
             filterOrders() {
                 /* let search = this.search.trim().toLowerCase();
@@ -189,14 +187,14 @@
                 this.$toasted.success('TODO: Filter orders',
                 {
                     position: "top-center",
-                    
+
                     duration: 3000,
                     icon: "info_outline"
                 });
             },
             changeOrderState: function (index, order, state) {
                 console.clear();
-                
+
                 this.currentOrder = Object.assign({}, order);
 
                 const orderToUpdate = this.currentOrder;
@@ -212,7 +210,7 @@
                      * order.id
                      * order
                      * new state
-                     * } */ 
+                     * } */
 
                     console.log('Order already had this cook');
 
@@ -260,7 +258,7 @@
                             onClick : (e, toastObject) => {
                                 toastObject.goAway(0);
                             }
-                        });             
+                        });
                     })
                     .catch((error) => {
                         console.dir(error);
@@ -272,7 +270,7 @@
                      * cook.id
                      * order
                      * order.state
-                     * } */ 
+                     * } */
 
                     console.log('Order had no cook');
 
@@ -330,7 +328,7 @@
                 {
                     this.pagination.descending = !this.pagination.descending
                 }
-                else 
+                else
                 {
                     this.pagination.sortBy = column
                     this.pagination.descending = false
