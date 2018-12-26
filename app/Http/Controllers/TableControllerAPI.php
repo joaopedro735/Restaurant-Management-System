@@ -11,6 +11,7 @@ use Carbon\Carbon;
 
 use App\Table;
 use Hash;
+use Debugbar;
 
 class TableControllerAPI extends Controller
 {
@@ -31,17 +32,22 @@ class TableControllerAPI extends Controller
         }
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
         // TODO: Proper validation
         $lastTable = DB::table('restaurant_tables')->max('table_number');
 
-        $validatedData = $request->validate([
+        // Why is $validate an User object?
+        $validate = $request->validate([
             'table_number' => 'required|integer|min:' . ($lastTable + 1)
         ]);
 
-        $table = new Table($validatedData);
+        $table = new Table($validate);
         $table->save();
+
+        Debugbar::info('Last table number: ' . $lastTable);
+        Debugbar::info('Table number from request: ' . $request->table_number);
+        Debugbar::info('Table number from table object: ' . $table->table_number);
         
         return new TableResource($table);
     }

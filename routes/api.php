@@ -44,7 +44,7 @@ Route::group([
         'prefix' => 'tables'
     ], function() {
         Route::get('/', 'TableControllerAPI@index');
-        Route::post('/add', 'TableControllerAPI@create');
+        Route::post('/add', 'TableControllerAPI@store');
     });
 });
 

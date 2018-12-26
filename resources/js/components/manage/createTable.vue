@@ -70,7 +70,8 @@
                 }
             },
             clear() {
-                this.$refs.form.reset();
+                //this.$refs.form.reset();
+                this.table.table_number = '';
             },
             register() {
                 let config = {
@@ -89,7 +90,7 @@
                         this.$emit('update', table);
                         this.$emit('close');
 
-                        this.$toasted.success('Order updated',
+                        this.$toasted.success('Table added',
                         {
                             duration: 3000,
                             position: 'top-center',
@@ -104,7 +105,19 @@
                         });
                     })
                     .catch(error => {
-                        console.log(error);
+                        this.$toasted.error(error,
+                        {
+                            duration: 3000,
+                            position: 'top-center',
+                            className: 'toasted-css',
+                            theme: 'toasted-primary',
+                            icon: 'error_outline',
+                            text : 'OK',
+                            type: 'error',
+                            onClick : (e, toastObject) => {
+                                toastObject.goAway(0);
+                            }
+                        });
                     });
             }
         },
