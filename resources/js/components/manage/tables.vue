@@ -23,7 +23,7 @@
                         <td>{{ props.item.total_meals }}</td>
                         <td class="text-xs-right">
                                 <span>
-                                    <v-btn small round color="error" @click.native="deleteTable(items.index), props.expanded=!props.expanded">Delete</v-btn>
+                                    <v-btn small round color="error" @click.native="delete(props.item.table_number), table_number_log(props.item.table_number)">Delete</v-btn>
                                 </span>
                             </td>
                     </tr>
@@ -47,6 +47,9 @@
         data () {
             return {
                 user: {},
+                table: {
+                    table_number: ''
+                },
                 managerID: '',
                 showPage: false,
                 totalTables: 0,
@@ -114,8 +117,65 @@
                     }
                 }));
             },
-            deleteTable(index) {
-                // TODO: delete table
+            table_number_log() {
+                console.log('Button given table number: ' + props.item.table_number);
+            },
+            delete(table_number) {
+                this.table.table_number = table_number;
+
+                console.log('Table to delete:' + this.table_number);
+
+                let config = {
+                    headers: {
+                        'Authorization': 'Bearer ' + this.$store.state.token,
+                        'Accept': 'application/json'
+                    }
+                };
+                axios.delete('/api/tables/delete', this.table, config)
+                    .then(response => {
+                        this.totalTables--;
+
+                        this.$toasted.success('Table deleted',
+                        {
+                            duration: 3000,
+                            position: 'top-center',
+                            className: 'toasted-css',
+                            theme: 'toasted-primary',
+                            icon: 'info_outline',
+                            text : 'OK',
+                            type: 'info',
+                            onClick : (e, toastObject) => {
+                                toastObject.goAway(0);
+                            }
+                        });
+
+                        index = 0;
+                        this.tables.forEach(element => {
+                            if (this.tables.table_number == table_number) {
+                                return;
+                            }
+                            index++;
+                        });
+
+                        this.tables.splice(index, 1);
+                    })
+                    .catch(error => {
+                        this.$toasted.error(error,
+                        {
+                            duration: 3000,
+                            position: 'top-center',
+                            className: 'toasted-css',
+                            theme: 'toasted-primary',
+                            icon: 'error_outline',
+                            text : 'OK',
+                            type: 'error',
+                            onClick : (e, toastObject) => {
+                                toastObject.goAway(0);
+                            }
+                        });
+                    });
+
+
             },
             updateList (table) {
                 if (this.tables.length < 15) {

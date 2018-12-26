@@ -66,25 +66,27 @@
         methods: {
             submit() {
                 if (this.$refs.form.validate()) {
-                    this.register();
+                    this.create();
                 }
             },
             clear() {
                 //this.$refs.form.reset();
                 this.table.table_number = '';
             },
-            register() {
+            create() {
                 let config = {
                     headers: {
                         'Authorization': 'Bearer ' + this.$store.state.token,
                         'Accept': 'application/json'
                     }
                 };
-                axios.post('/api/tables/add', this.table, config)
+                axios.post('/api/tables/create', this.table, config)
                     .then(response => {
                         var table = response.data.data;
-
-                        table.table_number = this.table.table_number;
+                        
+                        if (table.table_number == 0) {
+                            table.table_number = this.table.table_number;
+                        }
 
                         this.clear();
                         this.$emit('update', table);

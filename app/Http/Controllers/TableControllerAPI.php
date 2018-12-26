@@ -21,14 +21,11 @@ class TableControllerAPI extends Controller
         {
             if ($request->has('rowsPerPage') && $request->input('rowsPerPage') == -1)
             {
-                return TableResource::collection(DB::table('restaurant_tables')
-                    ->paginate($request->input('rowsPerPage', 10))
+                return TableResource::collection(Table::paginate($request->input('rowsPerPage', 15))
                 );
             }
 
-            return TableResource::collection(DB::table('restaurant_tables')
-                ->paginate($request->input('rowsPerPage', 10))
-            );
+            return TableResource::collection(Table::paginate($request->input('rowsPerPage', 15)));
         }
     }
 
@@ -42,7 +39,8 @@ class TableControllerAPI extends Controller
             'table_number' => 'required|integer|min:' . ($lastTable + 1)
         ]);
 
-        $table = new Table($validate);
+        $table = new Table();
+        $table->table_number = $request->table_number;
         $table->save();
 
         Debugbar::info('Last table number: ' . $lastTable);
@@ -50,5 +48,17 @@ class TableControllerAPI extends Controller
         Debugbar::info('Table number from table object: ' . $table->table_number);
         
         return new TableResource($table);
+    }
+
+    public function destroy(Request $request) {
+        $table = Table::find($request->table_number);
+
+        $table->delete();
+
+        /* if ($table->trashed()) {
+             return response()->json([
+                'message' => 'Table deleted'
+            ]);
+        } */
     }
 }
