@@ -40,8 +40,12 @@ Route::group([
         Route::put('/{id}', 'OrderControllerAPI@update');
     });
 
-    Route::get('tables', 'TableControllerAPI@index');
-
+    Route::group([
+        'prefix' => 'tables'
+    ], function() {
+        Route::get('/', 'TableControllerAPI@index');
+        Route::post('/add', 'TableControllerAPI@create');
+    });
 });
 
 Route::get('users', 'UserControllerAPI@index');

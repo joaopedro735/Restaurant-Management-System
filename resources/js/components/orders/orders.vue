@@ -260,7 +260,7 @@
                             onClick : (e, toastObject) => {
                                 toastObject.goAway(0);
                             }
-                        });                   
+                        });             
                     })
                     .catch((error) => {
                         console.dir(error);

@@ -35,7 +35,7 @@
                 </template>
             </v-data-table>
 
-            <create-table :visible="showCreateTable" @close="showCreateTable = false"></create-table>
+            <create-table :visible="showCreateTable" @close="showCreateTable = false" @update="updateList"></create-table>
 
         </v-card>
     </div>
@@ -69,7 +69,6 @@
             }
         },
         watch: {
-            
             pagination: {
                 handler () {
                     if (this.user.type == 'manager') {
@@ -116,7 +115,12 @@
                 }));
             },
             deleteTable(index) {
-                // TODO: delete tables
+                // TODO: delete table
+            },
+            updateList (table) {
+                if (this.tables.length < 15) {
+                    Vue.set(this.tables, this.tables.length, table);
+                }
             },
             getInformationFromLoggedUser() {
                 this.user = this.$store.state.user;

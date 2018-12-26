@@ -79,9 +79,29 @@
                         'Accept': 'application/json'
                     }
                 };
-                axios.post('/api/table/create', this.table, config)
+                axios.post('/api/tables/add', this.table, config)
                     .then(response => {
-                        this.$toasted.success('Tble created successfully');
+                        var table = response.data.data;
+
+                        table.table_number = this.table.table_number;
+
+                        this.clear();
+                        this.$emit('update', table);
+                        this.$emit('close');
+
+                        this.$toasted.success('Order updated',
+                        {
+                            duration: 3000,
+                            position: 'top-center',
+                            className: 'toasted-css',
+                            theme: 'toasted-primary',
+                            icon: 'info_outline',
+                            text : 'OK',
+                            type: 'info',
+                            onClick : (e, toastObject) => {
+                                toastObject.goAway(0);
+                            }
+                        });
                     })
                     .catch(error => {
                         console.log(error);
@@ -104,5 +124,7 @@
 </script>
 
 <style scoped>
-
+    .toasted-css {
+        font-family: Arial, Helvetica, sans-serif;
+    }
 </style>
