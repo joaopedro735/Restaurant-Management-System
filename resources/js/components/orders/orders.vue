@@ -20,7 +20,7 @@
                         :class="{
                                 'in-prep': (props.item.responsible_cook_id == user.id & props.item.state == 'In preparation'),
                                 'this-cook-conf': (props.item.responsible_cook_id == user.id & props.item.state == 'Confirmed'),
-                                'no-cook': (props.item.responsible_cook == 'No cook assigned' & user.type == 'cook')
+                                'no-cook': (props.item.responsible_cook_id === 0 & user.type == 'cook')
                             }"
                             @click="props.expanded = !props.expanded">
                         <td>
@@ -41,7 +41,7 @@
                             </v-chip>
 
                             <!-- CONFIRMED WITH NO COOK -->
-                            <v-chip v-if="(user.type == 'cook' & props.item.responsible_cook_id == 0)" outline color="black">
+                            <v-chip v-if="(user.type === 'cook' & props.item.responsible_cook_id === 0)" outline color="black">
                                 <v-avatar>
                                     <v-icon>check_circle</v-icon>
                                 </v-avatar>
@@ -62,7 +62,7 @@
                                 <strong>{{ props.item.state }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
                             </v-chip>
                         </td>
-                        <td><strong>{{ props.item.responsible_cook }}</strong></td>
+                        <td><strong>{{ props.item.responsible_cook || "No cook assigned"}}</strong></td>
                         <td>{{ props.item.created_at }}</td>
                         <td>{{ props.item.start }}</td>
                         <td>{{ props.item.updated_at }}</td>
