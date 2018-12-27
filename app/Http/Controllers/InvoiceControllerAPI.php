@@ -15,9 +15,9 @@ class InvoiceControllerAPI extends Controller
      */
     public function index()
     {
-        if (request()->has('page')) {
-            return InvoiceResource::collection(Invoice::where('state', 'not paid')
-                ->paginate(request()->input('rowsPerPage', 10)));
+        if (request()->has("page")) {
+            return InvoiceResource::collection(Invoice::where("state", "not paid")
+                ->paginate(request()->input("rowsPerPage", 10)));
         }
         return response()->json([
             "message" => "Request needs page parameter",

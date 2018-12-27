@@ -33,23 +33,23 @@
                 totalInvoices: 0,
                 invoices: [],
                 table: {
-                    rowsPerPageItems: [5 ,10, 15, 25, 50],
+                    rowsPerPageItems: [5, 10, 15, 25, 50],
                     loading: true,
                     pagination: {
                         "sortBy": "created_at"
                     },
                     headers: [
-                        {text: 'Invoice ID', value: 'id', align: 'left', sortable: false, width: '60px'},
-                        {text: 'Table Number', value: 'table_number'},
-                        {text: 'Responsible Waiter', value: 'waiter' },
-                        {text: 'Price', value: 'price', width: '200px'},
-                        {text: 'Creation date', value: 'created_at'},
+                        {text: "Invoice ID", value: "id", align: "left", sortable: false, width: "60px"},
+                        {text: "Table Number", value: "table_number"},
+                        {text: "Responsible Waiter", value: "waiter"},
+                        {text: "Price", value: "price", width: "200px"},
+                        {text: "Creation date", value: "created_at"},
                     ],
                 },
             }
         },
         watch: {
-            'table.pagination': {
+            "table.pagination": {
                 handler() {
                     this.getDataFromApi()
                         .then(data => {
@@ -63,7 +63,7 @@
         methods: {
             getDataFromApi() {
                 this.table.loading = true;
-                return axios.get('/api/invoices', {
+                return axios.get("/api/invoices", {
                     params: {
                         page: this.table.pagination.page,
                         rowsPerPage: this.table.pagination.rowsPerPage
@@ -83,7 +83,7 @@
                 });
             },
         },
-    }
+    };
 </script>
 
 <style scoped>

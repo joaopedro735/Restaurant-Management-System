@@ -19,6 +19,7 @@ class OrderControllerAPI extends Controller
     {
         $id = $request->input('cookID');
         $user = User::find($id);
+
         if ($user === null) {
             return response()->json([
                 "message" => "User not found",
@@ -46,6 +47,7 @@ class OrderControllerAPI extends Controller
                 ->orderBy('created_at', 'asc')
                 ->paginate($request->input('rowsPerPage', 10)));
         }
+        
         return response()->json([
             "message" => "Request needs page parameter",
         ], 400);
