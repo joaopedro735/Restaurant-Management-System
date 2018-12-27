@@ -48,7 +48,7 @@ const loginModal = Vue.component("login-modal", () => import("./components/login
 const logout = Vue.component("logout-component", () => import(/* webpackChunkName: "logout"*/"./components/logout.vue"));
 const footer = Vue.component("footer-component", () => import(/* webpackChunkName: "footer"*/"./components/footer.vue"));
 
-const home = () => import("./components/home");
+const home = require("./components/home");
 
 /* Components para conta de utilizador */
 const accountPage = Vue.component("account-page", () => import("./components/account/accountPage.vue"));
