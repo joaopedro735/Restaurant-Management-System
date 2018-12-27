@@ -47,6 +47,12 @@ Route::group([
         Route::post('/create', 'TableControllerAPI@store');
         Route::post('/delete', 'TableControllerAPI@destroy');
     });
+
+    Route::group([
+        'prefix' => 'invoices'
+    ], function () {
+        Route::get('/', 'InvoiceControllerAPI@index');
+    });
 });
 
 Route::get('users', 'UserControllerAPI@index');
