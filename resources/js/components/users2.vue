@@ -17,7 +17,7 @@
                 <td>
                     <v-avatar size="56px">
                         <img v-bind:src=props.item.photo_url
-                             alt="miau"
+                             alt="avatar"
                         >
                     </v-avatar>
                 </td>

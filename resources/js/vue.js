@@ -62,12 +62,16 @@ const changePassword = Vue.component("change-password", () => import("./componen
 /* Worker options */
 const shiftOptions = Vue.component("shift-options", () => import("./components/worker/shiftOptions.vue"));
 const tables = Vue.component('manage', () => import('./components/manage/tables.vue'));
+
 // Orders
 const orders = Vue.component("orders", () => import("./components/orders/orders.vue"));
 
+//Nav
 const userNav = Vue.component("user-nav", () => import("./components/nav/user.vue"));
-
 const mainNav = Vue.component("main-nav", () => import("./components/nav/mainNav.vue"));
+
+//Cashier Options
+const invoices = Vue.component('invoices', () => import("./components/invoices/invoices"));
 
 const routes = [
     { path: "/", component: home, name: "home" },
@@ -81,7 +85,9 @@ const routes = [
     // { path: '/account', component: accountPage },
     { path: "/account/activate", component: activateAccount, name: "activate" },
     { path: "/account/changePassword", component: changePassword },
-    { path: '/management/tables', component: tables, name: 'tables' }
+    { path: '/management/tables', component: tables, name: 'tables' },
+    //Invoices
+    { path: "/invoices", component: invoices},
 ];
 
 const router = new VueRouter({
