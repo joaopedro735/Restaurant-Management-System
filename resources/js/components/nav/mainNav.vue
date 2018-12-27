@@ -11,7 +11,7 @@
 
             <v-spacer></v-spacer>
 
-            <v-chip outline color="white" v-if="this.$store.state.user != null">User: {{ this.$store.state.user.name }}&nbsp;<strong>({{this.$store.state.user.type}})</strong></v-chip>
+            <v-chip outline color="white" v-if="this.$store.state.user != null">{{ this.$store.state.user.name }}&nbsp;<strong>({{this.$store.state.user.type}})</strong></v-chip>
             <login-modal v-if="!this.$store.state.token"></login-modal>
             <user-nav v-if="this.$store.state.user"></user-nav>
         </v-toolbar>

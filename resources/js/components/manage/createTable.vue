@@ -20,10 +20,11 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn :disabled="!form.valid" :loading="form.loading" @click="submit">
-                        Submit
+                    <v-btn small round :disabled="!form.valid" :loading="form.loading" @click="submit">
+                        Create
                     </v-btn>
-                    <v-btn @click="clear">Clear</v-btn>
+                    <v-btn small round @click="clear">Clear</v-btn>
+                    <v-btn small round @click="close()">Cancel</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -73,13 +74,20 @@
                 //this.$refs.form.reset();
                 this.table.table_number = '';
             },
+            close() {
+                this.clear();
+                this.$emit('close');
+            },
             create() {
+                console.log(this.table);
+
                 let config = {
                     headers: {
                         'Authorization': 'Bearer ' + this.$store.state.token,
                         'Accept': 'application/json'
                     }
                 };
+
                 axios.post('/api/tables/create', this.table, config)
                     .then(response => {
                         var table = response.data.data;
@@ -87,6 +95,7 @@
                         if (table.table_number == 0) {
                             table.table_number = this.table.table_number;
                         }
+
 
                         this.clear();
                         this.$emit('update', table);
@@ -107,12 +116,14 @@
                         });
                     })
                     .catch(error => {
-                        this.$toasted.error(error,
+                        console.log(error.response.data.table_number[0]);
+
+                        this.$toasted.error(error.response.data.table_number[0],
                         {
                             duration: 3000,
                             position: 'top-center',
                             className: 'toasted-css',
-                            theme: 'toasted-primary',
+                            theme: 'bubble',
                             icon: 'error_outline',
                             text : 'OK',
                             type: 'error',
