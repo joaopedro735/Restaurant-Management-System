@@ -83,7 +83,7 @@ const footer = Vue.component("footer-component", () =>
     import(/* webpackChunkName: "footer"*/ "./components/footer.vue")
 );
 
-const home = () => import("./components/home");
+const home = require("./components/home");
 
 /* Components para conta de utilizador */
 const accountPage = Vue.component("account-page", () =>
@@ -120,6 +120,7 @@ const orders = Vue.component("orders", () =>
     import("./components/orders/orders.vue")
 );
 
+//Nav
 const userNav = Vue.component("user-nav", () =>
     import("./components/nav/user.vue")
 );
@@ -127,6 +128,9 @@ const userNav = Vue.component("user-nav", () =>
 const mainNav = Vue.component("main-nav", () =>
     import("./components/nav/mainNav.vue")
 );
+
+//Cashier Options
+const invoices = Vue.component('invoices', () => import("./components/invoices/invoices"));
 
 const routes = [
     { path: "/", component: home, name: "home" },
@@ -140,7 +144,9 @@ const routes = [
     // { path: '/account', component: accountPage },
     { path: "/account/activate", component: activateAccount, name: "activate" },
     { path: "/account/changePassword", component: changePassword },
-    { path: "/management/tables", component: tables, name: "tables" }
+    { path: "/management/tables", component: tables, name: "tables" },
+    //Invoices
+    { path: "/invoices", component: invoices},
 ];
 
 const router = new VueRouter({
@@ -149,7 +155,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.name == "profile" || to.name == "logout") {
+    if ((to.name === "profile") || (to.name === "logout")) {
         if (!store.state.user) {
             next("/login");
             return;
@@ -158,7 +164,7 @@ router.beforeEach((to, from, next) => {
     next();
 });
 
-Vue.filter("capitalize", function(value) {
+Vue.filter("capitalize", function (value) {
     if (!value) return "";
     value = value.toString();
     return value.charAt(0).toUpperCase() + value.slice(1);
@@ -177,7 +183,7 @@ const app = new Vue({
 
 axios.interceptors.response.use(
     response => response,
-    error => {
+    (error) => {
         if (error.response.status === 401) {
             if (!store.state.user) {
                 // Clear token and redirect
@@ -187,5 +193,5 @@ axios.interceptors.response.use(
             }
         }
         return Promise.reject(error);
-    }
+    },
 );
