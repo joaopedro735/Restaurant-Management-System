@@ -23,6 +23,7 @@ namespace App{
  * @property float $total_price
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Meal $meal
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Invoice newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Invoice newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Invoice query()

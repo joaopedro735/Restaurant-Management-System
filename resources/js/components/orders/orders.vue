@@ -47,7 +47,7 @@
                                 </v-avatar>
                                 <strong>{{ props.item.state }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
                             </v-chip>
-                            <v-chip v-if="(user.type == 'manager' & props.item.responsible_cook_id == 0)" outline color="red darken-1">
+                            <v-chip v-if="(user.type === 'manager' & props.item.responsible_cook_id === 0)" outline color="red darken-1">
                                 <v-avatar>
                                     <v-icon>check_circle</v-icon>
                                 </v-avatar>
@@ -62,7 +62,7 @@
                                 <strong>{{ props.item.state }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
                             </v-chip>
                         </td>
-                        <td><strong>{{ props.item.responsible_cook || "No cook assigned"}}</strong></td>
+                        <td><strong>{{ props.item.responsible_cook != '' ?  props.item.responsible_cook : ''}}</strong></td>
                         <td>{{ props.item.created_at }}</td>
                         <td>{{ props.item.start }}</td>
                         <td>{{ props.item.updated_at }}</td>
@@ -75,7 +75,7 @@
                                 <v-btn small round color="info" @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">Prepare</v-btn>
                                 <v-btn small round color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">Mark as Prepared</v-btn>
                             </span>
-                            <span v-if="props.item.responsible_cook == 'No cook assigned' & user.type == 'cook'">
+                            <span v-if="props.item.responsible_cook_id == 0 & user.type == 'cook'">
                                 <v-btn small round color="info" @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">Prepare</v-btn>
                                 <v-btn small round color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">Mark as prepared</v-btn>
                             </span>
@@ -216,7 +216,6 @@
 
                     axios.put('/api/orders/' + orderToUpdate.id + '?state=' + state)
                     .then(response => {
-                        //console.log(response.data.data);
                         Vue.set(this.orders, index, response.data.data);
 
                         if (state == 'prepared') {
@@ -265,15 +264,6 @@
                     })
                 }
                 else { // Order doesn't have a cook
-                    /** Server needs : {
-                     * order.id
-                     * cook.id
-                     * order
-                     * order.state
-                     * } */
-
-                    console.log('Order had no cook');
-
                     axios.put('/api/orders/' + orderToUpdate.id + '?state=' + state + '&responsible_cook_id=' + this.cookID)
                     .then(response => {
                         Vue.set(this.orders, index, response.data.data);

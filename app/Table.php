@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Table extends Model
 {
-    //use SoftDeletes;
+    use SoftDeletes;
 
     protected $connection = 'mysql';
     
