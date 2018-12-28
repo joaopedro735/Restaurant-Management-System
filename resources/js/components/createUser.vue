@@ -111,7 +111,7 @@
     export default {
         name: "createUser",
         props: {
-            visible: Boolean
+            visible: Boolean,
         },
         data: () => {
             return initialState();
