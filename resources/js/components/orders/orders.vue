@@ -182,12 +182,10 @@
                     });
                 } */
                 this.$toasted.success('TODO: Filter orders',
-                {
-                    position: "top-center",
-
-                    duration: 3000,
-                    icon: "info_outline"
-                });
+                    {
+                        icon: "info_outline"
+                    }
+                );
             },
             changeOrderState: function (index, order, state) {
                 console.clear();
@@ -221,9 +219,6 @@
                         }
 
                         if (state == 'in preparation') {
-                            console.log('Must sort in preparation orders');
-                            console.log('Total size of array: ' + this.orders.length);
-
                             var totalInPreparation = 0;
 
                             this.orders.forEach(order => {
@@ -243,18 +238,10 @@
                         }
 
                         this.$toasted.success('Order updated',
-                        {
-                            duration: 3000,
-                            position: 'top-center',
-                            className: 'toasted-css',
-                            theme: 'toasted-primary',
-                            icon: 'info_outline',
-                            text : 'OK',
-                            type: 'info',
-                            onClick : (e, toastObject) => {
-                                toastObject.goAway(0);
+                            {
+                                icon: 'info_outline',
                             }
-                        });
+                        );
                     })
                     .catch((error) => {
                         console.dir(error);
@@ -292,18 +279,10 @@
                         }
 
                         this.$toasted.success('Order updated',
-                        {
-                            duration: 3000,
-                            position: 'top-center',
-                            className: 'toasted-css',
-                            theme: 'toasted-primary',
-                            icon: 'info_outline',
-                            text : 'OK',
-                            type: 'info',
-                            onClick : (e, toastObject) => {
-                                toastObject.goAway(0);
+                            {
+                                icon: 'info_outline',
                             }
-                        });
+                        );
                     })
                     .catch((error) => {
                         console.dir(error);
@@ -336,14 +315,9 @@
                     console.log('Not authorized to see this page!');
                     this.$toasted.error('You are not authorized to see this page',
                         {
-                            position: "top-center",
-                            duration: 3000,
                             icon: "error_outline",
-                            className: 'toasted-css',
-                            theme: 'toasted-primary',
-                            text : 'OK',
-                            type: 'error',
-                        });
+                        }
+                    );
                     this.$router.push('/');
                 }
             }

@@ -23,7 +23,7 @@ class TableResource extends JsonResource
             'deleted_at' => Table::timestampToString($this->deleted_at),
             'created_at' => Table::timestampToString($this->created_at),
             'updated_at' => Table::timestampToString($this->updated_at),
-            'total_meals' => MealControllerAPI::getMealCountInTable($this->table_number)
+            'total_meals' => MealControllerAPI::getMealCountPerTable($this->table_number)
         ];
     }
 }

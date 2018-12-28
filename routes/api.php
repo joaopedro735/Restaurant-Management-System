@@ -44,8 +44,8 @@ Route::group([
         'prefix' => 'tables'
     ], function() {
         Route::get('/', 'TableControllerAPI@index');
-        Route::post('/create', 'TableControllerAPI@store');
-        Route::post('/delete', 'TableControllerAPI@destroy');
+        Route::post('/', 'TableControllerAPI@store');
+        Route::delete('/{id}', 'TableControllerAPI@destroy');
     });
 
     Route::group([
@@ -64,7 +64,17 @@ Route::group([
     });
 });
 
-Route::get('menu', 'ItemControllerAPI@index');
+/* Route::get('menu', 'ItemControllerAPI@index'); */
+
+Route::group([
+    'prefix' => 'menu'
+], function () {
+    Route::get('/', 'ItemControllerAPI@index');
+    Route::get('/drinks', 'ItemControllerAPI@indexDrinks');
+    Route::get('/dishes', 'ItemControllerAPI@indexDishes');
+    Route::post('/', 'ItemControllerAPI@store');
+    Route::delete('/{id}', 'ItemControllerAPI@destroy');
+});
 
 Route::post('login', 'LoginControllerAPI@login');
 Route::post('/account/confirm', 'UserControllerAPI@confirm');

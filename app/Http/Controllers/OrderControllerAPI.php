@@ -4,14 +4,11 @@ namespace App\Http\Controllers;
 
 use http\Env\Response;
 use Illuminate\Http\Request;
-use Illuminate\Contracts\Support\Jsonable;
 
 use App\Http\Resources\OrderResource;
 
 use App\Order;
 use App\User;
-//use App\StoreUserRequest;
-use Hash;
 
 class OrderControllerAPI extends Controller
 {
@@ -64,5 +61,11 @@ class OrderControllerAPI extends Controller
         $order->update($request->all());
 
         return new OrderResource($order);
+    }
+
+    public static function canDeleteItem($id) {
+        $order = Order::where('item_id', $id)->first();
+
+        return $order ? false : true;
     }
 }

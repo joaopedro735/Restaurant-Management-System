@@ -88,7 +88,7 @@
                     }
                 };
 
-                axios.post('/api/tables/create', this.table, config)
+                axios.post('/api/tables/', this.table, config)
                     .then(response => {
                         var table = response.data.data;
                         
@@ -102,34 +102,17 @@
                         this.$emit('close');
 
                         this.$toasted.success('Table added',
-                        {
-                            duration: 3000,
-                            position: 'top-center',
-                            className: 'toasted-css',
-                            theme: 'toasted-primary',
-                            icon: 'info_outline',
-                            text : 'OK',
-                            type: 'info',
-                            onClick : (e, toastObject) => {
-                                toastObject.goAway(0);
+                            {
+                                icon: 'info_outline',
                             }
-                        });
+                        );
                     })
                     .catch(error => {
                         console.log(error.response.data.table_number[0]);
 
                         this.$toasted.error(error.response.data.table_number[0],
                         {
-                            duration: 3000,
-                            position: 'top-center',
-                            className: 'toasted-css',
-                            theme: 'bubble',
                             icon: 'error_outline',
-                            text : 'OK',
-                            type: 'error',
-                            onClick : (e, toastObject) => {
-                                toastObject.goAway(0);
-                            }
                         });
                     });
             }

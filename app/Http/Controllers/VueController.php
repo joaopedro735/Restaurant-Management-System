@@ -9,6 +9,4 @@ class VueController extends Controller
         // Alterar 'welcome' para o vue
         return view('vue.index');
     }
-
-    // Adicionar o resto das páginas
 }

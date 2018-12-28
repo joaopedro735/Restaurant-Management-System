@@ -33,7 +33,9 @@ const options = {
 Vue.use(VueRouter);
 Vue.use(store);
 Vue.use(Vuetify);
-Vue.use(Toasted, options);
+Vue.use(Toasted, options, {
+    router
+});
 Vue.use(Vuelidate);
 
 /* Components para users */
@@ -60,6 +62,9 @@ const cashierList = Vue.component("list-cashiers", () =>
 /* Components para menu */
 const menu = Vue.component("items-component", () =>
     import("./components/menu/menu.vue")
+);
+const menuTest = Vue.component("items-component", () =>
+    import("./components/menu/menuTest.vue")
 );
 // @ Unused
 // const menuList = Vue.component('list-menu', require('./components/menuList.vue'));
@@ -133,16 +138,17 @@ const mainNav = Vue.component("main-nav", () =>
 const invoices = Vue.component('invoices', () => import("./components/invoices/invoices"));
 
 const routes = [
-    { path: "/", component: home, name: "home" },
-    { path: "/users", component: users },
+    { path: "/", component: home, name: 'home' },
+    { path: "/users", component: users, name: 'users' },
     { path: "/menu", component: menu },
+    { path: "/menuTest", component: menuTest },
     { path: "/login", component: login },
     { path: "/logout", component: logout },
     { path: "/users/me", component: accountPage },
     // Orders
     { path: "/orders", component: orders },
     // { path: '/account', component: accountPage },
-    { path: "/account/activate", component: activateAccount, name: "activate" },
+    { path: "/account/activate", component: activateAccount, name: 'activate' },
     { path: "/account/changePassword", component: changePassword },
     { path: "/management/tables", component: tables, name: "tables" },
     //Invoices
@@ -150,8 +156,9 @@ const routes = [
 ];
 
 const router = new VueRouter({
-    mode: "history",
-    routes
+    mode: 'history',
+    routes,
+    linkActiveClass: 'active'
 });
 
 router.beforeEach((to, from, next) => {
