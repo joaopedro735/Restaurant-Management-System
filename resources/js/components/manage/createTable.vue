@@ -102,17 +102,10 @@
                         this.$emit('close');
 
                         this.$toasted.success('Table added',
-                        {
-                            icon: 'info_outline',
-                            /* action : {
-                                text : 'Refresh',
-                                onClick : (e, toastObject) => {
-                                    push : { 
-                                        name : 'users'
-                                    }
-                                }
-                            } */
-                        });
+                            {
+                                icon: 'info_outline',
+                            }
+                        );
                     })
                     .catch(error => {
                         console.log(error.response.data.table_number[0]);

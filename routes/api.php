@@ -45,7 +45,7 @@ Route::group([
     ], function() {
         Route::get('/', 'TableControllerAPI@index');
         Route::post('/create', 'TableControllerAPI@store');
-        Route::post('/delete', 'TableControllerAPI@destroy');
+        Route::delete('/{id}', 'TableControllerAPI@destroy');
     });
 
     Route::group([

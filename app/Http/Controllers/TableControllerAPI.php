@@ -52,8 +52,10 @@ class TableControllerAPI extends Controller
         return new TableResource($table);
     }
 
-    public function destroy(Request $request) {
-        $table = Table::findOrFail($request->table_number);
+    public function destroy($id) {
+        Debugbar::info('Entered destroy function');
+
+        $table = Table::findOrFail($id);
 
         $table->delete();
 

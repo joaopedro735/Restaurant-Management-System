@@ -24,7 +24,7 @@
                         <td>{{ props.item.total_meals }}</td>
                         <td class="text-xs-right">
                             <span>
-                                <v-btn small round color="error" @click.native="delete(props.index)">
+                                <v-btn small round color="error" @click.native="deleteTable(props.item.table_number, props.index)">
                                     Delete
                                 </v-btn>
                             </span>
@@ -124,70 +124,46 @@
                     })
                 );
             },
-            table_number_log() {
-                console.log('Button given table number: ' + props.item.table_number);
-            },
-            delete(index) {
-                console.log('Entered delete function');
-                
-                this.table.table_number = this.tables[index].table_number;
+            deleteTable(table_number, index) {                
+                this.table.table_number = table_number;
 
-                console.log('Table number: ' + this.table.table_number);
+                console.log('Entered delete function, with table number = ' + this.table.table_number);
                 
-                /* let config = {
+                let config = {
                     headers: {
                     Authorization: 'Bearer ' + this.$store.state.token,
                     Accept: 'application/json'
                     }
                 };
 
-                axios.delete('/api/tables/delete', this.table, config)
+                axios.delete('/api/tables/' + this.table.table_number, config)
                     .then(response => {
-                    this.totalTables--;
+                        this.totalTables--;
 
-                    this.$toasted.success('Table deleted', {
-                        duration: 3000,
-                        position: 'top-center',
-                        className: 'toasted-css',
-                        theme: 'toasted-primary',
-                        icon: 'info_outline',
-                        text: 'OK',
-                        type: 'info',
-                        onClick: (e, toastObject) => {
-                        toastObject.goAway(0);
+                        this.$toasted.success('Table deleted',
+                            {
+
+                                icon: 'info_outline',
+                            }
+                        );
+
+                        this.tables.splice(index, 1);
+                    }
+                )
+                .catch(error => {
+                    this.$toasted.error(error,
+                        {
+                            icon: 'error_outline',
                         }
-                    });
-
-                    index = 0;
-
-                    this.tables.forEach(element => {
-                        if (this.tables.table_number == table_number) {
-                        return;
-                        }
-                        index++;
-                    });
-
-                    this.tables.splice(index, 1);
-                }).catch(error => {
-                    this.$toasted.error(error, {
-                        duration: 3000,
-                        position: 'top-center',
-                        className: 'toasted-css',
-                        theme: 'toasted-primary',
-                        icon: 'error_outline',
-                        text: 'OK',
-                        type: 'error',
-                        onClick: (e, toastObject) => {
-                        toastObject.goAway(0);
-                        }
-                    });
-                }); */
+                    );
+                });
             },
             updateList(table) {
                 this.totalTables++;
 
-                if (this.tables.length < 15) {
+                if (this.tables.length < this.pagination.rowsPerPage) {
                     Vue.set(this.tables, this.tables.length, table);
+                    this.tables.sort((a, b) => a.table_number - b.table_number);
                 }
             },
             getInformationFromLoggedUser() {
