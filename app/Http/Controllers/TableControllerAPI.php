@@ -48,13 +48,13 @@ class TableControllerAPI extends Controller
     public function destroy($id) {
         $table = Table::findOrFail($id);
 
-        $tableMealCount = MealControllerAPI::getMealCountPerTable($table->table_number);
+        $canDeleteTable = MealControllerAPI::canDeleteTable($id);
 
-        if ($tableMealCount == 0) {
-            $table->forceDelete();
+        if (!$canDeleteTable) {
+            $table->delete();
         }
         else {
-            $table->delete();
+            $table->forceDelete();
         }
 
         return response()->json(null, 204);

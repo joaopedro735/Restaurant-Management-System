@@ -57,4 +57,41 @@ class ItemControllerAPI extends Controller
     public static function getItemName($id) {
         return Item::find($id)->name;
     }
+
+    public function store(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'type' => 'required|in:drink,dish',
+            'description' => 'required|string|max:255',
+            'price' => 'required|float|max:255'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $item = new Item();
+        $item->name = $request->name;
+        $item->type = $request->type;
+        $item->description = $request->description;
+        $item->price = $request->price;
+        $item->save();
+        
+        return new ItemResource($item);
+    }
+
+    public function destroy($id) {
+        $item = Item::findOrFail($id);
+
+        $canDeleteItem = Meal::canDeleteItem($id);
+
+        if (!canDeleteItem) {
+            $item->delete();
+        }
+        else {
+            $item->forceDelete();
+        }
+
+        return response()->json(null, 204);
+    }
 }
