@@ -3,16 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Contracts\Support\Jsonable;
 
 use App\Http\Resources\TableResource;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 use App\Table;
 use Validator;
-use Hash;
-use Debugbar;
 
 class TableControllerAPI extends Controller
 {

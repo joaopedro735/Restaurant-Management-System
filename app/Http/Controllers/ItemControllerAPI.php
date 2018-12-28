@@ -3,16 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Contracts\Support\Jsonable;
 
 use App\Http\Resources\ItemResource as ItemResource;
-use Illuminate\Support\Facades\DB;
 
 use App\Item;
 use Validator;
-use App\StoreUserRequest;
-use Hash;
-use Debugbar;
 
 class ItemControllerAPI extends Controller
 {

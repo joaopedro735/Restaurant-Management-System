@@ -4,14 +4,11 @@ namespace App\Http\Controllers;
 
 use http\Env\Response;
 use Illuminate\Http\Request;
-use Illuminate\Contracts\Support\Jsonable;
 
 use App\Http\Resources\OrderResource;
 
 use App\Order;
 use App\User;
-//use App\StoreUserRequest;
-use Hash;
 
 class OrderControllerAPI extends Controller
 {
