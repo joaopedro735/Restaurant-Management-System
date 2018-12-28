@@ -29,7 +29,7 @@
                         <td>{{ props.item.table_number }}</td>
                         <td>{{ props.item.waiter }}</td>
                         <td>{{ props.item.price }}</td>
-                        <td>{{ props.item.created_at }}</td>
+                        <td>{{ props.item.date }}</td>
                         <td>
                             <v-icon
                                     @click="seeInvoice(props.item.id)"
@@ -84,7 +84,7 @@
                     rowsPerPageItems: [5, 10, 15, 25, 50],
                     loading: true,
                     pagination: {
-                        "sortBy": "created_at",
+                        "sortBy": "date",
                         invoicesType: "pending",
                     },
                     headers: [
@@ -92,7 +92,7 @@
                         {text: "Table Number", value: "table_number"},
                         {text: "Responsible Waiter", value: "waiter"},
                         {text: "Price", value: "price", width: "200px"},
-                        {text: "Creation date", value: "created_at"},
+                        {text: "Date", value: "date"},
                         {text: "Actions", sortable: false},
                     ],
                 },

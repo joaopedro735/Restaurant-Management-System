@@ -2,15 +2,15 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
 use App\Order;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
@@ -20,7 +20,7 @@ class OrderResource extends JsonResource
             'state' => Order::stateToStr($this->state),
             /*'item' => ItemControllerAPI::getItemName($this->item_id),*/
             'item' => $this->item->name,
-            'responsible_cook_id' => $this->responsible_cook_id == null ? 0 : $this->responsible_cook_id,
+            'responsible_cook_id' => $this->responsible_cook_id ?? 0,
             /*'responsible_cook' => UserControllerAPI::getCookName($this->responsible_cook_id),*/
             'responsible_cook' => $this->responsibleCook()->value('name'),
             'start' => $this->start,
