@@ -51,29 +51,29 @@
     export default {
         data() {
             return {
-            user: {},
-            table: {
-                table_number: ''
-            },
-            managerID: '',
-            showPage: false,
-            totalTables: 0,
-            tables: [],
-            loading: true,
-            pagination: {},
-            rowsPerPageItems: [15, 25, 50, 100],
-            pagination: {
-                rowsPerPage: 15
-            },
-            headers: [
-                { text: 'Table Number', value: 'table_number', align: 'left' },
-                { text: 'Created', value: 'created_at' },
-                { text: 'Updated at', value: 'updated_at' },
-                { text: 'Deleted at', value: 'deleted_at' },
-                { text: 'Total meals', value: 'total_meals' },
-                { text: '', value: 'actions' }
-            ],
-            showCreateTable: false
+                user: {},
+                table: {
+                    table_number: ''
+                },
+                managerID: '',
+                showPage: false,
+                totalTables: 0,
+                tables: [],
+                loading: true,
+                pagination: {},
+                rowsPerPageItems: [15, 25, 50, 100],
+                pagination: {
+                    rowsPerPage: 15
+                },
+                headers: [
+                    { text: 'Table Number', value: 'table_number', align: 'left' },
+                    { text: 'Created', value: 'created_at' },
+                    { text: 'Updated at', value: 'updated_at' },
+                    { text: 'Deleted at', value: 'deleted_at' },
+                    { text: 'Total meals', value: 'total_meals' },
+                    { text: '', value: 'actions' }
+                ],
+                showCreateTable: false
             };
         },
         watch: {

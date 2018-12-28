@@ -20,51 +20,43 @@ class TableControllerAPI extends Controller
     {
         if ($request->has('page'))
         {
-            if ($request->has('rowsPerPage') && $request->input('rowsPerPage') == -1)
-            {
-                return TableResource::collection(Table::paginate($request->input('rowsPerPage', 15))
-                );
-            }
-
             return TableResource::collection(Table::paginate($request->input('rowsPerPage', 15)));
         }
+
+        return response()->json([
+                "message" => "Request needs page parameter",
+            ], 400);
     }
 
     public function store(Request $request)
     {
-        Debugbar::info('Table number from request: ' . $request->table_number);
-
         $validator = Validator::make($request->all(), [
             'table_number' => 'required|integer|unique:restaurant_tables|min:1',
         ]);
 
         if ($validator->fails()) {
-            Debugbar::error($validator->errors());
             return response()->json($validator->errors(), 422);
         }
 
         $table = new Table();
         $table->table_number = $request->table_number;
         $table->save();
-
-        Debugbar::info('Table number from table object: ' . $table->table_number);
         
         return new TableResource($table);
     }
 
     public function destroy($id) {
-        Debugbar::info('Entered destroy function');
-
         $table = Table::findOrFail($id);
 
-        $table->delete();
+        $tableMealCount = MealControllerAPI::getMealCountPerTable($table->table_number);
+
+        if ($tableMealCount == 0) {
+            $table->forceDelete();
+        }
+        else {
+            $table->delete();
+        }
 
         return response()->json(null, 204);
-
-        /* if ($table->trashed()) {
-             return response()->json([
-                'message' => 'Table deleted'
-            ]);
-        } */
     }
 }

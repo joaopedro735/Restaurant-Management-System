@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Item;
 use App\StoreUserRequest;
 use Hash;
+use Debugbar;
 
 class ItemControllerAPI extends Controller
 {
@@ -25,6 +26,33 @@ class ItemControllerAPI extends Controller
             return ItemResource::collection(Item::all());
         }
     }
+
+    public function indexDrinks(Request $request)
+    {
+        if ($request->has('page'))
+        {
+            return ItemResource::collection(Item::where('type', 'drink')
+                ->paginate($request->input('rowsPerPage', 15)));
+        }
+
+        return response()->json([
+            "message" => "Request needs page parameter",
+        ], 400);
+    }
+
+    public function indexDishes(Request $request)
+    {
+        if ($request->has('page'))
+        {
+            return ItemResource::collection(Item::where('type', 'dish')
+                ->paginate($request->input('rowsPerPage', 15)));
+        }
+
+        return response()->json([
+            "message" => "Request needs page parameter",
+        ], 400);
+    }
+
 
     public static function getItemName($id) {
         return Item::find($id)->name;

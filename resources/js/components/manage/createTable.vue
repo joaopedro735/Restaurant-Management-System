@@ -88,7 +88,7 @@
                     }
                 };
 
-                axios.post('/api/tables/create', this.table, config)
+                axios.post('/api/tables/', this.table, config)
                     .then(response => {
                         var table = response.data.data;
                         
