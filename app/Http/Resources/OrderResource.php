@@ -4,9 +4,6 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Order;
-use App\User;
-use App\Http\Controllers\ItemControllerAPI;
-use App\Http\Controllers\UserControllerAPI;
 
 class OrderResource extends JsonResource
 {
