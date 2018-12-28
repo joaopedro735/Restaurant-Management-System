@@ -57,6 +57,8 @@ class TableControllerAPI extends Controller
 
         $table->delete();
 
+        return response()->json(null, 204);
+
         /* if ($table->trashed()) {
              return response()->json([
                 'message' => 'Table deleted'

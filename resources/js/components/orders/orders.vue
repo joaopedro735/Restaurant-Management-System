@@ -224,9 +224,6 @@
                         }
 
                         if (state == 'in preparation') {
-                            console.log('Must sort in preparation orders');
-                            console.log('Total size of array: ' + this.orders.length);
-
                             var totalInPreparation = 0;
 
                             this.orders.forEach(order => {
@@ -244,6 +241,8 @@
                             this.orders.splice(totalInPreparation, 0, response.data.data);
                             this.orders.splice((index + 1), 1);
                         }
+
+                        
 
                         this.$toasted.success('Order updated',
                         {

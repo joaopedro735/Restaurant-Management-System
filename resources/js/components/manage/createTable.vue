@@ -103,16 +103,15 @@
 
                         this.$toasted.success('Table added',
                         {
-                            duration: 3000,
-                            position: 'top-center',
-                            className: 'toasted-css',
-                            theme: 'toasted-primary',
                             icon: 'info_outline',
-                            text : 'OK',
-                            type: 'info',
-                            onClick : (e, toastObject) => {
-                                toastObject.goAway(0);
-                            }
+                            /* action : {
+                                text : 'Refresh',
+                                onClick : (e, toastObject) => {
+                                    push : { 
+                                        name : 'users'
+                                    }
+                                }
+                            } */
                         });
                     })
                     .catch(error => {
@@ -120,16 +119,7 @@
 
                         this.$toasted.error(error.response.data.table_number[0],
                         {
-                            duration: 3000,
-                            position: 'top-center',
-                            className: 'toasted-css',
-                            theme: 'bubble',
                             icon: 'error_outline',
-                            text : 'OK',
-                            type: 'error',
-                            onClick : (e, toastObject) => {
-                                toastObject.goAway(0);
-                            }
                         });
                     });
             }
