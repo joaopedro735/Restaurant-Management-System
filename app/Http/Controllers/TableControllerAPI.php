@@ -50,12 +50,14 @@ class TableControllerAPI extends Controller
 
         $canDeleteTable = MealControllerAPI::canDeleteTable($id);
 
-        if (!$canDeleteTable) {
+        $canDeleteTable ? $table->forceDelete() : $table->delete();
+
+        /* if (!$canDeleteTable) {
             $table->delete();
         }
         else {
             $table->forceDelete();
-        }
+        } */
 
         return response()->json(null, 204);
     }
