@@ -70,11 +70,5 @@ class OrderControllerAPI extends Controller
         $order = Order::where('item_id', $id)->first();
 
         return $order ? false : true;
-
-        /* if (!$order) {
-            return true;
-        }
-
-        return false; */
     }
 }

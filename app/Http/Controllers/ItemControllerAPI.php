@@ -9,6 +9,7 @@ use App\Http\Resources\ItemResource as ItemResource;
 use Illuminate\Support\Facades\DB;
 
 use App\Item;
+use Validator;
 use App\StoreUserRequest;
 use Hash;
 use Debugbar;
@@ -85,14 +86,7 @@ class ItemControllerAPI extends Controller
 
         $canDeleteItem = OrderControllerAPI::canDeleteItem($id);
 
-        $canDeleteitem ? $item->forceDelete() : $item->delete();
-
-        /* if (!canDeleteItem) {
-            $item->delete();
-        }
-        else {
-            $item->forceDelete();
-        } */
+        $canDeleteItem ? $item->forceDelete() : $item->delete();
 
         return response()->json(null, 204);
     }

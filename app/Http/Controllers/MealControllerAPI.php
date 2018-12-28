@@ -21,11 +21,5 @@ class MealControllerAPI extends Controller
         $meal =  Meal::where('table_number', $table_number)->first();
 
         return $meal ? false : true;
-
-        /* if (!$meal) {
-            return true;
-        }
-
-        return false; */
     }
 }
