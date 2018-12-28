@@ -20,20 +20,12 @@ class MealControllerAPI extends Controller
     public static function canDeleteTable($table_number) {
         $meal =  Meal::where('table_number', $table_number)->first();
 
-        if (!$meal) {
+        return $meal ? false : true;
+
+        /* if (!$meal) {
             return true;
         }
 
-        return false;
-    }
-
-    public static function canDeleteItem($table_number) {
-        $meal = Meal::where('table_number', $table_number)->first();
-
-        if (!$meal) {
-            return true;
-        }
-
-        return false;
+        return false; */
     }
 }

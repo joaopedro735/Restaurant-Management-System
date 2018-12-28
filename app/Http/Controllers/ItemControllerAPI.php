@@ -83,14 +83,16 @@ class ItemControllerAPI extends Controller
     public function destroy($id) {
         $item = Item::findOrFail($id);
 
-        $canDeleteItem = Meal::canDeleteItem($id);
+        $canDeleteItem = OrderControllerAPI::canDeleteItem($id);
 
-        if (!canDeleteItem) {
+        $canDeleteitem ? $item->forceDelete() : $item->delete();
+
+        /* if (!canDeleteItem) {
             $item->delete();
         }
         else {
             $item->forceDelete();
-        }
+        } */
 
         return response()->json(null, 204);
     }
