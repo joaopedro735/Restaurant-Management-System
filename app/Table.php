@@ -10,7 +10,7 @@ class Table extends Model
     use SoftDeletes;
 
     protected $connection = 'mysql';
-    
+
     protected $table = 'restaurant_tables';
     protected $primaryKey = 'table_number';
 
@@ -26,6 +26,6 @@ class Table extends Model
     protected $dates = ['deleted_at'];
 
     public static function timestampToString($timestamp) {
-        return mb_convert_encoding($timestamp, "UTF-8");;
+        return mb_convert_encoding($timestamp, "UTF-8");
     }
 }

@@ -21,6 +21,11 @@ class Meal extends Model
         return $this->hasOne('App\User', 'id', 'responsible_waiter_id');
     }
 
+    public function table()
+    {
+        return $this->hasOne('App\Table', 'table_number', 'table_number');
+    }
+
     public static function stateToStr($orderState)
     {
         switch ($orderState) {

@@ -2,18 +2,68 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Contracts\Support\Jsonable;
-
-use App\Http\Resources\MealResource;
-use Illuminate\Support\Facades\DB;
-
 use App\Meal;
-use Hash;
+use Illuminate\Http\Request;
 
 class MealControllerAPI extends Controller
 {
-    public static function getMealCountPerTable($table_number) {
-        return DB::table('meals')->where('table_number', $table_number)->count();
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        /*$meal = Meal::with('orders.item:id')->find($id);
+        return response()->json($meal, 404);*/
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Meal  $meal
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Meal $meal)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Meal  $meal
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Meal $meal)
+    {
+        //
+    }
+
+    public static function getMealCountInTable($tableNumber) {
+       return Meal::where('table_number', $tableNumber)->count();
     }
 }

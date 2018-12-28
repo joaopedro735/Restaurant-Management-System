@@ -52,11 +52,17 @@ Route::group([
         'prefix' => 'invoices'
     ], function () {
         Route::get('/', 'InvoiceControllerAPI@index');
+        Route::get('/pending', 'InvoiceControllerAPI@pending');
+        Route::get('/{id}', 'InvoiceControllerAPI@show');
+    });
+
+    Route::group([
+        'prefix' => 'meals'
+    ], function () {
+        Route::get('/', 'MealControllerAPI@index');
+        Route::get('/{id}', 'MealControllerAPI@show');
     });
 });
-
-Route::get('users', 'UserControllerAPI@index');
-Route::middleware('auth:api')->get('users/me', 'UserControllerAPI@myProfile');
 
 Route::get('menu', 'ItemControllerAPI@index');
 
