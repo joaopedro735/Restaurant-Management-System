@@ -88,7 +88,7 @@ const footer = Vue.component("footer-component", () =>
     import(/* webpackChunkName: "footer"*/ "./components/footer.vue")
 );
 
-const home = require("./components/home");
+const home = () => import("./components/home");
 
 /* Components para conta de utilizador */
 const accountPage = Vue.component("account-page", () =>

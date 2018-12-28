@@ -121,9 +121,6 @@
                 pagination: {},
                 search: '',
                 rowsPerPageItems: [15, 25, 50, 100],
-                pagination: {
-                    rowsPerPage: 15
-                },
                 headers: [
                     { text: 'Status', value: 'state', align: 'left', sortable: false},
                     { text: 'Cook', value: 'responsible_cook'},

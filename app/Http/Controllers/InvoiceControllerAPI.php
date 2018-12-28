@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\InvoiceResource;
-
+use App\Http\Resources\InvoicesResource;
 use App\Invoice;
 use Illuminate\Http\Request;
 
@@ -17,7 +17,17 @@ class InvoiceControllerAPI extends Controller
     public function index()
     {
         if (request()->has("page")) {
-            return InvoiceResource::collection(Invoice::where("state", "not paid")
+            return InvoicesResource::collection(Invoice::paginate(request()->input("rowsPerPage", 10)));
+        }
+        return response()->json([
+            "message" => "Request needs page parameter",
+        ], 400);
+    }
+
+    public function pending()
+    {
+        if (request()->has("page")) {
+            return InvoicesResource::collection(Invoice::where("state", "not paid")
                 ->paginate(request()->input("rowsPerPage", 10)));
         }
         return response()->json([
@@ -39,12 +49,11 @@ class InvoiceControllerAPI extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Invoice  $invoice
-     * @return \Illuminate\Http\Response
+     * @return InvoiceResource
      */
-    public function show(Invoice $invoice)
+    public function show($id)
     {
-        //
+        return new InvoiceResource(Invoice::find($id));
     }
 
     /**
