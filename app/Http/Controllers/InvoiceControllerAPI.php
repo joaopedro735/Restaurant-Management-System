@@ -27,7 +27,7 @@ class InvoiceControllerAPI extends Controller
     public function pending()
     {
         if (request()->has("page")) {
-            return InvoicesResource::collection(Invoice::where("state", "not paid")
+            return InvoicesResource::collection(Invoice::where("state", "pending")
                 ->paginate(request()->input("rowsPerPage", 10)));
         }
         return response()->json([

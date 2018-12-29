@@ -30,14 +30,23 @@
                         <td>{{ props.item.waiter }}</td>
                         <td>{{ props.item.price }}</td>
                         <td>{{ props.item.date }}</td>
+                        <td>{{ props.item.state }}</td>
                         <td>
-                            <v-icon
-                                    @click="seeInvoice(props.item.id)"
-                            >
-                                info
-                            </v-icon>
+                            <!--<v-icon-->
+                                    <!--@click="seeInvoice(props.item.id)"-->
+                            <!--&gt;-->
+                                <!--info-->
+                            <!--</v-icon>-->
+                            <span v-if="props.item.state === 'pending'">
+                                <v-btn small round color="success" @click.stop="closeInvoice(props.item.id)">Close invoice</v-btn>
+                            </span>
                         </td>
                     </tr>
+                </template>
+                <template slot="footer">
+                    <td :colspan="table.headers.length">
+                        <strong>Click on a invoice for more details</strong>
+                    </td>
                 </template>
             </v-data-table>
         </v-card>
@@ -63,12 +72,14 @@
             </v-card>
         </v-dialog>
 
-        <invoices-info :visible="showModal" :invoiceInfo="selectedInvoice" @close="showModal = false"></invoices-info>
+        <invoices-info :visible="showInvoiceInfoModal" :invoiceInfo="selectedInvoice" @close="showInvoiceInfoModal = false"></invoices-info>
+        <close-invoice :visible="showCloseInvoiceModal" :invoiceID="selectedInvoiceID" @close="showCloseInvoiceModal = false"></close-invoice>
     </div>
 </template>
 
 <script>
     import InvoicesInfo from './invoicesInfo';
+    import CloseInvoice from './closeInvoice';
 
     export default {
         data() {
@@ -76,10 +87,11 @@
                 totalInvoices: 0,
                 invoices: [],
                 invoicesUrl: "api/invoices/",
-                selectedInvoiceID: "",
+                selectedInvoiceID: null,
                 selectedInvoice: {},
                 dialog: false,
-                showModal: false,
+                showInvoiceInfoModal: false,
+                showCloseInvoiceModal: false,
                 table: {
                     rowsPerPageItems: [5, 10, 15, 25, 50],
                     loading: true,
@@ -93,6 +105,7 @@
                         {text: "Responsible Waiter", value: "waiter"},
                         {text: "Price", value: "price", width: "200px"},
                         {text: "Date", value: "date"},
+                        {text: "State", value: "state"},
                         {text: "Actions", sortable: false},
                     ],
                 },
@@ -142,11 +155,21 @@
                 this.dialog = true;
                 axios.get('/api/invoices/' + $id)
                     .then((response) => {
-                        this.dialog = false;
                         this.selectedInvoice = response.data.data;
-                        this.showModal = true;
+                        this.showInvoiceInfoModal = true;
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        this.$toasted.error("Some error occurred", {duration: 5000});
+                    })
+                    .finally(() => {
+                        this.dialog = false;
                     });
             },
+            closeInvoice($id) {
+                this.selectedInvoiceID = $id;
+                this.showCloseInvoiceModal = true;
+            }
         },
         computed: {
             isTypeAll: {
@@ -157,6 +180,7 @@
 
         },
         components: {
+            CloseInvoice,
             'invoices-info': InvoicesInfo
         }
     };

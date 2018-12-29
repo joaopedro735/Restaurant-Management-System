@@ -22,6 +22,7 @@ class InvoicesResource extends JsonResource
             'date' => Carbon::parse($this->date)->format('d/m/Y'),
             'price' => $this->total_price,
             'meal_id' => $this->meal_id,
+            'state' => $this->state,
         ];
     }
 }
