@@ -54,6 +54,7 @@ Route::group([
         Route::get('/', 'InvoiceControllerAPI@index');
         Route::get('/pending', 'InvoiceControllerAPI@pending');
         Route::get('/{id}', 'InvoiceControllerAPI@show');
+        Route::patch('/close/{id}', 'InvoiceControllerAPI@close');
     });
 
     Route::group([

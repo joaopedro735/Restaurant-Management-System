@@ -19,7 +19,7 @@ class InvoiceResource extends JsonResource
             'id' => $this->id,
             'table_number' => $this->meal->table_number,
             'waiter' => $this->meal->waiter->name,
-            'created_at' => $this->created_at->format('d/m/y H:i'),
+            'date' => Carbon::parse($this->date)->format('d/m/Y'),
             'price' => $this->total_price,
             'meal_id' => $this->meal_id,
             'items' => [
