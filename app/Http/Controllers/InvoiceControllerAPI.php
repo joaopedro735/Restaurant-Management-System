@@ -53,7 +53,7 @@ class InvoiceControllerAPI extends Controller
      */
     public function show($id)
     {
-        return new InvoiceResource(Invoice::find($id));
+        return new InvoiceResource(Invoice::findOrFail($id));
     }
 
     /**
@@ -66,6 +66,36 @@ class InvoiceControllerAPI extends Controller
     public function update(Request $request, Invoice $invoice)
     {
         //
+    }
+
+    public function close(Request $request, $id)
+    {
+        $invoice = Invoice::findOrFail($id);
+        if ($invoice->state === "paid") {
+            return response()->json([
+                "message" => "Invoice already paid"
+            ], 400);
+        }
+
+        if (!$request->has("nif") || !$request->has("name")) {
+            return response()->json([
+                "message" => "Request needs 'nif' and name 'parameters'"
+            ], 400);
+        }
+
+        $request->validate([
+            'nif' => 'required|integer|digits:9',
+            'name' => 'required|regex:/^[\pL\s\-]+$/u',
+        ], [
+            "name.regex" => "Name must have only letters and spaces"
+        ]);
+
+        $invoice->nif = $request->input('nif');
+        $invoice->name = ucwords($request->input('name'));
+        $invoice->state = 'paid';
+        $invoice->save();
+
+        return $invoice;
     }
 
     /**

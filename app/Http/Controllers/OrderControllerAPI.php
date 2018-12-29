@@ -42,7 +42,7 @@ class OrderControllerAPI extends Controller
                 ->orderByRaw('responsible_cook_id is NULL desc')
                 ->orderBy('state', 'desc')
                 ->orderBy('created_at', 'asc')
-                ->paginate($request->input('rowsPerPage', 5)));
+                ->paginate($request->input('rowsPerPage', 15)));
         }
 
         return response()->json([
