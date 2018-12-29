@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\InvoiceResource;
 use App\Http\Resources\InvoicesResource;
 use App\Invoice;
+use App\Meal;
 use Illuminate\Http\Request;
 
 class InvoiceControllerAPI extends Controller
@@ -71,15 +72,23 @@ class InvoiceControllerAPI extends Controller
     public function close(Request $request, $id)
     {
         $invoice = Invoice::findOrFail($id);
-        if ($invoice->state === "paid") {
+        if ($invoice->state !== "pending") {
             return response()->json([
-                "message" => "Invoice already paid"
+                "message" => "Not possible to change this invoice"
             ], 400);
         }
 
         if (!$request->has("nif") || !$request->has("name")) {
             return response()->json([
                 "message" => "Request needs 'nif' and name 'parameters'"
+            ], 400);
+        }
+
+        $meal = Meal::findOrFail($invoice->meal_id);
+
+        if ($meal->state !== "terminated") {
+            return response()->json([
+                "message" => "Associated meal isn't terminated"
             ], 400);
         }
 
@@ -93,7 +102,9 @@ class InvoiceControllerAPI extends Controller
         $invoice->nif = $request->input('nif');
         $invoice->name = ucwords($request->input('name'));
         $invoice->state = 'paid';
+        $meal->state = "paid";
         $invoice->save();
+        $meal->save();
 
         return $invoice;
     }
