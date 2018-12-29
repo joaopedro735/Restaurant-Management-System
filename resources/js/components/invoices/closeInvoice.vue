@@ -88,6 +88,11 @@
                             console.log(error);
                         });
                 }
+            },
+            clear() {
+                this.$v.$reset();
+                this.client.name = "";
+                this.client.nif = null;
             }
         },
         computed: {
