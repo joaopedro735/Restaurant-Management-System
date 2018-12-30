@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\InvoiceResource;
 use App\Http\Resources\InvoicesResource;
 use App\Invoice;
+use App\Meal;
 use Illuminate\Http\Request;
 
 class InvoiceControllerAPI extends Controller
@@ -27,7 +28,7 @@ class InvoiceControllerAPI extends Controller
     public function pending()
     {
         if (request()->has("page")) {
-            return InvoicesResource::collection(Invoice::where("state", "not paid")
+            return InvoicesResource::collection(Invoice::where("state", "pending")
                 ->paginate(request()->input("rowsPerPage", 10)));
         }
         return response()->json([
@@ -53,7 +54,7 @@ class InvoiceControllerAPI extends Controller
      */
     public function show($id)
     {
-        return new InvoiceResource(Invoice::find($id));
+        return new InvoiceResource(Invoice::findOrFail($id));
     }
 
     /**
@@ -66,6 +67,46 @@ class InvoiceControllerAPI extends Controller
     public function update(Request $request, Invoice $invoice)
     {
         //
+    }
+
+    public function close(Request $request, $id)
+    {
+        $invoice = Invoice::findOrFail($id);
+        if ($invoice->state !== "pending") {
+            return response()->json([
+                "message" => "Not possible to change this invoice"
+            ], 400);
+        }
+
+        if (!$request->has("nif") || !$request->has("name")) {
+            return response()->json([
+                "message" => "Request needs 'nif' and name 'parameters'"
+            ], 400);
+        }
+
+        $meal = Meal::findOrFail($invoice->meal_id);
+
+        if ($meal->state !== "terminated") {
+            return response()->json([
+                "message" => "Associated meal isn't terminated"
+            ], 400);
+        }
+
+        $request->validate([
+            'nif' => 'required|integer|digits:9',
+            'name' => 'required|regex:/^[\pL\s\-]+$/u',
+        ], [
+            "name.regex" => "Name must have only letters and spaces"
+        ]);
+
+        $invoice->nif = $request->input('nif');
+        $invoice->name = ucwords($request->input('name'));
+        $invoice->state = 'paid';
+        $meal->state = "paid";
+        $invoice->save();
+        $meal->save();
+
+        return $invoice;
     }
 
     /**

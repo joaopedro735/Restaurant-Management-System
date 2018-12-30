@@ -4,7 +4,7 @@
             <v-card-title class="headline grey lighten-2">
                 {{ invoiceTitle }}
                 <v-spacer></v-spacer>
-                {{ invoiceInfo.created_at}}
+                {{ invoiceInfo.date}}
             </v-card-title>
 
 

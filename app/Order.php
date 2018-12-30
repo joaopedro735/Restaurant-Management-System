@@ -37,7 +37,7 @@ class Order extends Model
 
     public function item()
     {
-        return $this->hasOne('App\Item', 'id', 'item_id');
+        return $this->hasOne('App\Item', 'id', 'item_id')->withTrashed();
     }
 
     public function responsibleCook() {
