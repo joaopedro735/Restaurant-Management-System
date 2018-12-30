@@ -40,6 +40,9 @@
                             <span v-if="props.item.state === 'pending'">
                                 <v-btn small round color="success" @click.stop="closeInvoice(props.item.id)">Close invoice</v-btn>
                             </span>
+                            <span v-if="props.item.state === 'paid'">
+                                <v-btn small round color="success" @click.stop="downloadInvoice(props.item.id)">Download invoice</v-btn>
+                            </span>
                         </td>
                     </tr>
                 </template>

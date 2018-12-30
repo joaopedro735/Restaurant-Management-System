@@ -7,6 +7,7 @@ use App\Http\Resources\InvoicesResource;
 use App\Invoice;
 use App\Meal;
 use Illuminate\Http\Request;
+use PDF;
 
 class InvoiceControllerAPI extends Controller
 {
@@ -67,6 +68,20 @@ class InvoiceControllerAPI extends Controller
     public function update(Request $request, Invoice $invoice)
     {
         //
+    }
+
+    public function downloadPDF(Request $request, $id)
+    {
+        $invoice = Invoice::with('items')->with('meal.waiter:id,name')->findOrFail($id);
+        if ($invoice->state !== "paid") {
+            return response()->json([
+                "message" => "Invoice is not closed."
+            ], 400);
+        }
+
+        $pdf = PDF::loadView('invoice', compact('invoice'));
+        $pdfName = "Invoice" . $invoice->id;
+        return $pdf->download($pdfName);
     }
 
     public function close(Request $request, $id)

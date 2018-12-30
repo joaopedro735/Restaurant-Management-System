@@ -53,6 +53,7 @@ Route::group([
     ], function () {
         Route::get('/', 'InvoiceControllerAPI@index');
         Route::get('/pending', 'InvoiceControllerAPI@pending');
+        Route::get('/download/{id}', 'InvoiceControllerAPI@downloadPDF');
         Route::get('/{id}', 'InvoiceControllerAPI@show');
         Route::patch('/close/{id}', 'InvoiceControllerAPI@close');
     });
