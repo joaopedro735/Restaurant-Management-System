@@ -18,14 +18,14 @@
                 <template slot="items" slot-scope="props">
                     <tr :key="props.item.created_at"
                         :class="{
-                                'in-prep': (props.item.responsible_cook_id == user.id & props.item.state == 'In preparation'),
-                                'this-cook-conf': (props.item.responsible_cook_id == user.id & props.item.state == 'Confirmed'),
-                                'no-cook': (props.item.responsible_cook_id === 0 & user.type == 'cook')
+                                'in-prep': (props.item.responsible_cook_id === user.id & props.item.state === 'In preparation'),
+                                'this-cook-conf': (props.item.responsible_cook_id ===  user.id & props.item.state === 'Confirmed'),
+                                'no-cook': (props.item.responsible_cook_id === 0 & user.type === 'cook')
                             }"
                             @click="props.expanded = !props.expanded">
                         <td>
                             <!-- IN PREPARATION BY LOGGED COOK-->
-                            <v-chip v-if="(props.item.responsible_cook_id == user.id && props.item.state == 'In preparation')" outline color="blue darken-1">
+                            <v-chip v-if="(props.item.responsible_cook_id === user.id && props.item.state === 'In preparation')" outline color="blue darken-1">
                                 <v-avatar>
                                     <v-icon>timer</v-icon>
                                 </v-avatar>
@@ -33,7 +33,7 @@
                             </v-chip>
 
                             <!-- LOGGED COOK CONFIRMED -->
-                            <v-chip v-if="(props.item.responsible_cook_id == user.id && props.item.state == 'Confirmed')" outline color="green darken-1">
+                            <v-chip v-if="(props.item.responsible_cook_id === user.id && props.item.state === 'Confirmed')" outline color="green darken-1">
                                 <v-avatar>
                                     <v-icon>check_circle</v-icon>
                                 </v-avatar>
@@ -201,14 +201,6 @@
 
                 // Order already has a cook
                 if (order.responsible_cook_id != 0) {
-                    /** Server needs : {
-                     * order.id
-                     * order
-                     * new state
-                     * } */
-
-                    console.log('Order already had this cook');
-
                     axios.put('/api/orders/' + orderToUpdate.id + '?state=' + state)
                     .then(response => {
                         Vue.set(this.orders, index, response.data.data);
@@ -231,8 +223,6 @@
                                 totalInPreparation--;
                             }
 
-                            console.log('Based on the for, new index should be: ' + totalInPreparation);
-
                             this.orders.splice(totalInPreparation, 0, response.data.data);
                             this.orders.splice((index + 1), 1);
                         }
@@ -252,18 +242,18 @@
                     .then(response => {
                         Vue.set(this.orders, index, response.data.data);
 
-                        if (state == 'prepared') {
+                        if (state === 'prepared') {
                             this.orders.splice(index, 1);
                         }
 
-                        if (state == 'in preparation') {
+                        if (state === 'in preparation') {
                             console.log('Must sort in preparation orders');
                             console.log('Total size of array: ' + this.orders.length);
 
                             var totalInPreparation = 0;
 
                             this.orders.forEach(order => {
-                                if (order.state == 'In preparation') {
+                                if (order.state === 'In preparation') {
                                     totalInPreparation++;
                                 }
                             });
@@ -304,7 +294,7 @@
                 this.user = this.$store.state.user;
             },
             isUserAWorker(user){
-                if(user.type == 'cook' || user.type == 'manager')
+                if(user.type === 'cook' || user.type === 'manager')
                 {
                     this.showPage = true;
                     this.cookID = user.id;
@@ -312,7 +302,6 @@
                 }
                 else
                 {
-                    console.log('Not authorized to see this page!');
                     this.$toasted.error('You are not authorized to see this page',
                         {
                             icon: "error_outline",

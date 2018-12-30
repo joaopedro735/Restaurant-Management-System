@@ -62,9 +62,14 @@ Route::group([
         Route::get('/', 'MealControllerAPI@index');
         Route::get('/{id}', 'MealControllerAPI@show');
     });
-});
 
-/* Route::get('menu', 'ItemControllerAPI@index'); */
+    Route::group([
+        'prefix' => 'menu'
+    ], function () {
+        Route::post('/', 'ItemControllerAPI@store');
+        Route::delete('/{id}', 'ItemControllerAPI@destroy');
+    });
+});
 
 Route::group([
     'prefix' => 'menu'
@@ -72,8 +77,6 @@ Route::group([
     Route::get('/', 'ItemControllerAPI@index');
     Route::get('/drinks', 'ItemControllerAPI@indexDrinks');
     Route::get('/dishes', 'ItemControllerAPI@indexDishes');
-    Route::post('/', 'ItemControllerAPI@store');
-    Route::delete('/{id}', 'ItemControllerAPI@destroy');
 });
 
 Route::post('login', 'LoginControllerAPI@login');
