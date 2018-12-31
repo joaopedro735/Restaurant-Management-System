@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Invoice - #{{ $invoice->id }}/title>
+    <title>Invoice - #{{ $invoice->id }}</title>
 
     <style type="text/css">
         @page {
