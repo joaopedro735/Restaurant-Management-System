@@ -2,7 +2,7 @@
     <div>
         <v-card>
             <v-card-title class="headline info" primary-title>Tables
-                <v-spacer></v-spacer>
+                <v-spacer ></v-spacer>
                 <v-btn slot="activator" round dark class="mb-2" @click="showCreateTable = true">Add table</v-btn>
             </v-card-title>
             <v-data-table
@@ -39,8 +39,8 @@
             <create-table
                 :visible="showCreateTable"
                 @close="showCreateTable = false"
-                @update="updateList"
-            ></create-table>
+                @update="updateList">
+            </create-table>
         </v-card>
     </div>
 </template>
@@ -79,7 +79,7 @@
         watch: {
             pagination: {
                 handler() {
-                    if (this.user.type == 'manager') {
+                    if (this.user.type === 'manager') {
                     this.getDataFromApi().then(data => {
                         this.tables = data.data.tables;
                         this.totalTables = data.data.totalTables;
@@ -91,7 +91,7 @@
         },
         methods: {
             getDataFromApi() {
-                if (this.user.type != 'manager') {
+                if (this.user.type !== 'manager') {
                     this.showPage = false;
                     return;
                 }

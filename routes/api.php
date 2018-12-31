@@ -68,6 +68,7 @@ Route::group([
         'prefix' => 'menu'
     ], function () {
         Route::post('/', 'ItemControllerAPI@store');
+        Route::put('/{id}', 'ItemControllerAPI@update');
         Route::delete('/{id}', 'ItemControllerAPI@destroy');
     });
 });

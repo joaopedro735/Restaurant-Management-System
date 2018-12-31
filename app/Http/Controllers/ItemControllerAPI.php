@@ -59,7 +59,8 @@ class ItemControllerAPI extends Controller
             'name' => 'required|string|max:255',
             'type' => 'required|in:drink,dish',
             'description' => 'required|string|max:255',
-            'price' => 'required|float|max:255'
+            'photo_url' => 'required|max:255',
+            'price' => 'required|between:0,999999.99'
         ]);
 
         if ($validator->fails()) {
@@ -71,6 +72,7 @@ class ItemControllerAPI extends Controller
         $item->type = $request->type;
         $item->description = $request->description;
         $item->price = $request->price;
+        $item->photo_url = $request->photo_url;
         $item->save();
         
         return new ItemResource($item);

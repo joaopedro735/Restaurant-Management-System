@@ -55,27 +55,27 @@
                             </v-chip>
 
                             <!-- OTHER COOKS CONFIRMED -->
-                            <v-chip v-if="(props.item.responsible_cook_id != user.id && props.item.responsible_cook_id != 0)" outline color="red darken-1">
+                            <v-chip v-if="(props.item.responsible_cook_id !== user.id && props.item.responsible_cook_id !== 0)" outline color="red darken-1">
                                 <v-avatar>
                                     <v-icon>check_circle</v-icon>
                                 </v-avatar>
                                 <strong>{{ props.item.state }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
                             </v-chip>
                         </td>
-                        <td><strong>{{ props.item.responsible_cook != '' ?  props.item.responsible_cook : ''}}</strong></td>
+                        <td><strong>{{ props.item.responsible_cook !== '' ? props.item.responsible_cook : ''}}</strong></td>
                         <td>{{ props.item.created_at }}</td>
                         <td>{{ props.item.start }}</td>
                         <td>{{ props.item.updated_at }}</td>
                         <td>{{ props.item.id }}</td>
                         <td class="text-xs-right">
-                            <span v-if="props.item.state == 'In preparation' & props.item.responsible_cook_id == user.id & user.type == 'cook'">
+                            <span v-if="props.item.state === 'In preparation' & props.item.responsible_cook_id === user.id & user.type === 'cook'">
                                 <v-btn small round color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">Mark as prepared</v-btn>
                             </span>
-                            <span v-if="props.item.responsible_cook_id == user.id & props.item.state == 'Confirmed' & user.type == 'cook'">
+                            <span v-if="props.item.responsible_cook_id === user.id & props.item.state === 'Confirmed' & user.type === 'cook'">
                                 <v-btn small round color="info" @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">Prepare</v-btn>
                                 <v-btn small round color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">Mark as Prepared</v-btn>
                             </span>
-                            <span v-if="props.item.responsible_cook_id == 0 & user.type == 'cook'">
+                            <span v-if="props.item.responsible_cook_id === 0 & user.type === 'cook'">
                                 <v-btn small round color="info" @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">Prepare</v-btn>
                                 <v-btn small round color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">Mark as prepared</v-btn>
                             </span>
@@ -200,21 +200,21 @@
                 console.log('               New state: ' + state);
 
                 // Order already has a cook
-                if (order.responsible_cook_id != 0) {
+                if (order.responsible_cook_id !== 0) {
                     axios.put('/api/orders/' + orderToUpdate.id + '?state=' + state)
                     .then(response => {
                         Vue.set(this.orders, index, response.data.data);
 
-                        if (state == 'prepared') {
+                        if (state === 'prepared') {
                             this.orders.splice(index, 1);
                             this.totalOrders--;
                         }
 
-                        if (state == 'in preparation') {
+                        if (state === 'in preparation') {
                             var totalInPreparation = 0;
 
                             this.orders.forEach(order => {
-                                if (order.state == 'In preparation') {
+                                if (order.state === 'In preparation') {
                                     totalInPreparation++;
                                 }
                             });
