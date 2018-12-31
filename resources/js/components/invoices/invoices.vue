@@ -40,6 +40,9 @@
                             <span v-if="props.item.state === 'pending'">
                                 <v-btn small round color="success" @click.stop="closeInvoice(props.item.id)">Close invoice</v-btn>
                             </span>
+                            <span v-if="props.item.state === 'paid'">
+                                <v-btn small round color="success" @click.stop="downloadInvoice(props.item.id)">Download invoice</v-btn>
+                            </span>
                         </td>
                     </tr>
                 </template>
@@ -169,6 +172,23 @@
             closeInvoice($id) {
                 this.selectedInvoiceID = $id;
                 this.showCloseInvoiceModal = true;
+            },
+            downloadInvoice($id) {
+                axios.get('/api/invoices/download/' + $id, { responseType: 'blob'})
+                    .then((response) => {
+                        const url = window.URL.createObjectURL(new Blob([response.data]));
+                        var tempLink = document.createElement('a');
+                        tempLink.style.display = 'none';
+                        tempLink.href = url;
+                        tempLink.setAttribute('download', "Invoice" + $id + ".pdf");
+                        document.body.appendChild(tempLink);
+                        tempLink.click();
+                        document.body.removeChild(tempLink);
+                        window.URL.revokeObjectURL(blobURL);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
             }
         },
         computed: {
