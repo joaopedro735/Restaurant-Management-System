@@ -272,7 +272,7 @@
                             this.$toasted.success('Item deleted',
                                 {
 
-                                    icon: 'info_outline',
+                                    icon: 'info',
                                 }
                             );
                         }
@@ -280,7 +280,7 @@
                     .catch(error => {
                         this.$toasted.error(error,
                             {
-                                icon: 'error_outline',
+                                icon: 'error',
                             }
                         );
                     });
@@ -309,14 +309,11 @@
                 }
             },
             updateItemRow(item) {
-                console.log('Entered updateList method');
                 if (item.type === 'drink') {
-                    console.log('Entered updateList method, drink if, with index ' + this.currentItemIndex);
                     Vue.set(this.drinks, this.currentItemIndex, item);
                 }
 
                 if (item.type === 'dish') {
-                    console.log('Entered updateList method, dish if, with index ' + this.currentItemIndex);
                     Vue.set(this.dishes, this.currentItemIndex, item);
                 }
             },
@@ -336,7 +333,7 @@
                 else {
                     this.$toasted.show('You are not authorized to alter items because your account is blocked',
                         {
-                            icon: "error_outline",
+                            icon: "error",
                             duration: 5000
                         }
                     );

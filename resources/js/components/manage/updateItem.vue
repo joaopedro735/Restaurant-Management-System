@@ -168,8 +168,6 @@
                     .then(response => {
                         var item = response.data.data;
 
-                        console.log(item);
-
                         if (item.id == 0) {
                             item.id = this.item.item;
                         }
@@ -179,16 +177,14 @@
 
                         this.$toasted.success('Item updated',
                             {
-                                icon: 'info_outline',
+                                icon: 'info',
                             }
                         );
                     })
                     .catch(error => {
-                        console.log(error);
-
                         this.$toasted.error(error,
                             {
-                                icon: 'error_outline',
+                                icon: 'error',
                             });
                     });
             },
@@ -219,31 +215,28 @@
                                 this.imageFile = '';
                                 this.imageUrl = '';
 
-                                console.log(item);
-
                                 this.$emit('update', item);
                                 this.$emit('close');
 
                                 this.$toasted.success('Item updated',
                                     {
-                                        icon: 'info_outline',
+                                        icon: 'info',
                                     }
                                 );
                             })
                             .catch(error => {
-                                console.log(error);
-
                                 this.$toasted.error(error,
                                     {
-                                        icon: 'error_outline',
+                                        icon: 'error',
                                     });
                             });
                     })
                     .catch(error => {
                         this.$toasted.error('Error uploading image',
                             {
-                                icon: 'error_outline',
+                                icon: 'error',
                             });
+                            
                         this.item.photo_url ='placeholder.png';
                     });
             },

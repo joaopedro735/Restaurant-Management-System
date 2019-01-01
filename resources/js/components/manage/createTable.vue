@@ -78,8 +78,6 @@
                 this.$emit('close');
             },
             create() {
-                console.log(this.table);
-
                 let config = {
                     headers: {
                         'Authorization': 'Bearer ' + this.$store.state.token,
@@ -102,16 +100,14 @@
 
                         this.$toasted.success('Table added',
                             {
-                                icon: 'info_outline',
+                                icon: 'info',
                             }
                         );
                     })
                     .catch(error => {
-                        console.log(error.response.data.table_number[0]);
-
                         this.$toasted.error(error.response.data.table_number[0],
                         {
-                            icon: 'error_outline',
+                            icon: 'erro',
                         });
                     });
             }

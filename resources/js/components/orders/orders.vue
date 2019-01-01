@@ -184,13 +184,11 @@
                 } */
                 this.$toasted.success('TODO: Filter orders',
                     {
-                        icon: "info_outline"
+                        icon: "info"
                     }
                 );
             },
             changeOrderState: function (index, order, state) {
-                console.clear();
-
                 this.currentOrder = Object.assign({}, order);
 
                 const orderToUpdate = this.currentOrder;
@@ -225,12 +223,16 @@
 
                         this.$toasted.success('Order updated',
                             {
-                                icon: 'info_outline',
+                                icon: 'info',
                             }
                         );
                     })
                     .catch((error) => {
-                        console.dir(error);
+                        this.$toasted.succerroress(error,
+                            {
+                                icon: 'error',
+                            }
+                        );
                     })
                 }
                 else { // Order doesn't have a cook
@@ -243,9 +245,6 @@
                         }
 
                         if (state === 'in preparation') {
-                            console.log('Must sort in preparation orders');
-                            console.log('Total size of array: ' + this.orders.length);
-
                             var totalInPreparation = 0;
 
                             this.orders.forEach(order => {
@@ -258,20 +257,22 @@
                                 totalInPreparation--;
                             }
 
-                            console.log('Based on the for, new index should be: ' + totalInPreparation);
-
                             this.orders.splice(totalInPreparation, 0, response.data.data);
                             this.orders.splice((index + 1), 1);
                         }
 
                         this.$toasted.success('Order updated',
                             {
-                                icon: 'info_outline',
+                                icon: 'info',
                             }
                         );
                     })
                     .catch((error) => {
-                        console.dir(error);
+                        this.$toasted.error(error,
+                            {
+                                icon: 'error',
+                            }
+                        );
                     })
                 }
             },
