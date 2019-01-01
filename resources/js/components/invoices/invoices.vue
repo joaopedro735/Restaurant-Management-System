@@ -1,15 +1,16 @@
 <template>
     <div>
         <div class="text-xs-center pt-2 ">
-            <v-btn color="primary" :disabled="isTypeAll" @click="table.pagination.invoicesType = 'all'">All Invoices
+            <v-btn color="primary" :disabled="isTypeAll" @click="table.pagination.invoicesType = 'all'">
+                All Invoices
             </v-btn>
-            <v-btn color="primary" :disabled="!isTypeAll" @click="table.pagination.invoicesType = 'pending'">Pending
-                Invoices
+            <v-btn color="primary" :disabled="!isTypeAll" @click="table.pagination.invoicesType = 'pending'">
+                Pending Invoices
             </v-btn>
         </div>
 
         <v-card>
-            <v-card-title class="headline light-blue lighten-3"
+            <v-card-title class="headline info white--text"
                           primary-title
             >Invoices
             </v-card-title>
@@ -31,7 +32,7 @@
                         <td>{{ props.item.price }}</td>
                         <td>{{ props.item.date }}</td>
                         <td>{{ props.item.state }}</td>
-                        <td>
+                        <td class="text-xs-right">
                             <!--<v-icon-->
                                     <!--@click="seeInvoice(props.item.id)"-->
                             <!--&gt;-->
@@ -41,7 +42,7 @@
                                 <v-btn small round color="success" @click.stop="closeInvoice(props.item.id)">Close invoice</v-btn>
                             </span>
                             <span v-if="props.item.state === 'paid'">
-                                <v-btn small round color="success" @click.stop="downloadInvoice(props.item.id)">Download invoice</v-btn>
+                                <v-btn small round color="success" @click.stop="downloadInvoice(props.item.id)"><v-icon>cloud_download</v-icon> &nbsp; Download invoice</v-btn>
                             </span>
                         </td>
                     </tr>
@@ -109,7 +110,7 @@
                         {text: "Price", value: "price", width: "200px"},
                         {text: "Date", value: "date"},
                         {text: "State", value: "state"},
-                        {text: "Actions", sortable: false},
+                        {text: "", sortable: false},
                     ],
                 },
             }

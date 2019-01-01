@@ -3,9 +3,11 @@
         <v-toolbar class="primary lighten-1">
             <v-toolbar-title>Restaurantte</v-toolbar-title>
 
-            <v-btn headline color="white" flat round exact :to="{name: 'home'}">Home</v-btn>
+            <v-btn headline color="white" flat round exact :to="{name: 'home'}">
+                <v-icon>home</v-icon>
+                &nbsp;Home
+            </v-btn>
             <v-btn color="white" flat round to="/menu">Menu</v-btn>
-            <v-btn color="white" flat round to="/menuTest">MenuTest</v-btn>
             <v-btn color="white" flat round v-if="checkDisplay('users')" to="/users" exact>Users</v-btn>
             <v-btn color="white" flat round v-if="checkDisplay('orders')" to="/orders">Orders</v-btn>
             <v-btn color="white" flat round v-if="checkDisplay('tables')" to="/management/tables">Tables</v-btn>

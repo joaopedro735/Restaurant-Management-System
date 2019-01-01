@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-card>
-            <v-card-title class="headline info" primary-title>
+            <v-card-title class="headline info white--text " primary-title>
                 Orders
                 <v-spacer></v-spacer>
                 <v-text-field @keypress.enter="filterOrders()" v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
@@ -62,7 +62,9 @@
                                 <strong>{{ props.item.state }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
                             </v-chip>
                         </td>
-                        <td><strong>{{ props.item.responsible_cook !== '' ? props.item.responsible_cook : ''}}</strong></td>
+                        <td>
+                            <strong>{{ props.item.responsible_cook !== '' ? props.item.responsible_cook : ''}}</strong>
+                        </td>
                         <td>{{ props.item.created_at }}</td>
                         <td>{{ props.item.start }}</td>
                         <td>{{ props.item.updated_at }}</td>
@@ -87,7 +89,7 @@
                 </v-alert>
                 <template slot="footer">
                     <td :colspan="headers.length">
-                        <strong>Click order for details</strong>
+                        <strong>Click on an order for details</strong>
                     </td>
                 </template>
                 <template slot="no-data">

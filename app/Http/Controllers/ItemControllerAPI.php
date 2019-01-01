@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Resources\ItemResource as ItemResource;
+use App\Http\Resources\ItemResource;
 
 use App\Item;
 use Validator;
+use Debugbar;
 
 class ItemControllerAPI extends Controller
 {
@@ -64,6 +65,7 @@ class ItemControllerAPI extends Controller
         ]);
 
         if ($validator->fails()) {
+            Debugbar::info('Got an error in the validator');
             return response()->json($validator->errors(), 422);
         }
 
@@ -86,5 +88,33 @@ class ItemControllerAPI extends Controller
         $canDeleteItem ? $item->forceDelete() : $item->delete();
 
         return response()->json(null, 204);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $item = Item::findOrFail($id);
+        Debugbar::info('Got to store method with id ' . $id);
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'type' => 'required|in:drink,dish',
+            'description' => 'required|string|max:255',
+            'photo_url' => 'required|max:255',
+            'price' => 'required|between:0,999999.99'
+        ]);
+
+        if ($validator->fails()) {
+            Debugbar::info('Got an error in the validator');
+            return response()->json($validator->errors(), 422);
+        }
+
+        Debugbar::info('No errors in the validator');
+
+
+        $item->update($request->all());
+
+        Debugbar::info($item);
+
+        return new ItemResource($item);
     }
 }

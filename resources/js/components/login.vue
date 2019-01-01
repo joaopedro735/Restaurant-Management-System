@@ -1,7 +1,7 @@
 <template>
     <div class="text-xs-center">
         <v-card max-width="600" class="center">
-            <v-card-title class="headline light-blue lighten-3" primary-title color="purple">Login</v-card-title>
+            <v-card-title class="headline blue darken-4 white--text" primary-title color="purple">Login</v-card-title>
 
             <v-divider light></v-divider>
 

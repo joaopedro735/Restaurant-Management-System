@@ -18,8 +18,8 @@ class ItemResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'price' => $this->price . "€",
-            'photo_url' => 'storage/items/' . $this->photo_url,
+            'price' => $this->price/*  . '€' */,
+            'photo_url' => /* 'storage/items/' .  */$this->photo_url,
             'type' => $this->type,
         ];
     }

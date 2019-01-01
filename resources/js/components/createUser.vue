@@ -2,11 +2,7 @@
     <div class="text-xs-center">
         <v-dialog width="500" v-model="show" @click.stop="show = false">
             <v-card>
-                <v-card-title
-                        class="headline light-blue lighten-3"
-                        primary-title
-                        color="purple"
-                >
+                <v-card-title class="headline blue darken-4 white--text" primary-title>
                     Create worker account
                 </v-card-title>
 

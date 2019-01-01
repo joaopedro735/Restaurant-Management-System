@@ -20,6 +20,8 @@ import Vuetify from "vuetify";
 import Toasted from "vue-toasted";
 import Vuelidate from "vuelidate";
 
+
+
 const options = {
     duration: 3000,
     position: "top-center",
@@ -62,9 +64,6 @@ const cashierList = Vue.component("list-cashiers", () =>
 /* Components para menu */
 const menu = Vue.component("items-component", () =>
     import("./components/menu/menu.vue")
-);
-const menuTest = Vue.component("items-component", () =>
-    import("./components/menu/menuTest.vue")
 );
 // @ Unused
 // const menuList = Vue.component('list-menu', require('./components/menuList.vue'));
@@ -141,7 +140,6 @@ const routes = [
     { path: "/", component: home, name: 'home' },
     { path: "/users", component: users, name: 'users' },
     { path: "/menu", component: menu },
-    { path: "/menuTest", component: menuTest },
     { path: "/login", component: login },
     { path: "/logout", component: logout },
     { path: "/users/me", component: accountPage },

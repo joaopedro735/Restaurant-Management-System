@@ -2,7 +2,7 @@
     <div class="text-xs-center">
         <v-dialog width="500" v-model="show" @click.stop="show = false">
             <v-card>
-                <v-card-title class="headline blue darken-4" primary-title color="purple">
+                <v-card-title class="headline blue darken-4 white--text" primary-title>
                     Create table
                 </v-card-title>
 
@@ -20,10 +20,9 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn small round :disabled="!form.valid" :loading="form.loading" @click="submit">
+                    <v-btn small round color="info" :disabled="!form.valid" :loading="form.loading" @click="submit">
                         Create
                     </v-btn>
-                    <v-btn small round @click="clear">Clear</v-btn>
                     <v-btn small round @click="close()">Cancel</v-btn>
                 </v-card-actions>
             </v-card>

@@ -1,7 +1,7 @@
 <template>
     <v-dialog persistent v-model="show" @click.stop="show = false" max-width="600px">
         <v-card>
-            <v-card-title class="headline grey lighten-2">
+            <v-card-title class="headline blue darken-4 white--text">
                 Close Invoice
             </v-card-title>
 

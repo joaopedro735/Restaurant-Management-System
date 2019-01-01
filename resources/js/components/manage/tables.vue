@@ -1,9 +1,11 @@
 <template>
     <div>
         <v-card>
-            <v-card-title class="headline info" primary-title>Tables
+            <v-card-title class="headline info white--text" primary-title>Tables
                 <v-spacer ></v-spacer>
-                <v-btn slot="activator" round dark class="mb-2" @click="showCreateTable = true">Add table</v-btn>
+                    <v-btn fab dark v-if="showManagerOptions" slot="activator" @click="showCreateTable = true">
+                    <v-icon>add</v-icon>
+                </v-btn>
             </v-card-title>
             <v-data-table
                 :headers="headers"
@@ -25,6 +27,7 @@
                         <td class="text-xs-right">
                             <span>
                                 <v-btn small round color="error" @click.native="deleteTable(props.item.table_number, props.index)">
+                                    <v-icon>delete</v-icon>
                                     Delete
                                 </v-btn>
                             </span>
@@ -56,7 +59,7 @@
                     table_number: ''
                 },
                 managerID: '',
-                showPage: false,
+                showManagerOptions: false,
                 totalTables: 0,
                 tables: [],
                 loading: true,
@@ -92,7 +95,7 @@
         methods: {
             getDataFromApi() {
                 if (this.user.type !== 'manager') {
-                    this.showPage = false;
+                    this.showManagerOptions = false;
                     return;
                 }
 
@@ -170,8 +173,8 @@
                 this.user = this.$store.state.user;
             },
             isUserAWorker(user) {
-                if (user.type == 'manager') {
-                    this.showPage = true;
+                if (user.type === 'manager') {
+                    this.showManagerOptions = true;
                     this.managerID = user.id;
                 } else {
                         this.$toasted.error('You are not authorized to see this page! Managers only.',

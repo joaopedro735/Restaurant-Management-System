@@ -25,7 +25,7 @@ class UserControllerAPI extends Controller
             if ($request->has('rowsPerPage') && $request->input('rowsPerPage') == -1) {
                 return UserResource::collection(User::all());
             }
-            return UserResource::collection(User::paginate($request->input('rowsPerPage', 10)));
+            return UserResource::collection(User::paginate($request->input('rowsPerPage', 15)));
         } else {
             return UserResource::collection(User::all());
         }
