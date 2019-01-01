@@ -68,4 +68,10 @@ class OrderControllerAPI extends Controller
 
         return $order ? false : true;
     }
+
+    public static function canDeleteuser($id) {
+        $user =  Order::where('responsible_cook_id', $id)->first();
+
+        return $user ? false : true;
+    }
 }

@@ -112,7 +112,6 @@
                                             </v-btn>
                                         </span>
                                     </td>
-                                    
                                 </tr>
                             </template>
                             <template slot="no-data">
@@ -331,9 +330,16 @@
                 this.user = this.$store.state.user;
             },
             isUserAWorker(user) {
-                if (user.type === 'manager') {
+                if (user.type === 'manager' && !user.blocked) {
                     this.showManagerOptions = true;
-                    this.managerID = user.id;
+                }
+                else {
+                    this.$toasted.show('You are not authorized to alter items because your account is blocked',
+                        {
+                            icon: "error_outline",
+                            duration: 5000
+                        }
+                    );
                 }
             }
         },

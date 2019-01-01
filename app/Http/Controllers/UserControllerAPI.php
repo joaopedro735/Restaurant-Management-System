@@ -60,6 +60,17 @@ class UserControllerAPI extends Controller
         ]);
     }
 
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+
+        $canDeleteUser = MealControllerAPI::canDeleteUser($id) && OrderControllerAPI::canDeleteUser($id);
+
+        $canDeleteUser ? $user->forceDelete() : $user->delete();
+
+        return response()->json(null, 204);
+    }
+
     public function confirm(Request $request)
     {
         $request->validate([
@@ -123,7 +134,10 @@ class UserControllerAPI extends Controller
         return new UserResource($request->user());
     }
 
-    public static function getCookName($id) {
+    /**
+     * @deprecated
+     */
+    public static function getCookName($id) { 
         if ($id == null) {
             return 'No cook assigned';
         }
@@ -131,16 +145,19 @@ class UserControllerAPI extends Controller
         return DB::table('users')->select('name')->where('id', $id)->first()->name;
     }
 
-    public static function getWaiterName($id) {
-        return DB::table('users')->select('name')->where('id', $id)->first()->name;
-    }
-
+    /**
+     * @deprecated
+     */
     public static function getCookID($id) {
         if ($id == null) {
             return 0;
         }
 
         return $id;
+    }
+
+    public static function getWaiterName($id) {
+        return DB::table('users')->select('name')->where('id', $id)->first()->name;
     }
 
     public function save(Request $request)
@@ -155,5 +172,23 @@ class UserControllerAPI extends Controller
             $user->photo_url = $request->input('photo_url');
         $user->save();
         return new UserResource($request->user());
+    }
+
+    public function blockUser($id) {
+        $user = User::findOrFail($id);
+
+        $user->blocked = 1;
+        $user->save();
+
+        return new UserResource($user);
+    }
+
+    public function unblockUser($id) {
+        $user = User::findOrFail($id);
+
+        $user->blocked = 0;
+        $user->save();
+
+        return new UserResource($user);
     }
 }

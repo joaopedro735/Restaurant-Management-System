@@ -72,4 +72,10 @@ class MealControllerAPI extends Controller
 
         return $meal ? false : true;
     }
+
+    public static function canDeleteuser($id) {
+        $user =  Meal::where('responsible_waiter_id', $id)->first();
+
+        return $user ? false : true;
+    }
 }

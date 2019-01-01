@@ -21,6 +21,7 @@ class UserResource extends JsonResource
             'type' => $this->type,
             'email' => $this->email,
             'photo_url' => 'storage/profiles/' . $this->photo_url,
+            'blocked' => $this->blocked == 0 ? false : true
         ];
     }
 }

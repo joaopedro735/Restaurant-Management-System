@@ -15,7 +15,10 @@
 
             <v-spacer></v-spacer>
 
-            <v-chip outline color="white" v-if="this.$store.state.user != null">{{ this.$store.state.user.name }}&nbsp;<strong>({{this.$store.state.user.type}})</strong></v-chip>
+            <v-chip outline color="white" v-if="this.$store.state.user != null">
+                <v-icon v-if="this.$store.state.user.blocked" color="red">block</v-icon>&nbsp;
+                {{ this.$store.state.user.name }}&nbsp;<strong>({{this.$store.state.user.type}})</strong>
+            </v-chip>
             <login-modal v-if="!this.$store.state.token"></login-modal>
             <user-nav v-if="this.$store.state.user"></user-nav>
         </v-toolbar>
@@ -32,12 +35,13 @@
 
                 switch (menu) {
                     case "tables":
+                        return (this.$store.state.user.type === "manager" && !this.$store.state.user.blocked);
                     case "users":
-                        return (this.$store.state.user.type === "manager");
+                        return (this.$store.state.user.type === "manager" && !this.$store.state.user.blocked);
                     case "orders":
-                        return (this.$store.state.user.type === "manager" || this.$store.state.user.type === "cook");
+                        return ((this.$store.state.user.type === "manager" || this.$store.state.user.type === "cook") && !this.$store.state.user.blocked);
                     case "invoices":
-                        return (this.$store.state.user.type === "manager" || this.$store.state.user.type === "cashier" )
+                        return ((this.$store.state.user.type === "manager" || this.$store.state.user.type === "cashier") && !this.$store.state.user.blocked);
                 }
             }
         }

@@ -15,8 +15,8 @@ use Illuminate\Http\Request;
 Route::group([
     'middleware' => 'auth:api'
 ], function() {
-
     Route::post('logout', 'LoginControllerAPI@logout');
+
     Route::group([
         'prefix' => 'users'
     ], function() {
@@ -24,6 +24,9 @@ Route::group([
         Route::get('/me', 'UserControllerAPI@myProfile');
         Route::put('/me', 'UserControllerAPI@save');
         Route::post('/me/photo', 'FileController@store');
+        Route::put('/block/{id}', 'UserControllerAPI@blockUser');
+        Route::put('/unblock/{id}', 'UserControllerAPI@unblockUser');
+        Route::delete('/{id}', 'UserControllerAPI@destroy');
     });
 
     Route::group([

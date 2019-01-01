@@ -1,9 +1,10 @@
 <template>
     <div>
         <v-card>
-            <v-card-title class="headline info white--text" primary-title>Tables
+            <v-card-title class="headline info white--text" primary-title>
+                Tables
                 <v-spacer ></v-spacer>
-                    <v-btn fab dark v-if="showManagerOptions" slot="activator" @click="showCreateTable = true">
+                <v-btn fab dark slot="activator" @click="showCreateTable = true">
                     <v-icon>add</v-icon>
                 </v-btn>
             </v-card-title>
@@ -14,6 +15,7 @@
                 :rows-per-page-items="rowsPerPageItems"
                 :total-items="totalTables"
                 :loading="loading"
+                item-key="table_number"
                 class="elevation-1">
                 <template slot="items" slot-scope="props">
                     <tr :key="props.item.table_number">
@@ -21,8 +23,6 @@
                             <h3>{{ props.item.table_number }}</h3>
                         </td>
                         <td>{{ props.item.created_at }}</td>
-                        <td>{{ props.item.updated_at }}</td>
-                        <td>{{ props.item.deleted_at }}</td>
                         <td>{{ props.item.total_meals }}</td>
                         <td class="text-xs-right">
                             <span>
@@ -39,10 +39,7 @@
                     </template>
             </v-data-table>
 
-            <create-table
-                :visible="showCreateTable"
-                @close="showCreateTable = false"
-                @update="updateList">
+            <create-table :visible="showCreateTable" @close="showCreateTable = false" @update="updateList">
             </create-table>
         </v-card>
     </div>
@@ -58,21 +55,16 @@
                 table: {
                     table_number: ''
                 },
-                managerID: '',
-                showManagerOptions: false,
+                showPage: false,
                 totalTables: 0,
                 tables: [],
                 loading: true,
                 pagination: {},
                 rowsPerPageItems: [15, 25, 50, 100],
-                pagination: {
-                    rowsPerPage: 15
-                },
+                pagination: {},
                 headers: [
                     { text: 'Table Number', value: 'table_number', align: 'left' },
                     { text: 'Created', value: 'created_at' },
-                    { text: 'Updated at', value: 'updated_at' },
-                    { text: 'Deleted at', value: 'deleted_at' },
                     { text: 'Total meals', value: 'total_meals' },
                     { text: '', value: 'actions' }
                 ],
@@ -82,11 +74,11 @@
         watch: {
             pagination: {
                 handler() {
-                    if (this.user.type === 'manager') {
-                    this.getDataFromApi().then(data => {
-                        this.tables = data.data.tables;
-                        this.totalTables = data.data.totalTables;
-                    });
+                    if (this.showPage) {
+                        this.getDataFromApi().then(data => {
+                            this.tables = data.data.tables;
+                            this.totalTables = data.data.totalTables;
+                        });
                     }
                 },
                 deep: true
@@ -94,11 +86,6 @@
         },
         methods: {
             getDataFromApi() {
-                if (this.user.type !== 'manager') {
-                    this.showManagerOptions = false;
-                    return;
-                }
-
                 this.loading = true;
 
                 var config = {
@@ -129,8 +116,6 @@
             },
             deleteTable(table_number, index) {                
                 this.table.table_number = table_number;
-
-                console.log('Entered delete function, with table number = ' + this.table.table_number);
                 
                 let config = {
                     headers: {
@@ -173,22 +158,30 @@
                 this.user = this.$store.state.user;
             },
             isUserAWorker(user) {
-                if (user.type === 'manager') {
-                    this.showManagerOptions = true;
-                    this.managerID = user.id;
-                } else {
-                        this.$toasted.error('You are not authorized to see this page! Managers only.',
-                        {
-                            icon: 'error_outline',
-                            onClick: (e, toastObject) => {
-                            toastObject.goAway(0);
-                            }
-                        }
-                        );
-
-                        this.$router.go(-1);
-                    }
+                if(user.type === 'manager' && !user.blocked)
+                {
+                    this.showPage = true;
                 }
+                else
+                {
+                    if (user.blocked) {
+                        this.$toasted.error('You are not authorized to see this page because your account is blocked',
+                            {
+                                icon: "error_outline",
+                            }
+                        );
+                    }
+                    else {
+                        this.$toasted.error('You are not authorized to see this page',
+                            {
+                                icon: "error_outline",
+                            }
+                        );
+                    }
+                    
+                    this.$router.push('/menu');
+                }
+            }
             },
         mounted() {
             this.getInformationFromLoggedUser();
@@ -201,7 +194,5 @@
 </script>
 
 <style scoped>
-    .toasted-css {
-        font-family: Arial, Helvetica, sans-serif;
-    }
+
 </style>

@@ -10,19 +10,15 @@ require("./bootstrap");
 
 window.Vue = require("vue");
 
-/**
- * Importar o vue-router
- * ? necess?rio instalar o vue-router primeiro (npm install vue-router --save)
- */
 import VueRouter from "vue-router";
 import store from "./stores/global-store";
 import Vuetify from "vuetify";
 import Toasted from "vue-toasted";
 import Vuelidate from "vuelidate";
 
+Vue.config.productionTip = false;
 
-
-const options = {
+const toastedOptions = {
     duration: 3000,
     position: "top-center",
     className: "toasted-css",
@@ -35,7 +31,7 @@ const options = {
 Vue.use(VueRouter);
 Vue.use(store);
 Vue.use(Vuetify);
-Vue.use(Toasted, options, {
+Vue.use(Toasted, toastedOptions, {
     router
 });
 Vue.use(Vuelidate);

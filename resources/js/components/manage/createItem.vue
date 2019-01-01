@@ -14,7 +14,7 @@
                     <v-form ref="form" v-model="form.valid" lazy-validation>
                         <v-text-field
                             v-model="item.name"
-                            :rules="[form.rules.required, form.rules.min, form.rules.max]"
+                            :rules="form.nameDescriptionRules"
                             label="Item name"
                             prepend-icon="local_dining"
                             autofocus
@@ -23,6 +23,7 @@
                         <v-select
                             v-model="item.type"
                             :items="types"
+                            :rules="form.typeRules"
                             item-text="text"
                             item-value="value"
                             label="Item type"
@@ -31,7 +32,7 @@
                         ></v-select>
                         <v-text-field
                             v-model="item.description"
-                            :rules="[form.rules.required, form.rules.min, form.rules.max]"
+                            :rules="form.nameDescriptionRules"
                             label="Item description"
                             prepend-icon="description"
                             required>
@@ -53,7 +54,7 @@
                         
                         <v-text-field
                             v-model="item.price"
-                            :rules="[form.rules.required, form.rules.price]"
+                            :rules="form.priceRules"
                             label="Item price"
                             prepend-icon="euro_symbol"
                             required>
@@ -102,7 +103,26 @@
                 valid: true,
                 loading: false,
                 p_show: false,
-                rules: {
+                nameDescriptionRules: [
+                    v => !!v || 'Required',
+                    v => (v && v.length >= 3) || 'Must be at least than 3 characters',
+                    v => (v && v.length <= 255) || 'Must be shorter than 255 characters' 
+                ],
+                typeRules: [
+                    v => !!v || 'Required',
+                    v => {
+                        const type = ['drink', 'dish'];
+                        return type.includes(v) || "Invalid type";
+                    }
+                ],
+                priceRules: [
+                    v => !!v || 'Required',
+                    value => {
+                        const pattern = /^\d{0,6}(\.\d{1,2})?$/;
+                        return pattern.test(value) || "Invalid price";
+                    }
+                ]
+                /*rules: {
                     required: v => !!v || "Required",
                     min: v => v.length >= 3 || "Min 3 characters",
                     max: v => v.length <= 255 || "Max 255 characters",
@@ -110,7 +130,7 @@
                         const pattern = /^\d{0,6}(\.\d{1,2})?$/;
                         return pattern.test(value) || "Invalid price";
                     }
-                }
+                } */
             },
             types: [
                 {text: "Drink", value: "drink"},
@@ -139,15 +159,7 @@
                 }
             },
             clear() {
-                //this.$refs.form.reset();
-                this.item.name = '';
-                this.item.type = '';
-                this.item.description = '';
-                this.item.photo_url = '';
-                this.item.price = '';
-                this.imageName = '';
-                this.imageUrl = '';
-                this.imageFile = '';
+                this.$refs.form.reset();
             },
             close() {
                 this.clear();
@@ -161,6 +173,10 @@
                     }
                 };
 
+                if (!Number.isInteger(this.item.price)) {
+                    this.item.price = this.item.price + '.00';
+                }
+                
                 this.item.photo_url = 'placeholder.png'
 
                 axios.post('/api/menu/', this.item, config)
@@ -198,6 +214,10 @@
 
                 axios.post('/api/menu/image', formData, config)
                     .then(response => {
+                        if (!Number.isInteger(this.item.price)) {
+                            this.item.price = this.item.price + '.00';
+                        }
+
                         this.item.photo_url = response.data.hashName;
 
                         axios.post('/api/menu/', this.item, config)
@@ -266,15 +286,7 @@
                 },
                 set(value) {
                     if (!value) {
-                        this.item.name = '';
-                        this.item.type = '';
-                        this.item.description = '';
-                        this.item.photo_url = '';
-                        this.item.price = '';
-                        this.imageName = '';
-                        this.imageUrl = '';
-                        this.imageFile = '';
-                        
+                        this.clear();                       
                         
                         this.$emit('close');
                     }

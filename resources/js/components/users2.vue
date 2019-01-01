@@ -25,6 +25,24 @@
                 <td>{{ props.item.name }}</td>
                 <td>{{ props.item.type }}</td>
                 <td>{{ props.item.email }}</td>
+                <td class="text-xs-right">
+                    <span>
+                        <v-btn small round color="warning" v-if="showManagerOptions & user.email != props.item.email & !props.item.blocked" @click="blockUser(props.index, props.item)">
+                            <v-icon>lock</v-icon>
+                            &nbsp; Block
+                        </v-btn>
+                        <v-btn small round color="info" v-if="showManagerOptions & user.email != props.item.email & props.item.blocked" @click="unblockUser(props.index, props.item)">
+                            <v-icon>lock_open</v-icon>
+                            &nbsp; Unblock
+                        </v-btn>
+                    </span>
+                    <span>
+                        <v-btn small round color="error" v-if="showManagerOptions & user.email != props.item.email" @click="deleteUser(props.index, props.item)">
+                            <v-icon>delete</v-icon>
+                            &nbsp; Delete
+                        </v-btn>
+                    </span>
+                </td>
             </template>
         </v-data-table>
 
@@ -54,6 +72,7 @@
                     {text: 'Nome', value: 'name', width: '500px'},
                     {text: 'Tipo', value: 'type', width: '80px'},
                     {text: 'Email', value: 'email', width: '200px'},
+                    {text: '', value: 'actions'},
                 ],
                 showCreateAccount: false,
                 showManagerOptions: false
@@ -100,9 +119,78 @@
                 this.user = this.$store.state.user;
             },
             isUserAWorker(user) {
-                if (user.type === 'manager') {
+                if (user.type === 'manager' && !user.blocked) {
                     this.showManagerOptions = true;
                 } 
+            },
+            blockUser(index, user) {
+                this.loading = true;
+
+                axios.put('/api/users/block/' + user.id)
+                .then((response) => {
+                    Vue.set(this.users, index, response.data.data);
+
+                    this.$toasted.info('User blocked',
+                        {
+                            icon: 'info',
+                        }
+                    );
+                }).catch((error) => {
+                    this.$toasted.error(error,
+                        {
+                            icon: 'error',
+                        }
+                    );
+                }).finally(() => {
+                    this.loading = false;
+                });
+            },
+            unblockUser(index, user) {
+                this.loading = true;
+
+                axios.put('/api/users/unblock/' + user.id)
+                .then((response) => {
+                    Vue.set(this.users, index, response.data.data);
+                    this.$toasted.info('User unblocked',
+                            {
+                                icon: 'info',
+                            }
+                        );
+                }).catch((error) => {
+                    this.$toasted.error(error,
+                        {
+                            icon: 'error',
+                        }
+                    );
+                }).finally(() => {
+                    this.loading = false;
+                });
+            },
+            deleteUser(index, user) {
+                this.loading = true;
+
+                axios.delete('/api/users/' + user.id)
+                .then((response) => {
+                    this.totalUsers--;
+
+                    this.$toasted.success('User deleted',
+                        {
+                            icon: 'info',
+                        }
+                    );
+
+                        this.users.splice(index, 1);
+                }).catch((error) => {
+                    console.log(error);
+
+                    this.$toasted.error(error,
+                        {
+                            icon: 'error',
+                        }
+                    );
+                }).finally(() => {
+                    this.loading = false;
+                });
             }
         },
         mounted() {

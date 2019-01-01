@@ -68,7 +68,6 @@
                         <td>{{ props.item.created_at }}</td>
                         <td>{{ props.item.start }}</td>
                         <td>{{ props.item.updated_at }}</td>
-                        <td>{{ props.item.id }}</td>
                         <td class="text-xs-right">
                             <span v-if="props.item.state === 'In preparation' & props.item.responsible_cook_id === user.id & user.type === 'cook'">
                                 <v-btn small round color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">Mark as prepared</v-btn>
@@ -114,7 +113,7 @@
         data () {
             return {
                 user: {},
-                cookID: '',
+                userID: '',
                 showPage: false,
                 totalOrders: 0,
                 orders: [],
@@ -129,7 +128,6 @@
                     { text: 'Ordered at', value: 'created_at'},
                     { text: 'Begin', value: 'start'},
                     { text: 'Last update', value: 'updated_at'},
-                    { text: 'Order ID', value: 'id'},
                     { text: '' , value : 'actions' }
                 ]
             }
@@ -137,11 +135,12 @@
         watch: {
             pagination: {
                 handler () {
-                    this.getDataFromApi()
-                        .then(data => {
-                            this.orders = data.data.orders;
-                            this.totalOrders = data.data.totalOrders;
-                        })
+                    if (this.showPage) {
+                        this.getDataFromApi().then(data => {
+                                this.orders = data.data.orders;
+                                this.totalOrders = data.data.totalOrders;
+                        });
+                    }
                 },
                 deep: true
             }
@@ -159,7 +158,7 @@
 
                 return axios.get('/api/orders', {
                     params: {
-                        page: this.pagination.page, rowsPerPage: this.pagination.rowsPerPage, cookID: this.cookID
+                        page: this.pagination.page, rowsPerPage: this.pagination.rowsPerPage, cookID: this.userID
                     }
                 })
                     .then((ordersRes) => {
@@ -195,11 +194,6 @@
                 this.currentOrder = Object.assign({}, order);
 
                 const orderToUpdate = this.currentOrder;
-
-                console.log('[Checkpoint 1] Order ID: ' + orderToUpdate.id);
-                console.log('               Responsible cook ID: ' + this.cookID);
-                console.log('               Current state: ' + orderToUpdate.state);
-                console.log('               New state: ' + state);
 
                 // Order already has a cook
                 if (order.responsible_cook_id !== 0) {
@@ -240,7 +234,7 @@
                     })
                 }
                 else { // Order doesn't have a cook
-                    axios.put('/api/orders/' + orderToUpdate.id + '?state=' + state + '&responsible_cook_id=' + this.cookID)
+                    axios.put('/api/orders/' + orderToUpdate.id + '?state=' + state + '&responsible_cook_id=' + this.userID)
                     .then(response => {
                         Vue.set(this.orders, index, response.data.data);
 
@@ -296,20 +290,29 @@
                 this.user = this.$store.state.user;
             },
             isUserAWorker(user){
-                if(user.type === 'cook' || user.type === 'manager')
+                if((user.type === 'cook' || user.type === 'manager') && !user.blocked)
                 {
                     this.showPage = true;
-                    this.cookID = user.id;
-                    console.log('Cook ID: ' + this.cookID);
+                    this.userID = user.id;
                 }
                 else
                 {
-                    this.$toasted.error('You are not authorized to see this page',
-                        {
-                            icon: "error_outline",
-                        }
-                    );
-                    this.$router.push('/');
+                    if (user.blocked) {
+                        this.$toasted.error('You are not authorized to see this page because your account is blocked',
+                            {
+                                icon: "error_outline",
+                            }
+                        );
+                    }
+                    else {
+                        this.$toasted.error('You are not authorized to see this page',
+                            {
+                                icon: "error_outline",
+                            }
+                        );
+                    }
+                    
+                    this.$router.push('/menu');
                 }
             }
         },
@@ -332,8 +335,5 @@
     }
     .no-cook {
         background-color: #FFECB3;
-    }
-    .toasted-css {
-        font-family: Arial, Helvetica, sans-serif;
     }
 </style>

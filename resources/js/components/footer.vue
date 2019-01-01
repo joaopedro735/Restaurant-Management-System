@@ -23,6 +23,15 @@ export default {
             this.$toasted.success("VueToasted", {
                 icon: "info_outline"
             });
+            this.$toasted.error("VueToasted", {
+                icon: "error_outline"
+            });
+            this.$toasted.info("VueToasted", {
+                icon: "done"
+            });
+            this.$toasted.show("VueToasted", {
+                icon: "grade"
+            });
         }
     }
   };

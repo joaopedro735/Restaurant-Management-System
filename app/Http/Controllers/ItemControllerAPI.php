@@ -66,7 +66,6 @@ class ItemControllerAPI extends Controller
         ]);
 
         if ($validator->fails()) {
-            Debugbar::info('Got an error in the validator');
             return response()->json($validator->errors(), 422);
         }
 
@@ -90,15 +89,12 @@ class ItemControllerAPI extends Controller
 
         $canDeleteItem ? $item->forceDelete() : $item->delete();
 
-        
-
         return response()->json(null, 204);
     }
 
     public function update(Request $request, $id)
     {
         $item = Item::findOrFail($id);
-        Debugbar::info('Got to store method with id ' . $id);
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -109,16 +105,10 @@ class ItemControllerAPI extends Controller
         ]);
 
         if ($validator->fails()) {
-            Debugbar::info('Got an error in the validator');
             return response()->json($validator->errors(), 422);
         }
 
-        Debugbar::info('No errors in the validator');
-
-
         $item->update($request->all());
-
-        Debugbar::info($item);
 
         return new ItemResource($item);
     }
