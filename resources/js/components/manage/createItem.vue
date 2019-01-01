@@ -92,20 +92,61 @@
         methods: {
             submit() {
                 if (this.$refs.form.validate()) {
-                    this.create();
+                    if (this.imageFile) {
+                        this.uploadImageAndCreateItem();
+                    }
+                    else {
+                        this.createItemWithoutImage();
+                    }
                 }
             },
             clear() {
-                this.$refs.form.reset();
+                //this.$refs.form.reset();
+                this.item.name = '';
+                this.item.type = '';
+                this.item.description = '';
+                this.item.photo_url = '';
+                this.item.price = '';
+                this.imageName = '';
+                this.imageUrl = '';
+                this.imageFile = '';
             },
             close() {
                 this.clear();
                 this.$emit('close');
             },
-            create() {
-                this.upload();
+            createItemWithoutImage() {
+                let config = {
+                    headers: {
+                        'Authorization': 'Bearer ' + this.$store.state.token,
+                        'Accept': 'application/json'
+                    }
+                };
+
+                this.item.photo_url = 'placeholder.png'
+
+                axios.post('/api/menu/', this.item, config)
+                    .then(response => {
+                        var item = response.data.data;
+
+                        this.clear();
+                        this.$emit('update', item);
+                        this.$emit('close');
+
+                        this.$toasted.success('Item created',
+                            {
+                                icon: 'info_outline',
+                            }
+                        );
+                    })
+                    .catch(error => {
+                        this.$toasted.error(error,
+                            {
+                                icon: 'error_outline',
+                            });
+                    });
             },
-            upload() {
+            uploadImageAndCreateItem() {
                 const formData = new FormData();
                 
                 formData.append('file', this.imageFile);
@@ -187,6 +228,16 @@
                 },
                 set(value) {
                     if (!value) {
+                        this.item.name = '';
+                        this.item.type = '';
+                        this.item.description = '';
+                        this.item.photo_url = '';
+                        this.item.price = '';
+                        this.imageName = '';
+                        this.imageUrl = '';
+                        this.imageFile = '';
+                        
+                        
                         this.$emit('close');
                     }
                 }

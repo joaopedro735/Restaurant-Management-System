@@ -32,6 +32,11 @@
                     </v-btn>
                     <v-btn small round @click="close()">Cancel</v-btn>
                 </v-card-actions>
+                <v-spacer></v-spacer>
+                <v-card class="text-xs-center">
+                    <v-spacer></v-spacer>
+                    <img :src="imageUrl" height="100" v-if="imageUrl"/>
+                </v-card>
             </v-card>
         </v-dialog>
     </div>
@@ -45,7 +50,6 @@
                 show: false,
                 error: ''
             },
-            imageName: '',
             imageUrl: '',
             imageFile: '',
             form: {
@@ -78,17 +82,20 @@
             submit() {
                 if (this.$refs.form.validate()) {
                     if (this.imageFile) {
-                        this.uploadImageAndUpdate();
+                        this.uploadImageAndUpdateItem();
                     }
                     else {
-                        this.update();
+                        this.updateItem();
                     }
                 }
             },
             close() {
+                this.imageUrl = '';
+                this.imageFile = '';
+                
                 this.$emit('close');
             },
-            update() {
+            updateItem() {
                 let config = {
                     headers: {
                         'Authorization': 'Bearer ' + this.$store.state.token,
@@ -124,7 +131,7 @@
                             });
                     });
             },
-            uploadImageAndUpdate() {
+            uploadImageAndUpdateItem() {
                 const formData = new FormData();
                 
                 formData.append('file', this.imageFile);
@@ -212,10 +219,6 @@
                     }
                 }
             }
-        },
-        mounted()
-        {
-            this.imageName = this.item.photo_url;
         }
     }
 </script>
