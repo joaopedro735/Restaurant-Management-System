@@ -8,6 +8,7 @@ use App\Http\Resources\ItemResource;
 
 use App\Item;
 use Validator;
+use Storage;
 use Debugbar;
 
 class ItemControllerAPI extends Controller
@@ -83,9 +84,13 @@ class ItemControllerAPI extends Controller
     public function destroy($id) {
         $item = Item::findOrFail($id);
 
+        /* Storage::delete('/public/items/' . $item->photo_url); */
+
         $canDeleteItem = OrderControllerAPI::canDeleteItem($id);
 
         $canDeleteItem ? $item->forceDelete() : $item->delete();
+
+        
 
         return response()->json(null, 204);
     }

@@ -174,7 +174,7 @@
                     { text: '', value: 'photo_url' },
                     { text: 'Name', value: 'name', align: 'left' },
                     { text: 'Description', value: 'description' },
-                    { text: 'Price', value: 'price', width: 30},
+                    { text: 'Price', value: 'price'},
                     { text: '', value: 'actions'}
                 ],
                 showCreateItem: false,
