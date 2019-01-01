@@ -13,10 +13,10 @@
                     :rows-per-page-items="rowsPerPageItems"
                     :total-items="totalOrders"
                     :loading="loading"
-                    item-key="created_at"
+                    item-key="id"
                     class="elevation-1">
                 <template slot="items" slot-scope="props">
-                    <tr :key="props.item.created_at"
+                    <tr :key="props.item.id"
                         :class="{
                                 'in-prep': (props.item.responsible_cook_id === user.id & props.item.state === 'In preparation'),
                                 'this-cook-conf': (props.item.responsible_cook_id ===  user.id & props.item.state === 'Confirmed'),

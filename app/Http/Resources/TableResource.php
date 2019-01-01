@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-
+use Carbon\carbon;
 use App\Table;
 
 use App\Http\Controllers\MealControllerAPI;
@@ -20,9 +20,9 @@ class TableResource extends JsonResource
     {
         return [
             'table_number' => $this->table_number,
-            'deleted_at' => Table::timestampToString($this->deleted_at),
-            'created_at' => Table::timestampToString($this->created_at),
-            'updated_at' => Table::timestampToString($this->updated_at),
+            'deleted_at' => Carbon::parse($this->deleted_at)->format('d/m/Y \(H:m\)'),
+            'created_at' => Carbon::parse($this->created_at)->format('d/m/Y \(H:m\)'),
+            'updated_at' => Carbon::parse($this->updated_at)->format('d/m/Y \(h:m\)'),
             'total_meals' => MealControllerAPI::getMealCountPerTable($this->table_number)
         ];
     }

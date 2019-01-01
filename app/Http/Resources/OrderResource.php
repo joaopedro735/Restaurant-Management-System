@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Order;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderResource extends JsonResource
@@ -21,10 +22,10 @@ class OrderResource extends JsonResource
             'item' => $this->item->name,
             'responsible_cook_id' => $this->responsible_cook_id ?? 0,
             'responsible_cook' => $this->responsibleCook()->value('name'),
-            'start' => $this->start,
-            'end' => $this->end,
-            'created_at' => Order::timestampToString($this->created_at),
-            'updated_at' => Order::timestampToString($this->updated_at),
+            'start' => Carbon::parse($this->start)->format('d/m/Y \(H:m\)'),
+            'end' => Carbon::parse($this->end)->format('d/m/Y \(H:m\)'),
+            'created_at' => Carbon::parse($this->created_at)->format('d/m/Y \(H:m\)'),
+            'updated_at' => Carbon::parse($this->updated_at)->format('d/m/Y \(H:m\)'),
 
         ];
     }
