@@ -106,7 +106,7 @@
                 nameDescriptionRules: [
                     v => !!v || 'Required',
                     v => (v && v.length >= 3) || 'Must be at least than 3 characters',
-                    v => (v && v.length <= 255) || 'Must be shorter than 255 characters' 
+                    v => (v && v.length <= 255) || 'Must be shorter than 256 characters' 
                 ],
                 typeRules: [
                     v => !!v || 'Required',
@@ -189,14 +189,14 @@
 
                         this.$toasted.success('Item created',
                             {
-                                icon: 'info_outline',
+                                icon: 'info',
                             }
                         );
                     })
                     .catch(error => {
                         this.$toasted.error(error,
                             {
-                                icon: 'error_outline',
+                                icon: 'error',
                             });
                     });
             },
@@ -234,21 +234,21 @@
 
                                 this.$toasted.success('Item created',
                                     {
-                                        icon: 'info_outline',
+                                        icon: 'info',
                                     }
                                 );
                             })
                             .catch(error => {
                                 this.$toasted.error(error,
                                     {
-                                        icon: 'error_outline',
+                                        icon: 'error',
                                     });
                             });
                     })
                     .catch(error => {
                         this.$toasted.error('Error uploading image',
                             {
-                                icon: 'error_outline',
+                                icon: 'error',
                             });
                         this.item.photo_url ='placeholder.png';
                     });

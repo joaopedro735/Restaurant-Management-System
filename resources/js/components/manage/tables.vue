@@ -119,8 +119,8 @@
                 
                 let config = {
                     headers: {
-                    Authorization: 'Bearer ' + this.$store.state.token,
-                    Accept: 'application/json'
+                        Authorization: 'Bearer ' + this.$store.state.token,
+                        Accept: 'application/json'
                     }
                 };
 
@@ -131,7 +131,7 @@
                         this.$toasted.success('Table deleted',
                             {
 
-                                icon: 'info_outline',
+                                icon: 'info',
                             }
                         );
 
@@ -141,7 +141,7 @@
                 .catch(error => {
                     this.$toasted.error(error,
                         {
-                            icon: 'error_outline',
+                            icon: 'error',
                         }
                     );
                 });
@@ -167,14 +167,14 @@
                     if (user.blocked) {
                         this.$toasted.error('You are not authorized to see this page because your account is blocked',
                             {
-                                icon: "error_outline",
+                                icon: "error",
                             }
                         );
                     }
                     else {
                         this.$toasted.error('You are not authorized to see this page',
                             {
-                                icon: "error_outline",
+                                icon: "error",
                             }
                         );
                     }
@@ -182,7 +182,7 @@
                     this.$router.push('/menu');
                 }
             }
-            },
+        },
         mounted() {
             this.getInformationFromLoggedUser();
             this.isUserAWorker(this.user);

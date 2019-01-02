@@ -21,10 +21,10 @@ export default {
     methods: {
         vueToast() {
             this.$toasted.success("VueToasted", {
-                icon: "info_outline"
+                icon: "info"
             });
             this.$toasted.error("VueToasted", {
-                icon: "error_outline"
+                icon: "error"
             });
             this.$toasted.info("VueToasted", {
                 icon: "done"

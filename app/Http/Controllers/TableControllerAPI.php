@@ -26,7 +26,7 @@ class TableControllerAPI extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'table_number' => 'required|integer|unique:restaurant_tables|min:1',
+            'table_number' => 'required|integer|unique:restaurant_tables|between:0,99999999999',
         ]);
 
         if ($validator->fails()) {

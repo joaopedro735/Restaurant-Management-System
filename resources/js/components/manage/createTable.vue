@@ -12,7 +12,13 @@
 
                 <v-card-text>
                     <v-form ref="form" v-model="form.valid" lazy-validation>
-                        <v-text-field v-model="table.table_number" :rules="[form.rules.required, form.rules.min, form.rules.max]" label="Table number" autofocus required></v-text-field>
+                        <v-text-field
+                            v-model="table.table_number"
+                            :rules="form.tableNumberRules"
+                            label="Table number"
+                            prepend-icon="fa-hashtag"
+                            autofocus
+                            required></v-text-field>
                     </v-form>
                 </v-card-text>
 
@@ -46,11 +52,20 @@
                 valid: true,
                 loading: false,
                 p_show: false,
+                tableNumberRules: [
+                    v => !!v || 'Required',
+                    v=> (v && v.length >= 1) || 'Miust have at least 1 character',
+                    v=> (v && v.length <= 11) || 'Must be shorter than 12 characters',
+                    value => {
+                        const pattern = /^\d{1,11}?$/;
+                        return pattern.test(value) || "Invalid price";
+                    }
+                ]/* ,
                 rules: {
                     required: v => !!v || 'Required.',
                     min: v => v.length >= 1 || 'Min 1 characters',
                     max: v => v.length < 11 || 'Max 11 characters'
-                }
+                } */
             }
         };
     }
@@ -70,8 +85,7 @@
                 }
             },
             clear() {
-                //this.$refs.form.reset();
-                this.table.table_number = '';
+                this.$refs.form.reset();
             },
             close() {
                 this.clear();
@@ -119,6 +133,7 @@
                 },
                 set(value) {
                     if (!value) {
+                        this.clear();
                         this.$emit('close');
                     }
                 }
@@ -128,7 +143,5 @@
 </script>
 
 <style scoped>
-    .toasted-css {
-        font-family: Arial, Helvetica, sans-serif;
-    }
+    
 </style>

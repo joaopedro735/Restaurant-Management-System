@@ -301,14 +301,14 @@
                     if (user.blocked) {
                         this.$toasted.error('You are not authorized to see this page because your account is blocked',
                             {
-                                icon: "error_outline",
+                                icon: "error",
                             }
                         );
                     }
                     else {
                         this.$toasted.error('You are not authorized to see this page',
                             {
-                                icon: "error_outline",
+                                icon: "error",
                             }
                         );
                     }
