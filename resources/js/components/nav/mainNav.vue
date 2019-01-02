@@ -48,7 +48,7 @@
         },
         computed: {
             working() {
-                return this.$store.state.user.shift_active;
+                return this.$store.state.user.shift_active || 0;
             },
         },
     }

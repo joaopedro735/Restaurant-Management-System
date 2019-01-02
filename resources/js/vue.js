@@ -43,12 +43,6 @@ Vue.use(Toasted, toastedOptions, {
         router
     }
 );
-Vue.use(new VueSocketIO(
-    {
-        debug: true,
-        connection: 'http://127.0.0.1:8080'
-    })
-);
 Vue.use(Vuelidate);
 
 /* Components para users */
@@ -214,13 +208,16 @@ const app = new Vue({
             if (store.state.user) {
                 this.$socket.emit('user_enter', this.$store.state.user);
             }
-        }, shift_started(dataFromServer) {
+        },
+        shift_started(dataFromServer) {
             console.log("start");
             this.$toasted.success("You started working",{icon: "info"});
-        }, shift_ended(dataFromServer) {
+        },
+        shift_ended(dataFromServer) {
             console.log("end");
             this.$toasted.error("You stopped working", {icon: "info"});
-        }, problem_Managers(dataFromServer) {
+        },
+        problem_Managers(dataFromServer) {
             this.$toasted.error(dataFromServer, {icon: "error"});
         },
         user_blocked(message) {

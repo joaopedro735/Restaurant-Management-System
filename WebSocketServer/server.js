@@ -46,6 +46,7 @@ io.on('connection', function (socket) {
     });
 
     socket.on('user_enter', user => {
+
         if (user) {
             socket.join(user.type);
             loggedUsers.addUserInfo(user, socket.id);
