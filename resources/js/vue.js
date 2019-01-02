@@ -14,7 +14,6 @@ import VueRouter from 'vue-router';
 import store from './stores/global-store';
 import Vuetify from 'vuetify';
 import Toasted from 'vue-toasted';
-import VueSocketio from 'vue-socket.io';
 import Moment from 'vue-moment';
 import Vuelidate from 'vuelidate';
 import VueSocketIO from 'vue-socket.io';
@@ -35,7 +34,7 @@ Vue.use(Moment);
 Vue.use(VueRouter);
 Vue.use(store);
 Vue.use(Vuetify);
-Vue.use(new VueSocketio({
+Vue.use(new VueSocketIO({
     debug: true,
     connection: 'http://127.0.0.1:8080'
 }));
@@ -46,50 +45,26 @@ Vue.use(Toasted, toastedOptions, {
 Vue.use(Vuelidate);
 
 /* Components para users */
-// const users = Vue.component('users-component', require('./components/users.vue'));
 const users = Vue.component('users-component', () =>
-    import(/* webpackChunkName: 'users' */ './components/users2')
-);
-// @ Unused
-// const userList = Vue.component('list-users', require('./components/userList.vue'));
-const managerList = () =>
-    Vue.component('list-managers', () =>
-        import(/* webpackChunkName: 'list-managers' */ './components/user/managerList.vue')
-    );
-const cookList = Vue.component('list-cooks', () =>
-    import('./components/user/cookList.vue')
-);
-const waiterList = Vue.component('list-waiters', () =>
-    import('./components/user/waiterList.vue')
-);
-const cashierList = Vue.component('list-cashiers', () =>
-    import('./components/user/cashierList.vue')
+    import('./components/users2')
 );
 
 /* Components para menu */
 const menu = Vue.component('items-component', () =>
     import('./components/menu/menu.vue')
 );
-// @ Unused
-// const menuList = Vue.component('list-menu', require('./components/menuList.vue'));
-const dishList = Vue.component('list-dishes', () =>
-    import('./components/menu/dishList.vue')
-);
-const drinksList = Vue.component('list-drinks', () =>
-    import('./components/menu/drinkList.vue')
-);
 
 const login = Vue.component('login-component', () =>
-    import(/* webpackChunkName: 'login-component'*/ './components/login.vue')
+    import('./components/login.vue')
 );
 const loginModal = Vue.component('login-modal', () =>
     import('./components/loginModal')
 );
 const logout = Vue.component('logout-component', () =>
-    import(/* webpackChunkName: 'logout'*/ './components/logout.vue')
+    import('./components/logout.vue')
 );
 const footer = Vue.component('footer-component', () =>
-    import(/* webpackChunkName: 'footer'*/ './components/footer.vue')
+    import('./components/footer.vue')
 );
 
 const home = () => import('./components/home');
@@ -140,7 +115,9 @@ const mainNav = Vue.component('main-nav', () =>
 );
 
 //Cashier Options
-const invoices = Vue.component('invoices', () => import('./components/invoices/invoices'));
+const invoices = Vue.component('invoices', () =>
+    import('./components/invoices/invoices')
+);
 
 const routes = [
     { path: '/', component: home, name: 'home' },
@@ -149,13 +126,10 @@ const routes = [
     { path: '/login', component: login, name: 'login' },
     { path: '/logout', component: logout, name: 'logout' },
     { path: '/users/me', component: accountPage },
-    // Orders
     { path: '/orders', component: orders, name: 'orders' },
-    // { path: '/account', component: accountPage },
     { path: '/account/activate', component: activateAccount, name: 'activate' },
     { path: '/account/changePassword', component: changePassword },
     { path: '/management/tables', component: tables, name: 'tables' },
-    //Invoices
     { path: '/invoices', component: invoices, name: 'invoices'},
 ];
 
@@ -182,14 +156,14 @@ Vue.filter('capitalize', function (value) {
 });
 
 const app = new Vue({
-    // Elemento que o vue vai poder 'gerir'
     el: '#app',
     router,
     store,
     data: {
         workingText: "",
         user: undefined,
-    }, methods: {
+    },
+    methods: {
         getInformationFromLoggedUser() {
             //todo
             this.user = this.$store.state.user;//
@@ -221,11 +195,6 @@ const app = new Vue({
             this.$toasted.error(dataFromServer, {icon: "error"});
         },
         user_blocked(message) {
-            /**
-             * Show toast only to blocked user
-             * Updated user to disable all app functionality (except viewing menu)
-             */
-
             this.$toasted.error(message,
                 {
                     icon: 'error'
@@ -237,11 +206,6 @@ const app = new Vue({
             this.$router.push('/menu');
         },
         user_unblocked(message) {
-            /**
-             * Show toast only to unblocked user
-             * Updated user to enable all app functionality
-             */
-            
             this.$toasted.info(message,
                 {
                     icon: 'info'
