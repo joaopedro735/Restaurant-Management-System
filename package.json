@@ -33,6 +33,7 @@
         "vuex-persist": "^2.0.0"
     },
     "dependencies": {
+        "vue-moment": "^4.0.0",
         "vue-socket.io": "^3.0.4",
         "vuelidate": "^0.7.4"
     }

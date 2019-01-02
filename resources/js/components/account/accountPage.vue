@@ -17,7 +17,7 @@
                 <v-card-actions>
                     <v-btn flat color="blue" @click="showEdit = true">Edit</v-btn>
                 </v-card-actions>
-                <edit-user v-show="showEdit" v-bind:user="user" v-on:user-cancel="showEdit=false" v-on:user-saved="showEdit=false"></edit-user>
+                <edit-user v-show="showEdit" v-bind:user="user" v-on:user-cancel="showEdit=false" v-on:user-saved="userSaved"></edit-user>
             </v-card>
         </v-flex>
     </v-layout>
@@ -27,23 +27,22 @@
     export default {
         data: () => {
             return {
-                user: "",
                 showEdit: false,
             };
         },
         methods: {
-            getInformationFromLoggedUser() {
-                this.user = this.$store.state.user;
-                if (this.user === undefined) {
-                    axios.get("api/users");
-                }
+            getPhoto(photo_url){
+                return "/" + photo_url;
             },
-            getPhoto(photoUrl){
-                return "/" + photoUrl;
-            }
+            userSaved(){
+                this.showEdit=false;
+            },
+
         },
-        created() {
-            this.getInformationFromLoggedUser();
+        computed: {
+            user(){
+                return this.$store.state.user;
+            }
         }
     };
 

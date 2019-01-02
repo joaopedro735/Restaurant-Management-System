@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ImageUploadRequest;
 use App\Notifications\PasswordResetSuccess;
 use App\Notifications\UserRegisteredSuccessfully;
 use App\PasswordReset;
@@ -12,10 +11,12 @@ use Illuminate\Http\Request;
 use Illuminate\Contracts\Support\Jsonable;
 use App\Http\Resources\UserResource as UserResource;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use App\User;
 use App\StoreUserRequest;
 use Hash;
 use Illuminate\Validation\Rule;
+
 
 class UserControllerAPI extends Controller
 {
@@ -134,10 +135,7 @@ class UserControllerAPI extends Controller
         return new UserResource($request->user());
     }
 
-    /**
-     * @deprecated
-     */
-    public static function getCookName($id) { 
+    public static function getCookName($id) {
         if ($id == null) {
             return 'No cook assigned';
         }
@@ -145,9 +143,6 @@ class UserControllerAPI extends Controller
         return DB::table('users')->select('name')->where('id', $id)->first()->name;
     }
 
-    /**
-     * @deprecated
-     */
     public static function getCookID($id) {
         if ($id == null) {
             return 0;
@@ -162,7 +157,6 @@ class UserControllerAPI extends Controller
 
     public function save(Request $request)
     {
-        //\Debugbar::info($request);
         $user = User::where('email', $request->input('email'))->first();
         if ($request->has('username') && !empty($request->input('username')))
             $user->username = $request->input('username');
@@ -171,7 +165,33 @@ class UserControllerAPI extends Controller
         if ($request->has('photo_url') && !empty($request->input('photo_url')))
             $user->photo_url = $request->input('photo_url');
         $user->save();
-        return new UserResource($request->user());
+        return new UserResource($user);
+    }
+
+    public function isWorking(Request $request)
+    {
+        $user = \Auth::guard('api')->user();
+        return $user->shift_active;
+    }
+
+    public function startWorking(Request $request){
+        $user = \Auth::guard('api')->user();
+        //shift active muda
+        $user->shift_active = 1;
+        //data muda
+        $user->last_shift_start = Carbon::now();
+        $user->save();
+        return new UserResource($user);
+    }
+
+    public function stopWorking(){
+        $user = \Auth::guard('api')->user();
+        //shift active muda
+        $user->shift_active = 0;
+        //data muda
+        $user->last_shift_end = Carbon::now();
+        $user->save();
+        return new UserResource($user);
     }
 
     public function blockUser($id) {

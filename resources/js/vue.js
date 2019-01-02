@@ -14,6 +14,8 @@ import VueRouter from 'vue-router';
 import store from './stores/global-store';
 import Vuetify from 'vuetify';
 import Toasted from 'vue-toasted';
+import VueSocketio from 'vue-socket.io';
+import Moment from 'vue-moment';
 import Vuelidate from 'vuelidate';
 import VueSocketIO from 'vue-socket.io';
 
@@ -29,9 +31,14 @@ const toastedOptions = {
     }
 };
 
+Vue.use(Moment);
 Vue.use(VueRouter);
 Vue.use(store);
 Vue.use(Vuetify);
+Vue.use(new VueSocketio({
+    debug: true,
+    connection: 'http://127.0.0.1:8080'
+}));
 Vue.use(Toasted, toastedOptions, {
         router
     }
@@ -123,6 +130,7 @@ const shiftOptions = Vue.component('shift-options', () =>
 const tables = Vue.component('manage', () =>
     import('./components/manage/tables.vue')
 );
+
 // Orders
 const orders = Vue.component('orders', () =>
     import('./components/orders/orders.vue')
@@ -170,7 +178,6 @@ router.beforeEach((to, from, next) => {
             return;
         }
     }
-
     next();
 });
 
@@ -186,7 +193,16 @@ const app = new Vue({
     router,
     store,
     data: {
-
+        workingText: "",
+        user: undefined,
+    }, methods: {
+        getInformationFromLoggedUser() {
+            //todo
+            this.user = this.$store.state.user;//
+            if (this.user === null) {
+                axios.get("api/users");
+            }
+        },
     },
     created() {
         store.commit('loadTokenAndUserFromSession');
@@ -198,6 +214,14 @@ const app = new Vue({
             if (store.state.user) {
                 this.$socket.emit('user_enter', this.$store.state.user);
             }
+        }, shift_started(dataFromServer) {
+            console.log("start");
+            this.$toasted.success("You started working",{icon: "info"});
+        }, shift_ended(dataFromServer) {
+            console.log("end");
+            this.$toasted.error("You stopped working", {icon: "info"});
+        }, problem_Managers(dataFromServer) {
+            this.$toasted.error(dataFromServer, {icon: "error"});
         },
         user_blocked(message) {
             /**
@@ -240,7 +264,7 @@ const app = new Vue({
                     icon: 'info'
                 }
             );
-        },
+        }
     },
 });
 

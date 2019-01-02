@@ -14,7 +14,8 @@
             <v-btn color="white" flat round v-if="checkDisplay('invoices')" to="/invoices/">Invoices</v-btn>
 
             <v-spacer></v-spacer>
-
+            <v-btn  v-if="this.$store.state.token && working" round color="success">WORKING</v-btn>
+            <v-btn  v-if="this.$store.state.token && !working" round color="error">NOT WORKING</v-btn>
             <v-chip outline color="white" v-if="this.$store.state.user != null">
                 <v-icon v-if="this.$store.state.user.blocked" color="red">block</v-icon>&nbsp;
                 {{ this.$store.state.user.name }}&nbsp;<strong>({{this.$store.state.user.type}})</strong>
@@ -44,7 +45,12 @@
                         return ((this.$store.state.user.type === "manager" || this.$store.state.user.type === "cashier") && !this.$store.state.user.blocked);
                 }
             }
-        }
+        },
+        computed: {
+            working() {
+                return this.$store.state.user.shift_active;
+            },
+        },
     }
 </script>
 

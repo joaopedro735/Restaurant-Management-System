@@ -27,6 +27,8 @@ Route::group([
         Route::put('/block/{id}', 'UserControllerAPI@blockUser');
         Route::put('/unblock/{id}', 'UserControllerAPI@unblockUser');
         Route::delete('/{id}', 'UserControllerAPI@destroy');
+        Route::put('/me/start', 'UserControllerAPI@startWorking');
+        Route::put('/me/end', 'UserControllerAPI@stopWorking');
     });
 
     Route::group([
