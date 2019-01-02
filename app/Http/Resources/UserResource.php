@@ -21,6 +21,11 @@ class UserResource extends JsonResource
             'type' => $this->type,
             'email' => $this->email,
             'photo_url' => 'storage/profiles/' . $this->photo_url,
+            'shift_active' => $this->shift_active,
+            'last_shift_start' => $this->last_shift_start,
+            'last_shift_end' => $this->last_shift_end,
+            'blocked' => $this->blocked
+
         ];
     }
 }

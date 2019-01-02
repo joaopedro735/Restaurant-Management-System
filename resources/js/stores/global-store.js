@@ -53,6 +53,15 @@ export default new Vuex.Store({
                 state.user = JSON.parse(user);
             }
         },
+        setDuration: (state, duration) => {
+            console.log(user);
+            state.duration =  duration;
+            sessionStorage.setItem('duration', JSON.stringify(duration));
+        },
+        clearDuration: (state) => {
+            state.duration = null;
+            sessionStorage.removeItem('duration');
+        },
     },
     plugins: [vuexLocal.plugin]
 });

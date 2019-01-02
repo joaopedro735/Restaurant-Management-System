@@ -20,7 +20,11 @@ Route::group([
     Route::post('logout', 'LoginControllerAPI@logout');
     Route::post('/account/create', 'UserControllerAPI@create');
     Route::post('users/me/photo', 'FileController@store');
+    Route::put('users/me/start', 'UserControllerAPI@startWorking');
+    Route::put('users/me/end', 'UserControllerAPI@stopWorking');
 });
+
+Route::get('users/me/working', 'UserControllerAPI@isWorking');
 Route::get('users', 'UserControllerAPI@index');
 Route::middleware('auth:api')->get('users/me', 'UserControllerAPI@myProfile');
 

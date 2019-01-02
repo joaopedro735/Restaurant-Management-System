@@ -122,7 +122,7 @@
                     .then(response => {
                         this.$store.commit('setUser', response.data.data);
                         console.log("wtv");
-                        //this.$socket.emit('user_enter', response.data.data);
+                        this.sockets.emit('logged', response.data.data);
                     })
                     .catch(error => {
                         this.alert.error = error.response.data.msg;

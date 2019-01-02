@@ -13,8 +13,8 @@
             <v-btn flat v-show="this.$store.state.token" to="/orders">Orders</v-btn>
 
             <v-spacer></v-spacer>
-
-
+            <v-btn  v-if="this.$store.state.token && working" color="success">WORKING</v-btn>
+            <v-btn  v-if="this.$store.state.token && !working" color="error">NOT WORKING</v-btn>
             {{--<v-btn flat v-show="!this.$store.state.token" to="/login">Login</v-btn>--}}
             <login-component v-show="!this.$store.state.token"></login-component>
             <v-btn flat v-show="this.$store.state.token" to="/users/me">Profile</v-btn>

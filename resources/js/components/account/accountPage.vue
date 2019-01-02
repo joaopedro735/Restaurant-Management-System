@@ -2,11 +2,10 @@
     <v-layout>
         <v-flex xs12 sm6 offset-sm3>
             <v-card>
-                <v-img
+                <img
                         height="200px"
                         :src="getPhoto(user.photo_url)"
                 >
-                </v-img>
                 <v-card-title>
                     <div>
                         <span class="grey--text">{{user.email}}</span><br>
@@ -17,7 +16,7 @@
                 <v-card-actions>
                     <v-btn flat color="blue" @click="showEdit = true">Edit</v-btn>
                 </v-card-actions>
-                <edit-user v-show="showEdit" v-bind:user="user" v-on:user-cancel="showEdit=false" v-on:user-saved="showEdit=false"></edit-user>
+                <edit-user v-show="showEdit" v-bind:user="user" v-on:user-cancel="showEdit=false" v-on:user-saved="userSaved"></edit-user>
             </v-card>
         </v-flex>
     </v-layout>
@@ -27,23 +26,22 @@
     export default {
         data: function () {
             return {
-                user: "",
                 showEdit: false,
             };
         },
         methods: {
-            getInformationFromLoggedUser() {
-                this.user = this.$store.state.user;
-                if (this.user == undefined) {
-                    axios.get("api/users");
-                }
-            },
             getPhoto(photo_url){
                 return "/" + photo_url;
-            }
+            },
+            userSaved(){
+                this.showEdit=false;
+            },
+
         },
-        created() {
-            this.getInformationFromLoggedUser();
+        computed: {
+            user(){
+                return this.$store.state.user;
+            }
         }
     }
 
