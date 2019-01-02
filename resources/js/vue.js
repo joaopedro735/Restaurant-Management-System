@@ -15,6 +15,7 @@ import store from './stores/global-store';
 import Vuetify from 'vuetify';
 import Toasted from 'vue-toasted';
 import Vuelidate from 'vuelidate';
+import VueSocketIO from 'vue-socket.io';
 
 Vue.config.productionTip = false;
 
@@ -32,8 +33,15 @@ Vue.use(VueRouter);
 Vue.use(store);
 Vue.use(Vuetify);
 Vue.use(Toasted, toastedOptions, {
-    router
-});
+        router
+    }
+);
+Vue.use(new VueSocketIO(
+    {
+        debug: true,
+        connection: 'http://127.0.0.1:8080'
+    })
+);
 Vue.use(Vuelidate);
 
 /* Components para users */
@@ -187,33 +195,43 @@ const app = new Vue({
         connect() {
             console.log('Sockect connected with ID: ' + this.$socket.id);
     
-            if (this.$store.state.user) {
+            if (store.state.user) {
                 this.$socket.emit('user_enter', this.$store.state.user);
             }
         },
-        user_blocked(user) {
+        user_blocked(message) {
             /**
              * Show toast only to blocked user
              * Updated user to disable all app functionality (except viewing menu)
              */
-            this.$toasted.error('Your account was blocked',
+
+            this.$toasted.error(message,
                 {
                     icon: 'error'
                 }
             );
+
+            store.commit('setBlock', true);
+
+            this.$router.push('/menu');
         },
-        user_unblocked(user) {
+        user_unblocked(message) {
             /**
              * Show toast only to unblocked user
              * Updated user to enable all app functionality
              */
-            this.$toasted.info('Your account was unblocked',
+            
+            this.$toasted.info(message,
                 {
                     icon: 'info'
                 }
             );
+
+            store.commit('setBlock', false);
+
+            this.$router.push('/menu');
         },
-        new_order(order) {
+        new_order(message) {
             /**
              * Show toast only to cooks
              * Show link to orders (possibly highlighting order)

@@ -158,7 +158,6 @@
                     'price': ''
                 },
                 currentItemIndex: '',
-                showManagerOptions: false,
                 totalDrinks: 0,
                 totalDishes: 0,
                 drinks: [],
@@ -327,7 +326,7 @@
                 this.user = this.$store.state.user;
             },
             isUserAWorker(user) {
-                if (user.type === 'manager' && !user.blocked) {
+                /* if (user.type === 'manager' && !user.blocked) {
                     this.showManagerOptions = true;
                 }
                 else {
@@ -337,8 +336,8 @@
                             icon: "error",
                             duration: 5000
                         }
-                    );
-                }
+                    ); */
+                
             }
         },
         mounted() {
@@ -348,6 +347,11 @@
         components: {
             'create-item': CreateItem,
             'update-item': UpdateItem
+        },
+        computed: {
+            showManagerOptions() {
+                return !this.$store.state.user.blocked && this.$store.state.user.type === 'manager';
+            }
         }
     }
 </script>

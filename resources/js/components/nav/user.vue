@@ -45,7 +45,6 @@
                 this.img = this.$store.state.user.photo_url;
             },
             onLoad() {
-                console.log("load");
                 this.showImg = true;
                 //this.$forceUpdate();
             }
@@ -56,7 +55,6 @@
             }
         },
         mounted() {
-            console.log("here");
         },
     }
 </script>

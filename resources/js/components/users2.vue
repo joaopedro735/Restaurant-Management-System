@@ -130,6 +130,11 @@
                 .then((response) => {
                     Vue.set(this.users, index, response.data.data);
 
+                    let message = 'Your account has been blocked. You cannot access the application';
+
+                    // Emit block user event
+                    this.$socket.emit('user_blocked', message, user);
+
                     this.$toasted.info('User blocked',
                         {
                             icon: 'info',
@@ -151,6 +156,12 @@
                 axios.put('/api/users/unblock/' + user.id)
                 .then((response) => {
                     Vue.set(this.users, index, response.data.data);
+
+                    let message = 'Your account has been unblocked. You can now access the application';
+
+                    // Emit block user event
+                    this.$socket.emit('user_unblocked', message, user);
+
                     this.$toasted.info('User unblocked',
                             {
                                 icon: 'info',

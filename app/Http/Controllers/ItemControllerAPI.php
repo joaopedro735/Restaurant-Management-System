@@ -8,8 +8,6 @@ use App\Http\Resources\ItemResource;
 
 use App\Item;
 use Validator;
-use Storage;
-use Debugbar;
 
 class ItemControllerAPI extends Controller
 {
