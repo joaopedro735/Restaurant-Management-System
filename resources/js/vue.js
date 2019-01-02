@@ -34,7 +34,6 @@ Vue.use(Moment);
 Vue.use(VueRouter);
 Vue.use(store);
 Vue.use(Vuetify);
-Vue.use(Toasted);
 Vue.use(new VueSocketio({
     debug: true,
     connection: 'http://127.0.0.1:8080'
@@ -199,11 +198,6 @@ const app = new Vue({
     },
     created() {
         store.commit('loadTokenAndUserFromSession');
-    }
-    computed: {
-        working() {
-            return this.$store.state.user.shift_active;
-        },
     },
     sockets: {
         connect() {
@@ -214,24 +208,12 @@ const app = new Vue({
             }
         }, shift_started(dataFromServer) {
             console.log("start");
-            this.$toasted.success("You STARTED working",
-                {
-                    position: "top-center",
-                    duration: 3000,
-                });
+            this.$toasted.success("You started working",{icon: "info"});
         }, shift_ended(dataFromServer) {
             console.log("end");
-            this.$toasted.error("You STOPPED working",
-                {
-                    position: "top-center",
-                    duration: 3000,
-                });
+            this.$toasted.error("You stopped working", {icon: "info"});
         }, problem_Managers(dataFromServer) {
-            this.$toasted.error(dataFromServer,
-                {
-                    position: "top-center",
-                    duration: 3000,
-                });
+            this.$toasted.error(dataFromServer, {icon: "error"});
         },
         user_blocked(user) {
             /**
