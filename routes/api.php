@@ -15,23 +15,78 @@ use Illuminate\Http\Request;
 Route::group([
     'middleware' => 'auth:api'
 ], function() {
-    Route::get('/users/me', 'UserControllerAPI@myProfile');
-    Route::put('/users/me', 'UserControllerAPI@save');
     Route::post('logout', 'LoginControllerAPI@logout');
-    Route::post('/account/create', 'UserControllerAPI@create');
-    Route::post('users/me/photo', 'FileController@store');
-    Route::put('users/me/start', 'UserControllerAPI@startWorking');
-    Route::put('users/me/end', 'UserControllerAPI@stopWorking');
+
+    Route::group([
+        'prefix' => 'users'
+    ], function() {
+        Route::get('/', 'UserControllerAPI@index');
+        Route::get('/me', 'UserControllerAPI@myProfile');
+        Route::put('/me', 'UserControllerAPI@save');
+        Route::post('/me/photo', 'FileController@store');
+        Route::put('/block/{id}', 'UserControllerAPI@blockUser');
+        Route::put('/unblock/{id}', 'UserControllerAPI@unblockUser');
+        Route::delete('/{id}', 'UserControllerAPI@destroy');
+        Route::put('/me/start', 'UserControllerAPI@startWorking');
+        Route::put('/me/end', 'UserControllerAPI@stopWorking');
+    });
+
+    Route::group([
+        'prefix' => 'account'
+    ], function() {
+        Route::post('/create', 'UserControllerAPI@create');
+        Route::put('/changePassword', 'UserControllerAPI@changePassword');
+    });
+
+    Route::group([
+        'prefix' => 'orders'
+    ], function() {
+        Route::get('/', 'OrderControllerAPI@index');
+        Route::put('/{id}', 'OrderControllerAPI@update');
+    });
+
+    Route::group([
+        'prefix' => 'tables'
+    ], function() {
+        Route::get('/', 'TableControllerAPI@index');
+        Route::post('/', 'TableControllerAPI@store');
+        Route::delete('/{id}', 'TableControllerAPI@destroy');
+    });
+
+    Route::group([
+        'prefix' => 'invoices'
+    ], function () {
+        Route::get('/', 'InvoiceControllerAPI@index');
+        Route::get('/pending', 'InvoiceControllerAPI@pending');
+        Route::get('/download/{id}', 'InvoiceControllerAPI@downloadPDF');
+        Route::get('/{id}', 'InvoiceControllerAPI@show');
+        Route::patch('/close/{id}', 'InvoiceControllerAPI@close');
+    });
+
+    Route::group([
+        'prefix' => 'meals'
+    ], function () {
+        Route::get('/', 'MealControllerAPI@index');
+        Route::get('/{id}', 'MealControllerAPI@show');
+    });
+
+    Route::group([
+        'prefix' => 'menu'
+    ], function () {
+        Route::post('/', 'ItemControllerAPI@store');
+        Route::post('/image', 'UploadController@uploadItemImage');
+        Route::put('/{id}', 'ItemControllerAPI@update');
+        Route::delete('/{id}', 'ItemControllerAPI@destroy');
+    });
 });
 
-Route::get('users/me/working', 'UserControllerAPI@isWorking');
-Route::get('users', 'UserControllerAPI@index');
-Route::middleware('auth:api')->get('users/me', 'UserControllerAPI@myProfile');
-
-Route::get('menu', 'ItemControllerAPI@index');
-
-Route::get('orders', 'OrderControllerAPI@index')/* ->middleware(['auth:api', 'scopes:manage-order']) */;
-Route::put('orders/{id}', 'OrderControllerAPI@update')/* ->middleware(['auth:api', 'scopes:manage-order']) */;
+Route::group([
+    'prefix' => 'menu'
+], function () {
+    Route::get('/', 'ItemControllerAPI@index');
+    Route::get('/drinks', 'ItemControllerAPI@indexDrinks');
+    Route::get('/dishes', 'ItemControllerAPI@indexDishes');
+});
 
 Route::post('login', 'LoginControllerAPI@login');
 Route::post('/account/confirm', 'UserControllerAPI@confirm');

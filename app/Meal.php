@@ -18,6 +18,31 @@ class Meal extends Model
 
     public function waiter()
     {
-        return $this->hasOne('App\User', 'id', 'responsible_waiter_id');
+        return $this->hasOne('App\User', 'id', 'responsible_waiter_id')->withTrashed();
+    }
+
+    public function table()
+    {
+        return $this->hasOne('App\Table', 'table_number', 'table_number');
+    }
+
+    public static function stateToStr($orderState)
+    {
+        switch ($orderState) {
+            case 'active':
+                return 'Active';
+            case 'terminated':
+                return 'Terminated';
+            case 'paid':
+                return 'Paid';
+            case 'not paid':
+                return 'Not paid';
+        }
+
+        return 'Unknown';
+    }
+
+    public static function timestampToString($timestamp) {
+        return mb_convert_encoding($timestamp, "UTF-8");;
     }
 }

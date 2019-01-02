@@ -9,7 +9,7 @@ class UserResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
@@ -24,8 +24,7 @@ class UserResource extends JsonResource
             'shift_active' => $this->shift_active,
             'last_shift_start' => $this->last_shift_start,
             'last_shift_end' => $this->last_shift_end,
-            'blocked' => $this->blocked
-
+            'blocked' => $this->blocked == 0 ? false : true
         ];
     }
 }

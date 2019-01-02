@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ItemResource extends JsonResource
+class InvoiceItems extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,12 +15,10 @@ class ItemResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
             'name' => $this->name,
-            'description' => $this->description,
-            'price' => $this->price/*  . '€' */,
-            'photo_url' => /* 'storage/items/' .  */$this->photo_url,
-            'type' => $this->type,
+            'quantity' => $this->pivot->quantity,
+            'unit_price' => $this->pivot->unit_price,
+            'sub_total_price' => $this->pivot->sub_total_price,
         ];
     }
 }

@@ -15,8 +15,8 @@ class PasswordResetController extends Controller
     /**
      * Create token password reset
      *
-     * @param  [string] email
-     * @return [string] message
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse [string] message
      */
     public function create(Request $request)
     {
@@ -48,8 +48,8 @@ class PasswordResetController extends Controller
      * Find token password reset
      *
      * @param  [string] $token
-     * @return [string] message
-     * @return [json] passwordReset object
+     * @return \Illuminate\Http\JsonResponse [string] message
+     * @throws \Exception
      */
     public function find($token)
     {
@@ -71,12 +71,9 @@ class PasswordResetController extends Controller
     /**
      * Reset password
      *
-     * @param  [string] email
-     * @param  [string] password
-     * @param  [string] password_confirmation
-     * @param  [string] token
-     * @return [string] message
-     * @return [json] user object
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse [string] message
+     * @throws \Exception
      */
     public function reset(Request $request)
     {

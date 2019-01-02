@@ -2,10 +2,11 @@
     <v-layout>
         <v-flex xs12 sm6 offset-sm3>
             <v-card>
-                <img
+                <v-img
                         height="200px"
                         :src="getPhoto(user.photo_url)"
                 >
+                </v-img>
                 <v-card-title>
                     <div>
                         <span class="grey--text">{{user.email}}</span><br>
@@ -24,7 +25,7 @@
 
 <script>
     export default {
-        data: function () {
+        data: () => {
             return {
                 showEdit: false,
             };
@@ -43,7 +44,7 @@
                 return this.$store.state.user;
             }
         }
-    }
+    };
 
 </script>
 

@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\UserResource as UserResource;
 use App\Notifications\PasswordResetSuccess;
 use App\Notifications\UserRegisteredSuccessfully;
 use App\PasswordReset;
-use App\StoreUserRequest;
-use App\User;
-use Carbon\Carbon;
+use Auth;
+use function GuzzleHttp\Promise\all;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Support\Jsonable;
+use App\Http\Resources\UserResource as UserResource;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use App\User;
+use App\StoreUserRequest;
+use Hash;
 use Illuminate\Validation\Rule;
 
 
@@ -22,7 +26,7 @@ class UserControllerAPI extends Controller
             if ($request->has('rowsPerPage') && $request->input('rowsPerPage') == -1) {
                 return UserResource::collection(User::all());
             }
-            return UserResource::collection(User::paginate($request->input('rowsPerPage', 10)));
+            return UserResource::collection(User::paginate($request->input('rowsPerPage', 15)));
         } else {
             return UserResource::collection(User::all());
         }
@@ -31,10 +35,10 @@ class UserControllerAPI extends Controller
     public function create(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users',
             'username' => 'required|string|max:255|unique:users',
-            'type' => ['required', Rule::in(["manager", "cook", "waiter", "cashier"])],
+            'type'     => ['required', Rule::in(["manager", "cook", "waiter", "cashier"])],
         ]);
         $user = new User($validatedData);
         $user->blocked = 1;
@@ -55,6 +59,17 @@ class UserControllerAPI extends Controller
         return response()->json([
             'message' => 'We have e-mailed your password reset link!'
         ]);
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+
+        $canDeleteUser = MealControllerAPI::canDeleteUser($id) && OrderControllerAPI::canDeleteUser($id);
+
+        $canDeleteUser ? $user->forceDelete() : $user->delete();
+
+        return response()->json(null, 204);
     }
 
     public function confirm(Request $request)
@@ -85,14 +100,42 @@ class UserControllerAPI extends Controller
         return response()->json($user);
     }
 
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required|string',
+            'new_password' => 'required|string|confirmed',
+        ]);
+        //$user = User::where('email', $request->email)->first();
+        $user = Auth::guard('api')->user();
+        if (!$user)
+            return response()->json([
+                'message' => 'We cant find a user with that e-mail address.'
+            ], 404);
+        $check  = Auth::guard('web')->attempt([
+            'email' => $user->email,
+            'password' => $request->old_password,
+        ]);
+
+        if ($check) {
+            $user->password = bcrypt($request->new_password);
+            $user->token()->revoke();
+            $user->token()->delete();
+            $token = $user->createToken('newToken')->accessToken;
+            $user->save();
+            return json_encode(array('token' => $token));
+        }
+        return response()->json([
+            'message' => 'Current password incorrect.'
+        ], 404);
+    }
+
     public function myProfile(Request $request)
     {
         return new UserResource($request->user());
-/*        return User::where('email', $request->input('email'))->first();*/
     }
 
-    public static function getCookName($id)
-    {
+    public static function getCookName($id) {
         if ($id == null) {
             return 'No cook assigned';
         }
@@ -100,13 +143,16 @@ class UserControllerAPI extends Controller
         return DB::table('users')->select('name')->where('id', $id)->first()->name;
     }
 
-    public static function getCookID($id)
-    {
+    public static function getCookID($id) {
         if ($id == null) {
             return 0;
         }
 
         return $id;
+    }
+
+    public static function getWaiterName($id) {
+        return DB::table('users')->select('name')->where('id', $id)->first()->name;
     }
 
     public function save(Request $request)
@@ -145,6 +191,24 @@ class UserControllerAPI extends Controller
         //data muda
         $user->last_shift_end = Carbon::now();
         $user->save();
+        return new UserResource($user);
+    }
+
+    public function blockUser($id) {
+        $user = User::findOrFail($id);
+
+        $user->blocked = 1;
+        $user->save();
+
+        return new UserResource($user);
+    }
+
+    public function unblockUser($id) {
+        $user = User::findOrFail($id);
+
+        $user->blocked = 0;
+        $user->save();
+
         return new UserResource($user);
     }
 }
