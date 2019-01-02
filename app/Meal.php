@@ -18,7 +18,7 @@ class Meal extends Model
 
     public function waiter()
     {
-        return $this->hasOne('App\User', 'id', 'responsible_waiter_id');
+        return $this->hasOne('App\User', 'id', 'responsible_waiter_id')->withTrashed();
     }
 
     public function table()

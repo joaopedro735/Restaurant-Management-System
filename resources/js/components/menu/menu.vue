@@ -134,7 +134,7 @@
                 </v-flex>
             </v-layout>
         </v-container>
-        <create-item :visible="showCreateItem" @close="showCreateItem = false" @update="newItemRow"></create-item>  
+        <create-item :visible="showCreateItem" @close="showCreateItem = false" @update="newItemRow"></create-item>
         <update-item :visible="showUpdateItem" @close="showUpdateItem = false" @update="updateItemRow" :item="currentItem"></update-item>
     </v-card>
 </template>
@@ -263,7 +263,7 @@
                                 this.totalDrinks--;
                                 this.drinks.splice(index, 1);
                             }
-                            
+
                             if (item.type === 'dish') {
                                 this.totalDishes--;
                                 this.dishes.splice(index, 1);
@@ -331,7 +331,8 @@
                     this.showManagerOptions = true;
                 }
                 else {
-                    this.$toasted.show('You are not authorized to alter items because your account is blocked',
+                    let reason = user.blocked ? "your account is blocked" : "you don't have sufficient rights";
+                    this.$toasted.show('You are not authorized to alter items because ' + reason,
                         {
                             icon: "error",
                             duration: 5000
