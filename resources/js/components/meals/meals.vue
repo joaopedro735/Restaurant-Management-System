@@ -27,26 +27,31 @@
                         <td>{{ props.item.start }}</td>
                         <td>{{ props.item.state }}</td>
                         <td class="text-xs-right">
-                            <span v-if="props.item.state === 'Active'">
-                                <v-btn small round color="success" @click.stop="">aDD</v-btn>
-                        </span>
+                            <span v-if="props.item.state === 'Active' && props.item.responsible_waiter === $store.state.user.name">
+                                <v-btn small round color="success" @click.stop="addOrder(props.item.id)">Add order</v-btn>
+                            </span>
                         </td>
                     </tr>
                 </template>
             </v-data-table>
         </v-card>
         <add-meal :visible="showAddMeal" @close="showAddMeal = false"></add-meal>
+        <add-order :visible="showAddOrder" :selectedMeal="selectedMeal" @close="showAddOrder = false"></add-order>
     </div>
 </template>
 
 <script>
     import AddMeal from './addMeal';
+    import AddOrder from './addOrder';
+
     export default {
         data() {
             return {
                 totalMeals: 0,
                 meals: [],
                 showAddMeal: false,
+                showAddOrder: false,
+                selectedMeal: null,
                 table: {
                     rowsPerPageItems: [5, 10, 15, 25, 50],
                     loading: true,
@@ -58,7 +63,7 @@
                         {text: "Total Price", value: "price", width: "200px"},
                         {text: "Start date", value: "date"},
                         {text: "State", value: "state"},
-                        {text: "ASD", sortable: false},
+                        {text: "", sortable: false},
                     ],
                 },
             }
@@ -98,9 +103,14 @@
                     this.table.loading = false;
                 });
             },
+            addOrder($mealID) {
+                this.selectedMeal = $mealID;
+                this.showAddOrder = true;
+            }
         },
         components: {
-            AddMeal
+            AddMeal,
+            AddOrder
         }
     };
 </script>

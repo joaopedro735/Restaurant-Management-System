@@ -70,6 +70,7 @@ Route::group([
         Route::get('/', 'MealControllerAPI@index');
         Route::post('/', 'MealControllerAPI@store');
         Route::get('/my/active', 'MealControllerAPI@active');
+        Route::post('/addOrder/{id}', 'MealControllerAPI@addOrderToMeal');
         Route::get('/{id}', 'MealControllerAPI@show');
     });
 

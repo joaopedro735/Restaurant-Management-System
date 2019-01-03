@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Http\Resources\MealResource;
 use App\Meal;
+use App\Order;
 use App\Table;
 use Auth;
 use Carbon\Carbon;
@@ -52,6 +53,28 @@ class MealControllerAPI extends Controller
         $meal->start = Carbon::now();
         $meal->save();
         return $meal;
+    }
+
+    public function addOrderToMeal(Request $request, $mealID) {
+        $meal = Meal::findOrFail($mealID);
+        if ($meal->state !== 'active') {
+            return response()->json([
+                'message' => "Meal isn't active"
+            ]);
+        }
+        $count = 0;
+        foreach ($request->input('items') as $item) {
+            $order = new Order;
+            $order->state = "pending";
+            $order->item_id = $item;
+            $order->meal_id = $mealID;
+            $order->start = Carbon::now();
+            $order->save();
+        }
+
+        return response()->json([
+            'message' => 'Orders added to meal successfully'
+        ], 200);
     }
 
     /**
