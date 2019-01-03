@@ -2,6 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Controllers\UserControllerAPI;
+use App\Meal;
+use App\Order;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class MealResource extends JsonResource
