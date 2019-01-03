@@ -50,6 +50,7 @@ Route::group([
     ], function() {
         Route::get('/', 'TableControllerAPI@index');
         Route::post('/', 'TableControllerAPI@store');
+        Route::get('/available', 'TableControllerAPI@available');
         Route::delete('/{id}', 'TableControllerAPI@destroy');
     });
 
@@ -67,6 +68,8 @@ Route::group([
         'prefix' => 'meals'
     ], function () {
         Route::get('/', 'MealControllerAPI@index');
+        Route::post('/', 'MealControllerAPI@store');
+        Route::get('/my/active', 'MealControllerAPI@active');
         Route::get('/{id}', 'MealControllerAPI@show');
     });
 

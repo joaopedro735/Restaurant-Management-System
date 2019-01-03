@@ -6,9 +6,9 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
+require("./bootstrap");
 
-window.Vue = require('vue');
+window.Vue = require("vue");
 
 import VueRouter from 'vue-router';
 import store from './stores/global-store';
@@ -22,9 +22,9 @@ Vue.config.productionTip = false;
 
 const toastedOptions = {
     duration: 3000,
-    position: 'top-center',
-    className: 'toasted-css',
-    theme: 'bubble',
+    position: "top-center",
+    className: "toasted-css",
+    theme: "bubble",
     onClick: (e, toastObject) => {
         toastObject.goAway(0);
     }
@@ -39,9 +39,8 @@ Vue.use(new VueSocketIO({
     connection: 'http://127.0.0.1:8080'
 }));
 Vue.use(Toasted, toastedOptions, {
-        router
-    }
-);
+    router
+});
 Vue.use(Vuelidate);
 
 /* Components para users */
@@ -119,6 +118,9 @@ const invoices = Vue.component('invoices', () =>
     import('./components/invoices/invoices')
 );
 
+//Meals
+const meals = Vue.component('meals', () => import("./components/meals/meals"));
+
 const routes = [
     { path: '/', component: home, name: 'home' },
     { path: '/users', component: users, name: 'users' },
@@ -131,6 +133,7 @@ const routes = [
     { path: '/account/changePassword', component: changePassword },
     { path: '/management/tables', component: tables, name: 'tables' },
     { path: '/invoices', component: invoices, name: 'invoices'},
+    { path: "/meals", component: meals }
 ];
 
 const router = new VueRouter({
@@ -178,7 +181,7 @@ const app = new Vue({
     sockets: {
         connect() {
             console.log('Sockect connected with ID: ' + this.$socket.id);
-    
+
             if (store.state.user) {
                 this.$socket.emit('user_enter', this.$store.state.user);
             }
