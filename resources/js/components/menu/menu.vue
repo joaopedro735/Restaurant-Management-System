@@ -2,7 +2,7 @@
     <v-card>
         <v-card-title class="headline info white--text" primary-title>Menu
             <v-spacer></v-spacer>
-            <v-btn fab dark v-if="showManagerOptions" slot="activator" @click="showCreateItem = true">
+            <v-btn fab dark  v-if="showManagerOptions" slot="activator" @click="showCreateItem = true">
                 <v-icon>add</v-icon>
             </v-btn>
         </v-card-title>
@@ -33,7 +33,7 @@
                                     <td class="text-xs-left">
                                         {{ props.item.name }}
                                     </td>
-                                    <td class="text-xs-left">{{ props.item.description.length >30 ? props.item.description.substr(0, 30) + ('...') : props.item.description }}</td>
+                                    <td class="text-xs-left">{{ props.item.description.length > 60 ? props.item.description.substr(0, 60) + ('...') : props.item.description }}</td>
                                     <td class="text-xs-left">
                                         <h4>{{ appendSign(props.item.price) }}</h4>
                                     </td>
@@ -94,7 +94,7 @@
                                     <td class="text-xs-left">
                                         {{ props.item.name }}
                                     </td>
-                                    <td class="text-xs-left">{{ props.item.description.length > 30 ? props.item.description.substr(0, 30) + ('...') : props.item.description }}</td>
+                                    <td class="text-xs-left">{{ props.item.description.length > 60 ? props.item.description.substr(0, 60) + ('...') : props.item.description }}</td>
                                     <td class="text-xs-left">
                                         <h4>{{ appendSign(props.item.price) }}</h4>
                                     </td>
@@ -169,10 +169,10 @@
                 rowsPerPageItemsDrinks: [15, 25, 50, 100],
                 rowsPerPageItemsDishes: [15, 25, 50, 100],
                 headers: [
-                    { text: '', value: 'photo_url' },
-                    { text: 'Name', value: 'name', align: 'left' },
-                    { text: 'Description', value: 'description' },
-                    { text: 'Price', value: 'price'},
+                    { text: '', value: 'photo_url', width: '1px' },
+                    { text: 'Name', value: 'name', align: 'left', width: '200px' },
+                    { text: 'Description', value: 'description', width: '300px' },
+                    { text: 'Price', value: 'price', width: '50px'},
                     { text: '', value: 'actions'}
                 ],
                 showCreateItem: false,
