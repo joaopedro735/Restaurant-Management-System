@@ -21,8 +21,9 @@
                     <v-avatar size="56px">
                         <img v-bind:src=props.item.photo_url alt="avatar">
                     </v-avatar>
-                </td>
+                </td> 
                 <td>{{ props.item.name }}</td>
+                <td>{{ props.item.username }}</td>
                 <td>{{ props.item.type }}</td>
                 <td>{{ props.item.email }}</td>
                 <td class="text-xs-right">
@@ -69,9 +70,10 @@
                 rowsPerPageItems: [15, 25, 50, 100],
                 headers: [
                     {text: '', value: 'photo_url', align: 'left', sortable: false, width: '60px'},
-                    {text: 'Nome', value: 'name', width: '500px'},
-                    {text: 'Tipo', value: 'type', width: '80px'},
-                    {text: 'Email', value: 'email', width: '200px'},
+                    {text: 'Nome', value: 'name', width: '400px'},
+                    {text: 'Username', value: 'username', width: '200px'},
+                    {text: 'Tipo', value: 'type', width: '150px'},
+                    {text: 'Email', value: 'email', width: '400px'},
                     {text: '', value: 'actions'},
                 ],
                 showCreateAccount: false,
