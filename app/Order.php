@@ -42,7 +42,7 @@ class Order extends Model
 
     public function responsibleCook()
     {
-        return $this->hasOne('App\User', 'id', 'responsible_cook_id');
+        return $this->hasOne('App\User', 'id', 'responsible_cook_id')->withTrashed();
     }
 
     public function meal()

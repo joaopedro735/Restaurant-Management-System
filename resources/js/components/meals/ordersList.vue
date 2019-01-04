@@ -4,7 +4,9 @@
             <v-card-title class="headline info white--text"
                           primary-title
             >
-                {{ title }}
+                {{ cardTitle }}
+                <v-spacer></v-spacer>
+                <v-btn @click="switchType" color="primary" dark class="mb-2">{{ buttonTitle }}</v-btn>
             </v-card-title>
 
             <v-data-table
@@ -29,9 +31,9 @@
                         <td>€{{ props.item.price }}</td>
                         <td>{{ props.item.state }}</td>
                         <td class="text-xs-right">
-                            <span v-if="props.item.state === 'Active'">
+                            <span v-if="props.item.state.toLowerCase() === 'prepared'">
                                 <v-btn small round color="success"
-                                       @click.stop="addOrder(props.item.id)">Add order</v-btn>
+                                       @click.stop="deliverOrder(props.item.id)">Deliver order</v-btn>
                             </span>
                         </td>
                     </tr>
@@ -48,6 +50,8 @@
             return {
                 totalOrders: 0,
                 orders: [],
+                ordersType: 'pendingConfirmed',
+                ordersURL: '/api/orders/my/active',
                 table: {
                     rowsPerPageItems: [5, 10, 15, 25, 50],
                     loading: true,
@@ -61,7 +65,7 @@
                         {text: "Responsible Cook", value: "waiter"},
                         {text: "Price", value: "price"},
                         {text: "State", value: "state"},
-                        {text: "", sortable: false},
+                        {text: "Actions", sortable: false},
                     ],
                 },
             }
@@ -69,11 +73,7 @@
         watch: {
             "table.pagination": {
                 handler() {
-                    this.getDataFromApi()
-                        .then(data => {
-                            this.orders = data.data.orders;
-                            this.totalOrders = data.data.totalOrders;
-                        })
+                    this.updateData();
                 },
                 deep: true
             },
@@ -81,7 +81,7 @@
         methods: {
             getDataFromApi() {
                 this.table.loading = true;
-                return axios.get('/api/orders/my/', {
+                return axios.get(this.ordersURL, {
                     params: {
                         page: this.table.pagination.page,
                         rowsPerPage: this.table.pagination.rowsPerPage
@@ -100,10 +100,43 @@
                     this.table.loading = false;
                 });
             },
+            switchType() {
+                if (this.ordersType === "pendingConfirmed") {
+                    this.ordersType = "prepared";
+                    this.ordersURL = '/api/orders/my/prepared';
+                    this.updateData();
+
+                } else {
+                    this.ordersType = "pendingConfirmed";
+                    this.ordersURL = '/api/orders/my/active';
+                    this.updateData();
+                }
+            },
+            updateData() {
+                this.getDataFromApi()
+                    .then(data => {
+                        this.orders = data.data.orders;
+                        this.totalOrders = data.data.totalOrders;
+                    })
+            },
+            deliverOrder($orderID) {
+                axios.patch('/api/orders/deliver/' + $orderID)
+                    .then((response) => {
+                        this.$toasted.success(response.data.message);
+                        this.updateData();
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        this.$toasted.error("An error occurred, please try again later!");
+                    });
+            }
         },
         computed: {
-            title() {
-                return 'Pending/Confirmed orders'
+            cardTitle() {
+                return this.ordersType !== "prepared" ? 'Pending/Confirmed orders' : 'Prepared orders';
+            },
+            buttonTitle() {
+                return this.ordersType === "prepared" ? 'Pending/Confirmed orders' : 'Prepared orders';
             }
         }
     }
