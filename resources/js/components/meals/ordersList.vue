@@ -23,7 +23,7 @@
                         :class="{
                                 'pending': (props.item.state.toLowerCase() === 'pending')
                             }"
-                        >
+                    >
                         <td>{{ props.item.id}}</td>
                         <td>{{ props.item.item}}</td>
                         <td>{{ props.item.table_number }}</td>
@@ -33,7 +33,9 @@
                         <td class="text-xs-right">
                             <span v-if="props.item.state.toLowerCase() === 'prepared'">
                                 <v-btn small round color="success"
-                                       @click.stop="deliverOrder(props.item.id)">Deliver order</v-btn>
+                                       @click.stop="deliverOrder(props.item.id)">
+                                    Deliver order
+                                </v-btn>
                             </span>
                         </td>
                     </tr>

@@ -35,6 +35,9 @@
                             <span v-if="props.item.state === 'Active' && props.item.responsible_waiter === $store.state.user.name">
                                 <v-btn small round color="primary" @click.stop="mealInfo(props.item.id)">Meal Info</v-btn>
                             </span>
+                            <span v-if="props.item.state === 'Active' && props.item.responsible_waiter === $store.state.user.name">
+                                <v-btn small round color="error" @click.stop="checkBeforeTerminateMeal(props.item.id)">Terminate meal</v-btn>
+                            </span>
                         </td>
                     </tr>
                 </template>
@@ -43,6 +46,11 @@
         <add-meal :visible="showAddMeal" @close="showAddMeal = false"></add-meal>
         <add-order :visible="showAddOrder" :selectedMeal="selectedMeal" @close="showAddOrder = false"></add-order>
         <meal-info :visible="showMealInfo" :mealInfo="selectedMealInfo" @close="showMealInfo = false"></meal-info>
+        <terminate-meal-modal :visible="showTerminateMealConfirmation"
+                              :numberOfOrders="numberOfOrdersPending"
+                              @close="showTerminateMealConfirmation = false"
+                              @continue="terminateMeal(selectedMeal)"
+        ></terminate-meal-modal>
     </div>
 </template>
 
@@ -50,6 +58,7 @@
     import AddMeal from './addMeal';
     import AddOrder from './addOrder';
     import MealInfo from './mealInfo';
+    import TerminateMealModal from "./terminateMealModal";
 
     export default {
         name: "meal-list",
@@ -60,8 +69,10 @@
                 showAddMeal: false,
                 showAddOrder: false,
                 showMealInfo: false,
+                showTerminateMealConfirmation: false,
                 selectedMeal: null,
                 selectedMealInfo: {},
+                numberOfOrdersPending: null,
                 table: {
                     rowsPerPageItems: [5, 10, 15, 25, 50],
                     loading: true,
@@ -81,12 +92,7 @@
         watch: {
             "table.pagination": {
                 handler() {
-                    this.getDataFromApi()
-                        .then(data => {
-                            console.log(data);
-                            this.meals = data.data.meals;
-                            this.totalMeals = data.data.totalMeals;
-                        })
+                    this.getDataFromApi();
                 },
                 deep: true
             },
@@ -94,17 +100,15 @@
         methods: {
             getDataFromApi() {
                 this.table.loading = true;
-                return axios.get('/api/meals/my/active', {
+                axios.get('/api/meals/my/active', {
                     params: {
                         page: this.table.pagination.page,
                         rowsPerPage: this.table.pagination.rowsPerPage
                     }
                 }).then((response) => {
-                    return {
-                        data: {
-                            meals: response.data.data,
-                            totalMeals: response.data.meta.total
-                        }
+                    {
+                        this.meals = response.data.data;
+                        this.totalMeals = response.data.meta.total;
                     }
                 }).catch((error) => {
                     console.log(error);
@@ -130,9 +134,32 @@
                     .catch((error) => {
                         console.log(error);
                     })
+            },
+            checkBeforeTerminateMeal($mealID) {
+                axios.get('/api/meals/checkTerminate/' + $mealID)
+                    .then((response) => {
+                        if (response.data.pendingCount !== 0) {
+                            this.numberOfOrdersPending = response.data.pendingCount;
+                            this.selectedMeal = $mealID;
+                            this.showTerminateMealConfirmation = true;
+                        } else {
+                            this.terminateMeal($mealID);
+                        }
+                    });
+            },
+            terminateMeal($mealID) {
+                axios.patch('/api/meals/terminate/' + $mealID)
+                    .then((response) => {
+                        this.$toasted.show(response.data.message);
+                        this.getDataFromApi();
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
             }
         },
         components: {
+            TerminateMealModal,
             AddMeal,
             AddOrder,
             MealInfo

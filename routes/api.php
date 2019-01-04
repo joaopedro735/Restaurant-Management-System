@@ -74,6 +74,8 @@ Route::group([
         Route::post('/', 'MealControllerAPI@store');
         Route::get('/my/active', 'MealControllerAPI@active');
         Route::post('/addOrder/{id}', 'MealControllerAPI@addOrderToMeal');
+        Route::get('/checkTerminate/{id}', 'MealControllerAPI@mealHasPendingOrders');
+        Route::patch('/terminate/{id}', 'MealControllerAPI@terminateMeal');
         Route::get('/{id}', 'MealControllerAPI@show');
     });
 

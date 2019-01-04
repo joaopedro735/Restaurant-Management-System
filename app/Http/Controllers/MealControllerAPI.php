@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Http\Resources\MealResource;
 use App\Http\Resources\MealsResource;
 use App\Item;
 use App\Meal;
 use App\Order;
-use App\Table;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -23,23 +23,62 @@ class MealControllerAPI extends Controller
         return MealsResource::collection(Meal::paginate(10));
     }
 
-    public function active()
+    public function active(Request $request)
     {
         return MealsResource::collection(Meal::where('responsible_waiter_id', Auth::guard('api')->user()->id)
             ->where('state', 'active')
-            ->paginate(10));
+            ->paginate($request->input('rowsPerPage', 10)));
+    }
+
+    public function mealHasPendingOrders(Request $request, $mealID)
+    {
+        $meal = Meal::findOrFail($mealID);
+        $count = 0;
+        foreach ($meal->orders as $order) {
+            if ($order->state !== 'delivered') {
+                $count++;
+            }
+        }
+        return response()->json([
+            "pendingCount" => $count
+        ]);
+    }
+
+    public function terminateMeal(Request $request, $mealID)
+    {
+        $meal = Meal::findOrFail($mealID);
+        $userID = Auth::guard('api')->user()->id;
+        if ($meal->responsible_waiter_id !== $userID) {
+            return response()->json([
+                'message' => "Unable to terminate another waiter's meal"
+            ],400);
+        }
+        $priceSum = 0.0;
+        foreach ($meal->orders as $order) {
+            if ($order->state !== "delivered") {
+                $priceSum += $order->item->price;
+                $order->state = "not delivered";
+                $order->save();
+            }
+        }
+        $meal->total_price_preview -= $priceSum;
+        $meal->state = "terminated";
+        $meal->save();
+        return response()->json([
+            "message" => "Meal terminated successfully"
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return Meal
      */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'table_number'     => 'required|integer|exists:restaurant_tables,table_number',
+            'table_number' => 'required|integer|exists:restaurant_tables,table_number',
         ]);
         $isTableActive = Meal::where('table_number', ($request->input('table_number')))->where('state', 'active')->count();
 
@@ -57,7 +96,8 @@ class MealControllerAPI extends Controller
         return $meal;
     }
 
-    public function addOrderToMeal(Request $request, $mealID) {
+    public function addOrderToMeal(Request $request, $mealID)
+    {
         $meal = Meal::findOrFail($mealID);
         if ($meal->state !== 'active') {
             return response()->json([
@@ -99,8 +139,8 @@ class MealControllerAPI extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Meal  $meal
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Meal $meal
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Meal $meal)
@@ -111,7 +151,7 @@ class MealControllerAPI extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Meal  $meal
+     * @param  \App\Meal $meal
      * @return \Illuminate\Http\Response
      */
     public function destroy(Meal $meal)
@@ -119,18 +159,21 @@ class MealControllerAPI extends Controller
         //
     }
 
-    public static function getMealCountPerTable($table_number) {
+    public static function getMealCountPerTable($table_number)
+    {
         return Meal::where('table_number', $table_number)->count();
     }
 
-    public static function canDeleteTable($table_number) {
-        $meal =  Meal::where('table_number', $table_number)->first();
+    public static function canDeleteTable($table_number)
+    {
+        $meal = Meal::where('table_number', $table_number)->first();
 
         return $meal ? false : true;
     }
 
-    public static function canDeleteuser($id) {
-        $user =  Meal::where('responsible_waiter_id', $id)->first();
+    public static function canDeleteuser($id)
+    {
+        $user = Meal::where('responsible_waiter_id', $id)->first();
 
         return $user ? false : true;
     }
