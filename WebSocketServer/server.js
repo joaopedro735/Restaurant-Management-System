@@ -88,7 +88,7 @@ io.on('connection', function (socket) {
 
         if (userInfoFrom) {
             // Emit with message and user who sent the message
-            io.sockets.to('managers').emit(message, userInfoFrom);
+            io.sockets.to('managers').emit('message_to_managers', message, from);
         }
     });
 

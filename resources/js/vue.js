@@ -183,6 +183,15 @@ const app = new Vue({
             console.log('Sockect connected with ID: ' + this.$socket.id);
 
             // Join the global channel and the user.type channel
+            /**
+             * TODO: should only connect to websocket server if user is working
+             * When user starts working join emit 'user_enter'
+             *      This will add the user to the 'global' and 'user.type' channels
+             * When user stops working, emit to user_exit
+             *      This will remove the user from the 'global' and 'user.type' channel
+             */
+
+
             if (store.state.user) {
                 this.$socket.emit('user_enter', this.$store.state.user);
             }         
