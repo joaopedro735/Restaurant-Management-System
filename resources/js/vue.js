@@ -232,7 +232,7 @@ const app = new Vue({
 
             this.$router.push('/menu');
         },
-        cooks(message) {
+        new_order(message) {
             /**
              * Show toast only to cooks (all)
              * Show link to orders (possibly highlighting order)
@@ -247,34 +247,34 @@ const app = new Vue({
              * Show toast only to responsible waiter
              * Show link to orders (possibly highlighting order)
              */
-            this.$toasted.info(message, {
+            this.$toasted.info(order + message, {
                     icon: 'info'
                 }
             );
         },
-        responsible_waiter_unavailable(waiter) {
-            this.$toasted.error(waiter.name + ' is no working right now',
+        responsible_waiter_unavailable(message, waiter) {
+            this.$toasted.error(waiter.name + message,
                 {
                     icon: 'error'
                 }
             );
         },
-        meal_fineshed(message) {
-            /**
-             * Show toast only to cooks
-             * Show link to orders (possibly highlighting order)
-             */
-            this.$toasted.info(`New order`, {
-                    icon: 'info'
-                }
-            );
-        },
-        cashiers(message) {
+        finished_meal(message) {
             /**
              * Show toast only to cashiers (all)
              * Show link to meal invoice (possibly highlighting order)
              */
             this.$toasted.info(message, {
+                    icon: 'info'
+                }
+            );
+        },
+        message_to_managers(message, from) {
+            /**
+             * Show toast only to cashiers (all)
+             * Show link to meal invoice (possibly highlighting order)
+             */
+            this.$toasted.info('Message from: ' + from.name + ' - ' + message, {
                     icon: 'info'
                 }
             );

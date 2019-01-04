@@ -55,32 +55,45 @@ io.on('connection', function (socket) {
         }
     });
 
-    // New order - Send to cooks
-    socket.on('new_order', (messsage, user) => {
+    // New order - Send to all cooks
+    socket.on('new_order', (message, user) => {
         if (user && user.type == 'waiter') {
-            io.sockets.to('cooks').emit(messsage);
+            io.sockets.to('cooks').emit('new_order', message);
         }
     });
 
     // Order prepared - Send to responsible waiter
     socket.on('order_prepared', (order, from, to) => {
+        const userInfoFrom = loggedCooks.userInfoByID(from.id);
         const userInfoTo = loggedWaiters.userInfoByID(to.id);
 
         if (userInfoTo) {
             io.to(userInfoTo.socket.id).emit('order_prepared', order);
         } else {
-            io.to(from.socket.id).emit('responsible_waiter_unavailable', to);
+            // Send message to cook who prepared teh order warning waiter is unavailible
+            io.to(userInfoFrom.socket.id).emit('responsible_waiter_unavailable', to);
         }
     });
 
-    // Finished meal - Send to cashiers
-    socket.on('finished_meal', (messsage, user) => {
+    // Finished meal - Send to all cashiers
+    socket.on('finished_meal', (message, user) => {
         if (user && user.type == 'waiter') {
-            io.sockets.to('cashiers').emit(messsage);
+            io.sockets.to('cashiers').emit('finished_meal', message);
+        }
+    });
+
+    // Message to working managers
+    socket.on('message_to_managers', (message, from) => {
+        const userInfoFrom = loggedUsers.userInfoByID(from.id);
+
+        if (userInfoFrom) {
+            // Emit with message and user who sent the message
+            io.sockets.to('managers').emit(message, userInfoFrom);
         }
     });
 
     // CHANNELS
+    // JOIN
     socket.on('user_enter', user => {
         // JOIN WHEN SHIFT STARTS
         if (user) {
@@ -108,6 +121,7 @@ io.on('connection', function (socket) {
         }
     });
 
+    // LEAVE
     socket.on('user_exit', user => {
         // LEAVE ALL WHEN SHIFT ENDS
         if (user) {
