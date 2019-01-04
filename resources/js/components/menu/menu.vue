@@ -33,8 +33,8 @@
                                     <td class="text-xs-left">
                                         {{ props.item.name }}
                                     </td>
-                                    <td class="text-xs-left">{{ props.item.description.length > 60 ? props.item.description.substr(0, 60) + ('...') : props.item.description }}</td>
-                                    <td class="text-xs-left">
+                                    <td class="text-xs-left">{{ props.item.description.length > 100 ? props.item.description.substr(0, 100) + (' ...') : props.item.description }}</td>
+                                    <td class="text-xs-rigth">
                                         <h4>{{ appendSign(props.item.price) }}</h4>
                                     </td>
                                     <td class="text-xs-right">
@@ -94,7 +94,7 @@
                                     <td class="text-xs-left">
                                         {{ props.item.name }}
                                     </td>
-                                    <td class="text-xs-left">{{ props.item.description.length > 60 ? props.item.description.substr(0, 60) + ('...') : props.item.description }}</td>
+                                    <td class="text-xs-left">{{ props.item.description.length > 100 ? props.item.description.substr(0, 100) + (' ...') : props.item.description }}</td>
                                     <td class="text-xs-left">
                                         <h4>{{ appendSign(props.item.price) }}</h4>
                                     </td>
@@ -170,10 +170,10 @@
                 rowsPerPageItemsDishes: [15, 25, 50, 100],
                 headers: [
                     { text: '', value: 'photo_url', width: '1px' },
-                    { text: 'Name', value: 'name', align: 'left', width: '200px' },
-                    { text: 'Description', value: 'description', width: '300px' },
-                    { text: 'Price', value: 'price', width: '50px'},
-                    { text: '', value: 'actions'}
+                    { text: 'Name', value: 'name', width: this.showManagerOptions ? '180px' : '250px' },
+                    { text: 'Description', value: 'description', width: this.showManagerOptions ? '150px' : '550px' },
+                    { text: 'Price', value: 'price', width: '20px' },
+                    { text: '', value: 'actions', width: this.showManagerOptions ? '220px' : ''}
                 ],
                 showCreateItem: false,
                 showUpdateItem: false
@@ -343,6 +343,7 @@
         mounted() {
             this.getInformationFromLoggedUser();
             this.isUserAWorker(this.user);
+            
         },
         components: {
             'create-item': CreateItem,
@@ -350,7 +351,11 @@
         },
         computed: {
             showManagerOptions() {
-                return !this.$store.state.user.blocked && this.$store.state.user.type === 'manager';
+                if (this.$store.state.user) {
+                    return !this.$store.state.user.blocked && this.$store.state.user.type === 'manager';
+                }
+
+                return false;
             }
         }
     }
