@@ -30,6 +30,9 @@
                             <span v-if="props.item.state === 'Active' && props.item.responsible_waiter === $store.state.user.name">
                                 <v-btn small round color="success" @click.stop="addOrder(props.item.id)">Add order</v-btn>
                             </span>
+                            <span v-if="props.item.state === 'Active' && props.item.responsible_waiter === $store.state.user.name">
+                                <v-btn small round color="primary" @click.stop="mealInfo(props.item.id)">Meal Info</v-btn>
+                            </span>
                         </td>
                     </tr>
                 </template>
@@ -37,21 +40,26 @@
         </v-card>
         <add-meal :visible="showAddMeal" @close="showAddMeal = false"></add-meal>
         <add-order :visible="showAddOrder" :selectedMeal="selectedMeal" @close="showAddOrder = false"></add-order>
+        <meal-info :visible="showMealInfo" :mealInfo="selectedMealInfo" @close="showMealInfo = false"></meal-info>
     </div>
 </template>
 
 <script>
     import AddMeal from './addMeal';
     import AddOrder from './addOrder';
+    import MealInfo from './mealInfo';
 
     export default {
+        name: "meal-list",
         data() {
             return {
                 totalMeals: 0,
                 meals: [],
                 showAddMeal: false,
                 showAddOrder: false,
+                showMealInfo: false,
                 selectedMeal: null,
+                selectedMealInfo: {},
                 table: {
                     rowsPerPageItems: [5, 10, 15, 25, 50],
                     loading: true,
@@ -106,12 +114,27 @@
             addOrder($mealID) {
                 this.selectedMeal = $mealID;
                 this.showAddOrder = true;
+            },
+            mealInfo($mealID) {
+                axios.get('/api/meals/' + $mealID)
+                    .then((response) => {
+                        this.selectedMealInfo = response.data.data;
+                        /*let occ = this.selectedMealInfo.orders.reduce(function(occ, item) {
+                            occ[item.item] = (occ[item.item] || 0) + 1;
+                            return occ;
+                        }, {});*/
+                        this.showMealInfo = true;
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
             }
         },
         components: {
             AddMeal,
-            AddOrder
-        }
+            AddOrder,
+            MealInfo
+        },
     };
 </script>
 

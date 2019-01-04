@@ -6,7 +6,7 @@ use App\Meal;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MealResource extends JsonResource
+class MealsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -26,8 +26,7 @@ class MealResource extends JsonResource
             'responsible_waiter' => $this->waiter->name,
             'total_price_preview' => $this->total_price_preview,
             'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
-            'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
-            'orders' => OrderResourceMeal::collection($this->orders()->orderBy('item_id')->get()),
+            'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString()
         ];
     }
 }

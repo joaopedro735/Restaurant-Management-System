@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Http\Resources\MealResource;
+use App\Http\Resources\MealsResource;
+use App\Item;
 use App\Meal;
 use App\Order;
 use App\Table;
@@ -18,12 +20,12 @@ class MealControllerAPI extends Controller
      */
     public function index()
     {
-        return MealResource::collection(Meal::paginate(10));
+        return MealsResource::collection(Meal::paginate(10));
     }
 
     public function active()
     {
-        return MealResource::collection(Meal::where('responsible_waiter_id', Auth::guard('api')->user()->id)
+        return MealsResource::collection(Meal::where('responsible_waiter_id', Auth::guard('api')->user()->id)
             ->where('state', 'active')
             ->paginate(10));
     }
@@ -62,15 +64,19 @@ class MealControllerAPI extends Controller
                 'message' => "Meal isn't active"
             ]);
         }
-        $count = 0;
+        $priceSum = 0.0;
         foreach ($request->input('items') as $item) {
+            $i = Item::select('price')->find($item);
             $order = new Order;
             $order->state = "pending";
             $order->item_id = $item;
             $order->meal_id = $mealID;
             $order->start = Carbon::now();
             $order->save();
+            $priceSum += $i->price;
         }
+        $meal->total_price_preview += $priceSum;
+        $meal->save();
 
         return response()->json([
             'message' => 'Orders added to meal successfully'
@@ -81,12 +87,13 @@ class MealControllerAPI extends Controller
      * Display the specified resource.
      *
      * @param  $id
-     * @return \Illuminate\Http\Response
+     * @return MealResource
      */
     public function show($id)
     {
         /*$meal = Meal::with('orders.item:id')->find($id);
         return response()->json($meal, 404);*/
+        return new MealResource(Meal::findOrFail($id));
     }
 
     /**
