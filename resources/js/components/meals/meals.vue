@@ -6,7 +6,9 @@
             >
                 Meals
                 <v-spacer></v-spacer>
-                <v-btn @click="showAddMeal = true" color="primary" dark class="mb-2">New Meal</v-btn>
+                <v-btn fab dark @click="showAddMeal = true" slot="activator" class="mb-2">
+                    <v-icon>add</v-icon>
+                </v-btn>
             </v-card-title>
 
             <v-data-table

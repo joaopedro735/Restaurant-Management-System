@@ -41,8 +41,8 @@
 
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn :disabled="!form.valid" :loading="form.loading" @click="submit">submit</v-btn>
-                <v-btn @click="clear">clear</v-btn>
+                <v-btn small round color="info" :disabled="!form.valid" :loading="form.loading" @click="submit">Login</v-btn>
+                <v-btn small round @click="clear">Clear</v-btn>
             </v-card-actions>
         </v-card>
     </div>
