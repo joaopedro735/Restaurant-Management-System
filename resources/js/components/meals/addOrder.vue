@@ -51,7 +51,20 @@
                 axios.post('/api/meals/addOrder/' + this.selectedMeal, { items: this.selected })
                     .then((response) => {
                         console.log(response.data);
+
                         this.$toasted.success(response.data.message);
+
+                        /**
+                         * TODO: Wait 5 seconds if waiter doesn't cancel
+                         * If waiter doesn't cancel the order, update to confirmed
+                         * If waiter cancels the order, delete order from database
+                         */
+                        
+                        // Emit new order to cooks
+                        let message = this.selected.length > 1 ? 'New orders to prepare!' : 'New order to prepare!';
+
+                        this.$socket.emit('new_order', message, this.$store.state.user);
+
                         this.close();
                     })
                     .catch((error) => {

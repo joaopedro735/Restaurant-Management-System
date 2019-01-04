@@ -35,7 +35,7 @@ Vue.use(VueRouter);
 Vue.use(store);
 Vue.use(Vuetify);
 Vue.use(new VueSocketIO({
-    debug: true,
+    debug: false,
     connection: 'http://127.0.0.1:8080'
 }));
 Vue.use(Toasted, toastedOptions, {
@@ -182,20 +182,42 @@ const app = new Vue({
         connect() {
             console.log('Sockect connected with ID: ' + this.$socket.id);
 
+            // Join the global channel and the user.type channel
+            /**
+             * TODO: should only connect to websocket server if user is working
+             * When user starts working join emit 'user_enter'
+             *      This will add the user to the 'global' and 'user.type' channels
+             * When user stops working, emit to user_exit
+             *      This will remove the user from the 'global' and 'user.type' channel
+             */
+
+
             if (store.state.user) {
                 this.$socket.emit('user_enter', this.$store.state.user);
-            }
+            }         
         },
         shift_started(dataFromServer) {
             console.log("start");
-            this.$toasted.success("You started working",{icon: "info"});
+            this.$toasted.success("You started working",
+                {
+                    icon: "info"
+                }
+            );
         },
         shift_ended(dataFromServer) {
             console.log("end");
-            this.$toasted.error("You stopped working", {icon: "info"});
+            this.$toasted.error("You stopped working",
+                {
+                    icon: "info"
+                }
+            );
         },
         problem_Managers(dataFromServer) {
-            this.$toasted.error(dataFromServer, {icon: "error"});
+            this.$toasted.error(dataFromServer,
+                {
+                    icon: "error"
+                }
+            );
         },
         user_blocked(message) {
             this.$toasted.error(message,
@@ -221,14 +243,67 @@ const app = new Vue({
         },
         new_order(message) {
             /**
-             * Show toast only to cooks
+             * Show toast only to cooks (all)
              * Show link to orders (possibly highlighting order)
              */
-            this.$toasted.info(`New order`, {
+            this.$toasted.info(message,
+                {
+                    icon: 'info',
+                    action : [
+                        {
+                            text : 'OK',
+                            onClick : (e, toastObject) => {
+                                toastObject.goAway(0);
+                            }
+                        },
+                        {
+                            text : 'View orders',
+                            push : { 
+                                name : 'orders',
+                                dontClose : true
+                             }
+                        }
+                    ]
+                },
+            );
+        },
+        order_prepared(message, order) {
+            /**
+             * Show toast only to responsible waiter
+             * Show link to orders (possibly highlighting order)
+             */
+            this.$toasted.info(order + message, {
                     icon: 'info'
                 }
             );
-        }
+        },
+        responsible_waiter_unavailable(message, waiter) {
+            this.$toasted.error(waiter.name + message,
+                {
+                    icon: 'error'
+                }
+            );
+        },
+        finished_meal(message) {
+            /**
+             * Show toast only to cashiers (all)
+             * Show link to meal invoice (possibly highlighting order)
+             */
+            this.$toasted.info(message, {
+                    icon: 'info'
+                }
+            );
+        },
+        message_to_managers(message, from) {
+            /**
+             * Show toast only to cashiers (all)
+             * Show link to meal invoice (possibly highlighting order)
+             */
+            this.$toasted.info('Message from: ' + from.name + ' - ' + message, {
+                    icon: 'info'
+                }
+            );
+        },
     },
 });
 
