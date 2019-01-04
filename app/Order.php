@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-      /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -40,11 +40,18 @@ class Order extends Model
         return $this->hasOne('App\Item', 'id', 'item_id')->withTrashed();
     }
 
-    public function responsibleCook() {
+    public function responsibleCook()
+    {
         return $this->hasOne('App\User', 'id', 'responsible_cook_id');
     }
 
-    public static function timestampToString($timestamp) {
-        return mb_convert_encoding($timestamp, "UTF-8");;
+    public function meal()
+    {
+        return $this->belongsTo('App\Meal');
+    }
+
+    public static function timestampToString($timestamp)
+    {
+        return mb_convert_encoding($timestamp, "UTF-8");
     }
 }

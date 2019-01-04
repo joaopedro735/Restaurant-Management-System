@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use http\Env\Response;
-use Illuminate\Http\Request;
-
 use App\Http\Resources\OrderResource;
-
+use App\Http\Resources\OrderResourceMeal;
+use App\Meal;
 use App\Order;
 use App\User;
+use Auth;
+use Illuminate\Http\Request;
 
 class OrderControllerAPI extends Controller
 {
@@ -25,8 +25,7 @@ class OrderControllerAPI extends Controller
 //        $user = \Auth::guard('api')->user();
 //        $null = null;
 
-        if ($request->has('page'))
-        {
+        if ($request->has('page')) {
             /*return OrderResource::collection(DB::table('orders')
                 ->whereRaw('responsible_cook_id = ? AND (state = "in preparation" OR state = "confirmed")', $user->id)
                 ->union(DB::table('orders')
@@ -50,6 +49,16 @@ class OrderControllerAPI extends Controller
         ], 400);
     }
 
+    public function waiterActive(Request $request)
+    {
+        $userID = Auth::guard('api')->user()->id;
+        $activeMeals = Meal::where('responsible_waiter_id', $userID)->where('state', 'active')->select('id')->get();
+        return OrderResourceMeal::collection(Order::whereIn('meal_id', $activeMeals)
+            ->whereIn('state', ['pending', 'confirmed'])
+            ->orderBy('state', 'asc')
+            ->paginate($request->input('rowsPerPage', 10)));
+    }
+
     public function update(Request $request, $id)
     {
         $order = Order::findOrFail($id);
@@ -63,14 +72,16 @@ class OrderControllerAPI extends Controller
         return new OrderResource($order);
     }
 
-    public static function canDeleteItem($id) {
+    public static function canDeleteItem($id)
+    {
         $order = Order::where('item_id', $id)->first();
 
         return $order ? false : true;
     }
 
-    public static function canDeleteuser($id) {
-        $user =  Order::where('responsible_cook_id', $id)->first();
+    public static function canDeleteuser($id)
+    {
+        $user = Order::where('responsible_cook_id', $id)->first();
 
         return $user ? false : true;
     }

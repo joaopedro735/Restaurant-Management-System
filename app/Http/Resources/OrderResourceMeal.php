@@ -6,7 +6,7 @@ use App\Order;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderResource extends JsonResource
+class OrderResourceMeal extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,12 +20,9 @@ class OrderResource extends JsonResource
             'id' => $this->id,
             'state' => Order::stateToStr($this->state),
             'item' => $this->item->name,
-            'responsible_cook_id' => $this->responsible_cook_id ?? 0,
+            'price' => $this->item->price,
             'responsible_cook' => $this->responsibleCook()->value('name'),
-            'start' => Carbon::parse($this->start)->format('d/m/Y \(H:m\)'),
-            'end' => Carbon::parse($this->end)->format('d/m/Y \(H:m\)'),
-            'created_at' => Carbon::parse($this->created_at)->format('d/m/Y \(H:m\)'),
-            'updated_at' => Carbon::parse($this->updated_at)->format('d/m/Y \(H:m\)'),
+            'table_number' => $this->meal->table_number
         ];
     }
 }

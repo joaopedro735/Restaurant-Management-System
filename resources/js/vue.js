@@ -119,7 +119,7 @@ const invoices = Vue.component('invoices', () =>
 );
 
 //Meals
-const meals = Vue.component('meals', () => import("./components/meals/meals"));
+const meals = Vue.component('meals', () => import("./components/meals/meal"));
 
 const routes = [
     { path: '/', component: home, name: 'home' },
