@@ -42,7 +42,9 @@ Route::group([
         'prefix' => 'orders'
     ], function() {
         Route::get('/', 'OrderControllerAPI@index');
-        Route::get('/my', 'OrderControllerAPI@waiterActive');
+        Route::get('/my/active', 'OrderControllerAPI@waiterActive');
+        Route::get('/my/prepared', 'OrderControllerAPI@waiterPrepared');
+        Route::patch('/deliver/{id}', 'OrderControllerAPI@deliverOrder');
         Route::put('/{id}', 'OrderControllerAPI@update');
     });
 
