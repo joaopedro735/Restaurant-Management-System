@@ -59,6 +59,37 @@ class OrderControllerAPI extends Controller
             ->paginate($request->input('rowsPerPage', 10)));
     }
 
+    public function waiterPrepared(Request $request)
+    {
+        $userID = Auth::guard('api')->user()->id;
+        $activeMeals = Meal::where('responsible_waiter_id', $userID)->where('state', 'active')->select('id')->get();
+        return OrderResourceMeal::collection(Order::whereIn('meal_id', $activeMeals)
+            ->where('state', 'prepared')
+            ->paginate($request->input('rowsPerPage', 10)));
+    }
+
+    public function deliverOrder(Request $request, $orderID) {
+        $order = Order::find($orderID);
+        $userID = Auth::guard('api')->user()->id;
+        if ($order->meal->responsible_waiter_id !== $userID) {
+            return response()->json([
+                'message' => "Unable to deliver another user's order"
+            ], 400);
+        }
+
+        if ($order->state !== 'prepared') {
+            return response()->json([
+                'message' => "Unable to deliver an unprepared order"
+            ], 400);
+        }
+
+        $order->state = 'delivered';
+        $order->save();
+        return response()->json([
+            'message' => "Order delivered successfully"
+        ]);
+    }
+
     public function update(Request $request, $id)
     {
         $order = Order::findOrFail($id);
