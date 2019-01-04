@@ -17,7 +17,7 @@ class Item extends Model
     protected $fillable = [
         'name', 'type', 'description', 'photo_url', 'price'
     ];
-    
+
     public static function itemTypeToStr($itemType)
     {
         switch ($itemType) {
@@ -28,5 +28,9 @@ class Item extends Model
         }
 
         return 'Desconhecido';
+    }
+
+    public function invoices() {
+        return $this->belongsToMany('App\Invoices', 'invoice_items')->withPivot('quantity', 'unit_price', 'sub_total_price');
     }
 }

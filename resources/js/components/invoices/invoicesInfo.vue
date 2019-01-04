@@ -2,7 +2,7 @@
     <v-dialog v-model="show" @click.stop="show = false" width="600px">
         <v-card>
             <v-card-title class="headline blue darken-4 white--text">
-                {{ invoiceInfo.id }}
+                {{ invoiceTitle }}
                 <v-spacer></v-spacer>
                 {{ invoiceInfo.date}}
             </v-card-title>

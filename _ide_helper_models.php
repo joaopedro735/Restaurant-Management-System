@@ -12,6 +12,17 @@
 
 namespace App{
 /**
+ * App\FileUpload
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\FileUpload newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\FileUpload newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\FileUpload query()
+ */
+	class FileUpload extends \Eloquent {}
+}
+
+namespace App{
+/**
  * App\Invoice
  *
  * @property int $id
@@ -23,6 +34,7 @@ namespace App{
  * @property float $total_price
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Item[] $items
  * @property-read \App\Meal $meal
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Invoice newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Invoice newQuery()
@@ -42,6 +54,27 @@ namespace App{
 
 namespace App{
 /**
+ * App\InvoiceItem
+ *
+ * @property int $invoice_id
+ * @property int $item_id
+ * @property int $quantity
+ * @property float $unit_price
+ * @property float $sub_total_price
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\InvoiceItem newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\InvoiceItem newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\InvoiceItem query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\InvoiceItem whereInvoiceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\InvoiceItem whereItemId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\InvoiceItem whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\InvoiceItem whereSubTotalPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\InvoiceItem whereUnitPrice($value)
+ */
+	class InvoiceItem extends \Eloquent {}
+}
+
+namespace App{
+/**
  * App\Item
  *
  * @property int $id
@@ -53,9 +86,12 @@ namespace App{
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Item newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Item newQuery()
+ * @method static \Illuminate\Database\Query\Builder|\App\Item onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Item query()
+ * @method static bool|null restore()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Item whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Item whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Item whereDescription($value)
@@ -65,6 +101,8 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Item wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Item whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Item whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Item withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Item withoutTrashed()
  */
 	class Item extends \Eloquent {}
 }
@@ -84,6 +122,7 @@ namespace App{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Invoice $invoice
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[] $orders
+ * @property-read \App\Table $table
  * @property-read \App\User $waiter
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Meal newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Meal newQuery()
@@ -115,6 +154,7 @@ namespace App{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Item $item
+ * @property-read \App\Meal $meal
  * @property-read \App\User $responsibleCook
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Order newQuery()
@@ -157,13 +197,18 @@ namespace App{
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Table newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Table newQuery()
+ * @method static \Illuminate\Database\Query\Builder|\App\Table onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Table query()
+ * @method static bool|null restore()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Table whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Table whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Table whereTableNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Table whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Table withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Table withoutTrashed()
  */
 	class Table extends \Eloquent {}
 }
@@ -192,9 +237,12 @@ namespace App{
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[] $orders
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[] $tokens
+ * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newQuery()
+ * @method static \Illuminate\Database\Query\Builder|\App\User onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User query()
+ * @method static bool|null restore()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereBlocked($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDeletedAt($value)
@@ -211,6 +259,8 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUsername($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\User withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\User withoutTrashed()
  */
 	class User extends \Eloquent {}
 }

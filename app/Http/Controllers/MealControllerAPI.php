@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\MealResource;
 use App\Http\Resources\MealsResource;
+use App\Invoice;
 use App\Item;
 use App\Meal;
 use App\Order;
@@ -48,6 +49,11 @@ class MealControllerAPI extends Controller
     {
         $meal = Meal::findOrFail($mealID);
         $userID = Auth::guard('api')->user()->id;
+        if ($meal->state === 'terminated') {
+            return response()->json([
+                'message' => "Meal already terminated"
+            ],400);
+        }
         if ($meal->responsible_waiter_id !== $userID) {
             return response()->json([
                 'message' => "Unable to terminate another waiter's meal"
@@ -64,10 +70,42 @@ class MealControllerAPI extends Controller
         $meal->total_price_preview -= $priceSum;
         $meal->state = "terminated";
         $meal->save();
+
+        $this->generateInvoice($meal);
+
         return response()->json([
             "message" => "Meal terminated successfully"
         ]);
     }
+
+    public function generateInvoice(Meal $meal) {
+        /*$meal = Meal::findOrFail($mealID);*/
+        $orders = json_decode($meal->orders->where('state', 'delivered'));
+        $items_quantity = array_count_values(array_column($orders, 'item_id'));
+
+        $invoice = new Invoice();
+        $invoice->state = "pending";
+        $invoice->meal_id = $meal->id;
+        $invoice->date = Carbon::today();
+        $invoice->total_price = $meal->total_price_preview;
+        $invoice->save();
+
+        foreach ($items_quantity as $item => $quantity) {
+            $i = Item::findOrFail($item);
+            /*$itemInvoice = new InvoiceItem;
+            $itemInvoice->quantity = $quantity;
+            $itemInvoice->unit_price = $i->price;
+            $itemInvoice->sub_total_price = $quantity * $i->price;*/
+            $invoice->items()->attach($i->id, [
+                'quantity' => $quantity,
+                'unit_price' => $i->price,
+                'sub_total_price' => $quantity * $i->price
+            ]);
+        }
+
+        return ;
+    }
+
 
     /**
      * Store a newly created resource in storage.
