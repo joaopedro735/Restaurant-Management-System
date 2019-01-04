@@ -246,9 +246,25 @@ const app = new Vue({
              * Show toast only to cooks (all)
              * Show link to orders (possibly highlighting order)
              */
-            this.$toasted.info(message, {
-                    icon: 'info'
-                }
+            this.$toasted.info(message,
+                {
+                    icon: 'info',
+                    action : [
+                        {
+                            text : 'OK',
+                            onClick : (e, toastObject) => {
+                                toastObject.goAway(0);
+                            }
+                        },
+                        {
+                            text : 'View orders',
+                            push : { 
+                                name : 'orders',
+                                dontClose : true
+                             }
+                        }
+                    ]
+                },
             );
         },
         order_prepared(message, order) {
