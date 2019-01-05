@@ -15,8 +15,14 @@
             <v-btn color="white" flat round v-if="checkDisplay('invoices')" to="/invoices/">Invoices</v-btn>
 
             <v-spacer></v-spacer>
-            <v-btn  v-if="this.$store.state.token && working" round color="success">WORKING</v-btn>
-            <v-btn  v-if="this.$store.state.token && !working" round color="error">NOT WORKING</v-btn>
+            <v-btn v-if="this.$store.state.token && working" round color="success">{{'WORKING since ' +
+                this.$store.state.user.last_shift_start}}
+            </v-btn>
+            <v-chip v-if="this.$store.state.token && working" outline color="white">
+                <strong>{{timePassed}}</strong>
+            </v-chip>
+            <v-btn v-if="this.$store.state.token && !working" round color="error">NOT WORKING</v-btn>
+            <notifications :notifications="currentNotifications"></notifications>
             <v-chip outline color="white" v-if="this.$store.state.user != null">
                 <v-icon v-if="this.$store.state.user.blocked" color="red">block</v-icon>&nbsp;
                 {{ this.$store.state.user.name }}&nbsp;<strong>({{this.$store.state.user.type}})</strong>
@@ -28,7 +34,18 @@
 </template>
 
 <script>
+    import moment from 'moment'
+    Vue.use(moment);
+
     export default {
+        data() {
+            return {
+                time: "",
+                timePassed: "",
+                currentNotifications: [{name: "Jorge", msg: "something"}],
+            }
+        },
+
         methods: {
             checkDisplay(menu) {
                 if (!this.$store.state.token || _.isEmpty(this.$store.state.user)) {
@@ -47,13 +64,24 @@
                     case "invoices":
                         return ((this.$store.state.user.type === "manager" || this.$store.state.user.type === "cashier") && !this.$store.state.user.blocked);
                 }
+            }, calcTime() {
+                let date = this.$store.state.user.last_shift_start;
+                this.timePassed = moment(date).fromNow();
             }
         },
         computed: {
-            working() {
-                return this.$store.state.user.shift_active || 0;
+            working: function () {
+                if (this.$store.state.user.shift_active === 0) {
+                    clearInterval();
+                    return false;
+                } else {
+                    clearInterval();
+                    this.calcTime();
+                    setInterval(this.calcTime, 60000);
+                    return true;
+                }
             },
-        },
+        }
     }
 </script>
 

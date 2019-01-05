@@ -102,19 +102,24 @@ io.on('connection', function (socket) {
             loggedUsers.addUserInfo(user, socket.id);
 
             if (user.type === 'cashier') {
+                console.log("Connected to cashiers ");
                 socket.join('cashiers');
                 loggedCashiers.addUserInfo(user, socket.id);
             }
             
             if (user.type === 'cook') {
+                console.log("Connected to cooks");
                 socket.join('cooks');
                 loggedCooks.addUserInfo(user, socket.id);
             }
             if (user.type === 'manager') {
+                console.log("Connected to managers");
                 socket.join('managers');
+                socket.join('problems');
                 loggedManagers.addUserInfo(user, socket.id);
             }
             if (user.type === 'waiter') {
+                console.log("Connected to waiters");
                 socket.join('waiters');
                 loggedWaiters.addUserInfo(user, socket.id);
             }
@@ -143,5 +148,12 @@ io.on('connection', function (socket) {
                 socket.leave('waiters');
             }
         }
+    });
+
+    socket.on('problems_Management', (msg, user) => {
+        console.log("problems_management")
+        console.log(user.name)
+        io.sockets.to('problems').emit('problems', { msg: msg,
+                                                    name: user.name});
     });
 });

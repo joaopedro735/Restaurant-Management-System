@@ -1,52 +1,51 @@
 <template>
     <v-container>
-        <v-dialog
-                v-model="dialog"
-                width="500"
-        >
-            <v-btn v-show="this.working === true"
-                   slot="activator"
-                   color="error"
-                   right
-                    >Report a problem
-                <v-icon right>info</v-icon>
-            </v-btn>
 
-            <v-card>
-                <v-card-title
-                        class="headline grey lighten-2"
-                        primary-title
-                >
-                    Describe your problem
-                </v-card-title>
-
-                <v-card-text>
-                    <v-text-field
-                            label="Your problem"
-                            v-model='problem'
-                    ></v-text-field>
-                </v-card-text>
-
-                <v-divider></v-divider>
-
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                            color="error"
-                            flat
-                            @click="notifyManagers(problem)"
+        <v-toolbar @problems="something">
+            <v-dialog
+                    v-model="dialog"
+                    width="500"
+            >
+                <v-toolbar-title v-show="this.working === true"
+                                 slot="activator">
+                    <v-chip color="red" text-color="white">
+                        <v-icon left>info</v-icon>
+                        Report a problem
+                    </v-chip>
+                </v-toolbar-title>
+                <v-card>
+                    <v-card-title
+                            class="headline grey lighten-2"
+                            primary-title
                     >
-                        Notify management
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
-        <v-toolbar>
+                        Describe your problem
+                    </v-card-title>
+
+                    <v-card-text>
+                        <v-text-field
+                                label="Your problem"
+                                v-model='problem'
+                        ></v-text-field>
+                    </v-card-text>
+
+                    <v-divider></v-divider>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                                color="error"
+                                flat
+                                @click="notifyManagers(problem)"
+                        >
+                            Notify management
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
             <v-toolbar-items class="sm-and-down">
             </v-toolbar-items>
             <v-spacer></v-spacer>
             <v-toolbar-items class="sm-and-down">
-                <v-btn flat v-show="this.working === true">{{this.$store.state.duration}}</v-btn>
                 <v-btn flat v-show="this.working === false" color="success" @click="beginShift">Begin shift</v-btn>
                 <v-btn flat v-show="this.working === true" color="error" @click="endShift">End shift</v-btn>
             </v-toolbar-items>
@@ -55,10 +54,6 @@
 </template>
 
 <script>
-    import moment from 'vue-moment';
-
-    Vue.use(moment);
-
     export default {
         props: ['user', 'working'],
         data: function () {
@@ -82,7 +77,7 @@
                         this.$store.commit('setUser', response.data.data);
                         this.$socket.emit('begin_shift', this.worker);
                         this.working = true;
-                        setInterval(this.updateTime,1000);
+                        //setInterval(this.updateTime,1000);
                     })
                     .catch(error => {
 
@@ -111,8 +106,9 @@
                 //clearInterval();
             }, updateTime() {
                 //TODO: TODO DURATION
-                this.duration = moment(this.worker.last_shift_start).toNow(true);
                 this.$store.commit('setDuration', this.duration);
+            }, something(){
+
             }
         }, created() {
             this.$store.commit('loadTokenAndUserFromSession');

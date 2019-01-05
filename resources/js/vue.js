@@ -121,6 +121,10 @@ const invoices = Vue.component('invoices', () =>
 //Meals
 const meals = Vue.component('meals', () => import("./components/meals/meal"));
 
+
+//List of notifications
+const notificationsList = Vue.component('notifications', () => import("./components/user/notificationList"))
+
 const routes = [
     { path: '/', component: home, name: 'home' },
     { path: '/users', component: users, name: 'users' },
@@ -158,6 +162,7 @@ Vue.filter('capitalize', function (value) {
     return value.charAt(0).toUpperCase() + value.slice(1);
 });
 
+
 const app = new Vue({
     el: '#app',
     router,
@@ -180,7 +185,7 @@ const app = new Vue({
     },
     sockets: {
         connect() {
-            console.log('Sockect connected with ID: ' + this.$socket.id);
+            console.log('Socket connected with ID: ' + this.$socket.id);
 
             // Join the global channel and the user.type channel
             /**
@@ -304,6 +309,9 @@ const app = new Vue({
                 }
             );
         },
+        problems(dataFromServer){
+            this.$toasted.error(dataFromServer.name + ": " + dataFromServer.msg);
+        }
     },
 });
 
