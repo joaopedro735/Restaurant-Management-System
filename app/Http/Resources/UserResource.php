@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -22,8 +23,8 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'photo_url' => 'storage/profiles/' . $this->photo_url,
             'shift_active' => $this->shift_active,
-            'last_shift_start' => $this->last_shift_start,
-            'last_shift_end' => $this->last_shift_end,
+            'last_shift_start' => Carbon::parse($this->last_shift_start)->toDateTimeString(),
+            'last_shift_end' => Carbon::parse($this->last_shift_end)->toDateTimeString(),
             'blocked' => $this->blocked == 0 ? false : true
         ];
     }

@@ -46,6 +46,7 @@ Route::group([
         Route::get('/my/prepared', 'OrderControllerAPI@waiterPrepared');
         Route::patch('/deliver/{id}', 'OrderControllerAPI@deliverOrder');
         Route::put('/{id}', 'OrderControllerAPI@update');
+        Route::patch('/confirmOrder', 'OrderControllerAPI@confirmOrder');
     });
 
     Route::group([

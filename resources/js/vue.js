@@ -20,16 +20,6 @@ import VueSocketIO from 'vue-socket.io';
 
 Vue.config.productionTip = false;
 
-const toastedOptions = {
-    duration: 3000,
-    position: "top-center",
-    className: "toasted-css",
-    theme: "bubble",
-    onClick: (e, toastObject) => {
-        toastObject.goAway(0);
-    }
-};
-
 Vue.use(Moment);
 Vue.use(VueRouter);
 Vue.use(store);
@@ -38,9 +28,6 @@ Vue.use(new VueSocketIO({
     debug: false,
     connection: 'http://127.0.0.1:8080'
 }));
-Vue.use(Toasted, toastedOptions, {
-    router
-});
 Vue.use(Vuelidate);
 /* Components para users */
 const users = Vue.component('users-component', () =>
@@ -120,6 +107,10 @@ const invoices = Vue.component('invoices', () =>
 //Meals
 const meals = Vue.component('meals', () => import("./components/meals/meal"));
 
+
+//List of notifications
+const notificationsList = Vue.component('notifications', () => import("./components/user/notificationList"))
+
 const routes = [
     { path: '/', component: home, name: 'home' },
     { path: '/users', component: users, name: 'users' },
@@ -141,6 +132,19 @@ const router = new VueRouter({
     linkActiveClass: 'active'
 });
 
+const toastedOptions = {
+    duration: 3000,
+    position: "top-center",
+    className: "toasted-css",
+    theme: "bubble",
+    onClick: (e, toastObject) => {
+        toastObject.goAway(0);
+    },
+    router
+};
+
+Vue.use(Toasted, toastedOptions);
+
 router.beforeEach((to, from, next) => {
     if ((to.name === 'profile') || (to.name === 'logout') || (to.name === 'orders') || (to.name === 'tables') || (to.name === 'logout') || (to.name === 'invoices')) {
         if (!store.state.user) {
@@ -156,6 +160,7 @@ Vue.filter('capitalize', function (value) {
     value = value.toString();
     return value.charAt(0).toUpperCase() + value.slice(1);
 });
+
 
 const app = new Vue({
     el: '#app',
@@ -179,7 +184,7 @@ const app = new Vue({
     },
     sockets: {
         connect() {
-            console.log('Sockect connected with ID: ' + this.$socket.id);
+            console.log('Socket connected with ID: ' + this.$socket.id);
 
             // Join the global channel and the user.type channel
             /**
@@ -303,6 +308,9 @@ const app = new Vue({
                 }
             );
         },
+        problems(dataFromServer){
+            this.$toasted.error(dataFromServer.name + ": " + dataFromServer.msg);
+        }
     },
 });
 

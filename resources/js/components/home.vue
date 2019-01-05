@@ -6,11 +6,11 @@
                     wrap
                     class="my-5"
                     align-center
-                    v-show="isLogged"
+                    v-if="isLogged === true"
             >
                 <shift-options v-on:shift-start='working = true'
                                v-on:shift-end='working = false'
-                               v-show="worker" :user="user"
+                               v-if="worker === true" :user="user"
                                :working="working"></shift-options>
             </v-layout>
             <v-layout
@@ -18,7 +18,7 @@
                     wrap
                     class="my-5"
                     align-center
-                    v-show="!isLogged"
+                    v-if="isLogged === false"
             >
                 <h1>Sup y'all</h1>
             </v-layout>
@@ -31,29 +31,30 @@
         data: function () {
             return {
                 user: [],
-                worker: false,
                 working: false,
-                isLogged: false,
             }
         },
         methods: {
             getInformationFromLoggedUser() {
                 this.user = this.$store.state.user;
-                this.isLogged = !(this.user === null || this.user === undefined);
-            },
-            isUserAWorker(user){
-                if(user.type === "cashier" || user.type === "waiter" || user.type === "cook"){
-                    this.worker = true;
-                    this.working = user.shift_active === 1;
-
-                }
+                console.log("getInformation: isLogged = " + this.isLogged)
             }
         },
         created() {
             this.getInformationFromLoggedUser();
-        },mounted(){
-            if(this.isLogged)
-                this.isUserAWorker(this.user);
+        }, computed: {
+            isLogged() {
+                return this.$store.state.user !== null && this.$store.state.user !== undefined;
+            },
+            worker() {
+                if (this.$store.state.user.type === "cashier" || this.$store.state.user.type === "waiter" || this.$store.state.user.type === "cook") {
+                    console.log("worker= true")
+                    this.working = this.$store.state.user.shift_active === 1;
+                    return true;
+                }
+                console.log("worker=false")
+                return false;
+            }
         }
     }
 </script>

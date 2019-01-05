@@ -1,15 +1,9 @@
 /*jshint esversion: 6 */
 
 var app = require('http').createServer();
-
 var io = require('socket.io')(app);
-
 var LoggedUsers = require('./loggedusers.js');
 
-var LoggedCashiers = require('./loggedcashiers.js');
-var LoggedCooks = require('./loggedcooks.js');
-var LoggedManagers = require('./loggedmanagers.js');
-var LoggedWaiters = require('./loggedwaiters.js');
 
 app.listen(8080, function(){
     console.log('listening on *:8080');
@@ -24,11 +18,6 @@ app.listen(8080, function(){
 // Check loggedusers.js file
 
 let loggedUsers = new LoggedUsers();
-
-let loggedCashiers = new LoggedCashiers();
-let loggedCooks = new LoggedCooks();
-let loggedManagers = new LoggedManagers();
-let loggedWaiters = new LoggedWaiters();
 
 io.on('connection', function (socket) {
     console.log('Client connected (Socket ID: ' + socket.id + ')');
@@ -57,15 +46,17 @@ io.on('connection', function (socket) {
 
     // New order - Send to all cooks
     socket.on('new_order', (message, user) => {
-        if (user && user.type == 'waiter') {
+        /* if (user && user.type == 'waiter') {
             io.sockets.to('cooks').emit('new_order', message);
-        }
+        } */
+
+        io.sockets.to('cooks').emit('new_order', message);
     });
 
     // Order prepared - Send to responsible waiter
     socket.on('order_prepared', (order, from, to) => {
-        const userInfoFrom = loggedCooks.userInfoByID(from.id);
-        const userInfoTo = loggedWaiters.userInfoByID(to.id);
+        const userInfoFrom = loggedUsers.userInfoByID(from.id);
+        const userInfoTo = loggedUsers.userInfoByID(to.id);
 
         if (userInfoTo) {
             io.to(userInfoTo.socket.id).emit('order_prepared', order);
@@ -102,21 +93,23 @@ io.on('connection', function (socket) {
             loggedUsers.addUserInfo(user, socket.id);
 
             if (user.type === 'cashier') {
+                console.log("Connected to cashiers ");
                 socket.join('cashiers');
-                loggedCashiers.addUserInfo(user, socket.id);
             }
             
             if (user.type === 'cook') {
+                console.log("Connected to cooks");
                 socket.join('cooks');
-                loggedCooks.addUserInfo(user, socket.id);
             }
             if (user.type === 'manager') {
+                console.log("Connected to managers");
                 socket.join('managers');
+                socket.join('problems');
                 loggedManagers.addUserInfo(user, socket.id);
             }
             if (user.type === 'waiter') {
+                console.log("Connected to waiters");
                 socket.join('waiters');
-                loggedWaiters.addUserInfo(user, socket.id);
             }
         }
     });
@@ -143,5 +136,12 @@ io.on('connection', function (socket) {
                 socket.leave('waiters');
             }
         }
+    });
+
+    socket.on('problems_Management', (msg, user) => {
+        console.log("problems_management")
+        console.log(user.name)
+        io.sockets.to('problems').emit('problems', { msg: msg,
+                                                    name: user.name});
     });
 });

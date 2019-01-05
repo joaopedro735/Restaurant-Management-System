@@ -137,12 +137,17 @@ class MealControllerAPI extends Controller
     public function addOrderToMeal(Request $request, $mealID)
     {
         $meal = Meal::findOrFail($mealID);
+
         if ($meal->state !== 'active') {
             return response()->json([
                 'message' => "Meal isn't active"
             ]);
         }
+        
+        $orders = array();
+
         $priceSum = 0.0;
+        
         foreach ($request->input('items') as $item) {
             $i = Item::select('price')->find($item);
             $order = new Order;
@@ -151,13 +156,15 @@ class MealControllerAPI extends Controller
             $order->meal_id = $mealID;
             $order->start = Carbon::now();
             $order->save();
+            array_push($orders, $order->id);
             $priceSum += $i->price;
         }
+        
         $meal->total_price_preview += $priceSum;
         $meal->save();
 
         return response()->json([
-            'message' => 'Orders added to meal successfully'
+            'items' => $orders
         ], 200);
     }
 
