@@ -103,7 +103,10 @@ class OrderControllerAPI extends Controller
 
         $order->update($request->all());
 
-        return new OrderResource($order);
+        /* return new OrderResource($order); */
+        return response()->json([
+            'message' => 'Order updated'
+        ], 200);
     }
 
     public function confirmOrder(Request $request)

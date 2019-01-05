@@ -70,15 +70,34 @@
                         <td>{{ props.item.updated_at }}</td>
                         <td class="text-xs-right">
                             <span v-if="props.item.state === 'In preparation' & props.item.responsible_cook_id === user.id & user.type === 'cook'">
-                                <v-btn small round color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">Mark as prepared</v-btn>
+                                <v-btn small round color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">
+                                    <v-icon></v-icon>
+                                    Prepared
+                                </v-btn>
                             </span>
                             <span v-if="props.item.responsible_cook_id === user.id & props.item.state === 'Confirmed' & user.type === 'cook'">
-                                <v-btn small round color="info" @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">Prepare</v-btn>
-                                <v-btn small round color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">Mark as Prepared</v-btn>
+                                <v-btn small round color="info" @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">
+                                    <v-icon></v-icon>
+                                    Prepare
+                                </v-btn>
+                                <v-btn small round color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">
+                                    <v-icon></v-icon>
+                                    Prepared
+                                </v-btn>
                             </span>
                             <span v-if="props.item.responsible_cook_id === 0 & user.type === 'cook'">
-                                <v-btn small round color="info" @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">Prepare</v-btn>
-                                <v-btn small round color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">Mark as prepared</v-btn>
+                                <v-btn small round  @click.native="changeOrderState(props.index, props.item, 'confirmed'), props.expanded=!props.expanded">
+                                    <v-icon></v-icon>
+                                    Confirm
+                                </v-btn>
+                                <v-btn small round color="info" @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">
+                                    <v-icon></v-icon>
+                                    Prepare
+                                </v-btn>
+                                <v-btn small round color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">
+                                    <v-icon></v-icon>
+                                    Prepared
+                                </v-btn>
                             </span>
                         </td>
                     </tr>
@@ -211,7 +230,7 @@
                             this.orders.splice((index + 1), 1);
                         } */
 
-                        this.$toasted.success('Order updated',
+                        this.$toasted.info(response.data.message,
                             {
                                 icon: 'info',
                             }
@@ -251,7 +270,7 @@
                             this.orders.splice((index + 1), 1);
                         } */
 
-                        this.$toasted.success('Order updated',
+                        this.$toasted.info(response.data.message,
                             {
                                 icon: 'info',
                             }
@@ -283,6 +302,7 @@
                 this.user = this.$store.state.user;
             },
             isUserAWorker(user){
+                // TODO: Use vue.js beforeEach() method instead
                 if((user.type === 'cook' || user.type === 'manager') && !user.blocked)
                 {
                     this.showPage = true;

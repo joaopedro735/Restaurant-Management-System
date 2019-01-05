@@ -1,15 +1,9 @@
 /*jshint esversion: 6 */
 
 var app = require('http').createServer();
-
 var io = require('socket.io')(app);
-
 var LoggedUsers = require('./loggedusers.js');
 
-var LoggedCashiers = require('./loggedcashiers.js');
-var LoggedCooks = require('./loggedcooks.js');
-var LoggedManagers = require('./loggedmanagers.js');
-var LoggedWaiters = require('./loggedwaiters.js');
 
 app.listen(8080, function(){
     console.log('listening on *:8080');
@@ -24,7 +18,6 @@ app.listen(8080, function(){
 // Check loggedusers.js file
 
 let loggedUsers = new LoggedUsers();
-
 
 io.on('connection', function (socket) {
     console.log('Client connected (Socket ID: ' + socket.id + ')');
