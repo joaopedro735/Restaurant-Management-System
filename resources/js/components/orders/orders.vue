@@ -213,7 +213,7 @@
                                 }
                             });
 
-                            if (totalInPreparation > 0 && totalInPreparation <= 15) {
+                            if (totalInPreparation > 0 && totalInPreparation <= this.pagination.rowsPerPage) {
                                 totalInPreparation--;
                             }
 
@@ -253,7 +253,7 @@
                                 }
                             });
 
-                            if (totalInPreparation > 0 && totalInPreparation <= 15) {
+                            if (totalInPreparation > 0 && totalInPreparation <= this.pagination.rowsPerPage) {
                                 totalInPreparation--;
                             }
 

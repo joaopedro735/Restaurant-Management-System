@@ -29,11 +29,19 @@
                 <v-btn color="blue darken-1" flat @click.stop="close">Close</v-btn>
                 <v-btn color="blue darken-1" flat @click.stop="addOrder">Save</v-btn>
             </v-card-actions>
+            <confirm-order 
+                :visible="showConfirmOrder"
+                @close="showConfirmOrder = false" 
+                @save="changeOrderStateToConfirmed"
+                @delete="deleteOrder">
+            </confirm-order>
         </v-card>
     </v-dialog>
 </template>
 
 <script>
+    import ConfirmOrder from '../misc/timerDialog.vue';
+
     export default {
         name: "add-order",
         props: {
@@ -44,6 +52,8 @@
             return {
                 items: [],
                 selected: [],
+                showConfirmOrder: false,
+                saveOrder: false
             }
         },
         methods: {
@@ -51,26 +61,36 @@
                 axios.post('/api/meals/addOrder/' + this.selectedMeal, { items: this.selected })
                     .then((response) => {
                         console.log(response.data);
-
-                        this.$toasted.success(response.data.message);
-
-                        /**
-                         * TODO: Wait 5 seconds if waiter doesn't cancel
-                         * If waiter doesn't cancel the order, update to confirmed
-                         * If waiter cancels the order, delete order from database
-                         */
                         
-                        // Emit new order to cooks
-                        let message = this.selected.length > 1 ? 'New orders to prepare!' : 'New order to prepare!';
+                        // TODO: Need order id to update it's state
+                        
+                        //this.$toasted.success(response.data.message);
 
-                        this.$socket.emit('new_order', message, this.$store.state.user);
-
-                        this.close();
+                        this.askToConfirmOrder();
+                        
                     })
                     .catch((error) => {
                         console.log(error);
                         this.$toasted.error("An error occurred, please try again later!");
                     })
+            },
+            askToConfirmOrder() {
+                this.showConfirmOrder = true;
+            },
+            changeOrderStateToConfirmed() {
+                this.$toasted.info("Order confirmed");   
+                
+                // Emit new order to cooks
+                let message = this.selected.length > 1 ? 'New orders to prepare!' : 'New order to prepare!';
+
+                this.$socket.emit('new_order', message, this.$store.state.user);
+
+                this.close();
+            },
+            deleteOrder() {
+                this.$toasted.show("Order must be deleted!");
+                
+                this.close();
             },
             getItems() {
                 axios.get('/api/menu/')
@@ -105,6 +125,9 @@
         mounted() {
             this.getItems();
         },
+        components: {
+            'confirm-order': ConfirmOrder
+        }
     }
 </script>
 
