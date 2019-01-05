@@ -29,19 +29,11 @@
                 <v-btn color="blue darken-1" flat @click.stop="close">Close</v-btn>
                 <v-btn color="blue darken-1" flat @click.stop="addOrder">Save</v-btn>
             </v-card-actions>
-            <confirm-order 
-                :visible="showConfirmOrder"
-                @close="showConfirmOrder = false" 
-                @save="changeOrderStateToConfirmed"
-                @delete="deleteOrder">
-            </confirm-order>
         </v-card>
     </v-dialog>
 </template>
 
 <script>
-    import ConfirmOrder from '../misc/timerDialog.vue';
-
     export default {
         name: "add-order",
         props: {
@@ -52,7 +44,6 @@
             return {
                 items: [],
                 selected: [],
-                showConfirmOrder: false,
                 saveOrder: false
             }
         },
@@ -62,20 +53,35 @@
                     .then((response) => {
                         console.log(response.data);
                         
-                        // TODO: Need order id to update it's state
+                        // TODO: Need order id/object to update it's state
                         
                         //this.$toasted.success(response.data.message);
+                        console.log("here");
 
-                        this.askToConfirmOrder();
-                        
+                        this.$toasted.info('5 seconds to confirm order',
+                        {
+                            icon: 'info',
+                            duration: 5000,
+                            action : [
+                                {
+                                    text : 'Cancel',
+                                    onClick : (e, toastObject) => {
+                                        toastObject.goAway(0);
+                                        console.log('Cancel order(s)');
+                                    }
+                                }
+                            ],
+                            onComplete() {
+                                console.log('Confirm order(s)');
+                            }
+                        },
+                    );
+
                     })
                     .catch((error) => {
                         console.log(error);
                         this.$toasted.error("An error occurred, please try again later!");
                     })
-            },
-            askToConfirmOrder() {
-                this.showConfirmOrder = true;
             },
             changeOrderStateToConfirmed() {
                 this.$toasted.info("Order confirmed");   
@@ -124,9 +130,6 @@
         },
         mounted() {
             this.getItems();
-        },
-        components: {
-            'confirm-order': ConfirmOrder
         }
     }
 </script>
