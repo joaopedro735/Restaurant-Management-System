@@ -68,7 +68,7 @@ class OrderControllerAPI extends Controller
         $activeMeals = Meal::where('responsible_waiter_id', $userID)->where('state', 'active')->select('id')->get();
         return OrderResourceMeal::collection(Order::whereIn('meal_id', $activeMeals)
             ->where('state', 'prepared')
-            ->paginate($request->input('rowsPerPage', 10)));    
+            ->paginate($request->input('rowsPerPage', 10)));
     }
 
     public function deliverOrder(Request $request, $orderID) {
@@ -109,10 +109,11 @@ class OrderControllerAPI extends Controller
         ], 200);
     }
 
-    public function confirmOrder(Request $request)
+    public function confirm(Request $request)
     {
         foreach ($request->input('orders') as $order) {
             $order = Order::findOrFail($order);
+            Debugbar::info($order);
             Debugbar::info('Found order');
             
             $order->state = "confirmed";
@@ -120,7 +121,17 @@ class OrderControllerAPI extends Controller
         }
 
         return response()->json([
-            'message' => 'Orders confirmed'
+            'message' => count($request->input('orders')) > 1 ? 'Orders confirmed' : 'Order confirmed'
+        ], 200);
+    }
+
+    public function delete($id) {
+        $order = Order::findOrFail($id);
+        
+        $order->delete();
+
+        return response()->json([
+            'message' => 'Orders deleted'
         ], 200);
     }
 
