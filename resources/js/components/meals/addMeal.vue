@@ -21,8 +21,12 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" flat @click.stop="show = false">Close</v-btn>
-                <v-btn color="blue darken-1" flat @click.stop="addMeal">Save</v-btn>
+                <v-btn small round color="info" @click.stop="addMeal">
+                    ;Save
+                </v-btn>
+                <v-btn small round @click.stop="show = false">
+                    Close
+                </v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>

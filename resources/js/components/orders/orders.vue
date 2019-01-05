@@ -332,6 +332,11 @@
         mounted() {
             this.getInformationFromLoggedUser();
             this.isUserAWorker(this.user);
+        },
+        sockets: {
+            new_order() {
+                this.getDataFromApi();
+            }
         }
     }
 </script>

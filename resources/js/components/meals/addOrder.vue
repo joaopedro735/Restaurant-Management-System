@@ -19,6 +19,7 @@
                                     multiple
                                     hint="Items to add to this meal"
                                     persistent-hint
+                                    prepend-icon="list"
                             ></v-select>
                         </v-flex>
                     </v-layout>
@@ -26,8 +27,8 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" flat @click.stop="close">Close</v-btn>
-                <v-btn color="blue darken-1" flat @click.stop="addOrder">Save</v-btn>
+                <v-btn small round color="info" @click.stop="addOrder">Save</v-btn>
+                <v-btn small round flat @click.stop="close">Close</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -35,7 +36,7 @@
 
 <script>
     export default {
-        name: "add-order",
+        name: 'add-order',
         props: {
             visible: Boolean,
             selectedMeal: Number,
@@ -44,7 +45,7 @@
             return {
                 items: [],
                 selected: [],
-                orders: ''
+                orders: []
             }
         },
         methods: {
@@ -52,7 +53,9 @@
                 axios.post('/api/meals/addOrder/' + this.selectedMeal, { items: this.selected })
                     .then((response) => {
                         this.orders = response.data.items;
-                        
+
+                        this.close();
+
                         this.$toasted.info('You have 5 seconds to cancel the order',
                         {
                             duration: 5000,
@@ -61,6 +64,7 @@
                                     text : 'Cancel',
                                     onClick : (e, toastObject) => {
                                         toastObject.goAway(0);
+                                        this.cancelOrder();
                                     }
                                 }
                             ],
@@ -73,29 +77,58 @@
                     })
                     .catch((error) => {
                         console.log(error);
-                        this.$toasted.error("An error occurred, please try again later!");
+                        this.$toasted.error('An error occurred, please try again later!');
                     })
             },
             confirmOrder() {
                 // Confirm order(s) in DB
-                axios.patch('/api/orders/confirmOrder/', { orders: this.orders })
+                axios.patch('/api/orders/confirm/', { orders: this.orders })
                     .then((response) => {                        
-                        this.notifyCooks();
+                        this.notifyCooks(response.data.message);
+                        this.$emit('update');
                     })
                     .catch((error) => {
                         console.log(error);
-                        this.$toasted.error("An error occurred, please try again later!");
+                        this.$toasted.error('An error occurred, please try again later!');
                     })
-                    .finally(() => {
-                        this.close();
-                    });
             },
-            notifyCooks() {
+            cancelOrder() {
+                // Confirm order(s) in DB
+                console.log(this.orders);
+
+                let message = '';
+
+                this.orders.forEach(order => {
+                    axios.delete('/api/orders/delete/' + order)
+                    .then((response) => {                        
+                        message = response.data.message;
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        this.$toasted.error('An error occurred, please try again later!');
+                    })
+                });
+
+                this.$toasted.info(this.orders.length > 1 ? 'Orders canceled' : 'Order canceled');
+
+                /* axios.delete('/api/orders/delete/', { orders: this.orders })
+                    .then((response) => {                        
+                        this.$toasted.info('Order canceled');
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        this.$toasted.error('An error occurred, please try again later!');
+                    }) */
+            },
+            notifyCooks(confirmationMessage) {
+                this.$toasted.success(confirmationMessage,
+                    {
+                        icon: 'info'
+                    }
+                );
+
                 let message = this.selected.length > 1 ? 'New orders to prepare!' : 'New order to prepare!';
                 this.$socket.emit('new_order', message, this.$store.state.user);
-                console.log("Here");
-
-                this.close();
             },
             getItems() {
                 axios.get('/api/menu/')
@@ -123,7 +156,7 @@
                 },
                 set(value) {
                     if (!value) {
-                        this.$emit("close");
+                        this.$emit('close');
                     }
                 }
             },
