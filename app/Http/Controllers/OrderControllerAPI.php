@@ -9,6 +9,7 @@ use App\Order;
 use App\User;
 use Auth;
 use Illuminate\Http\Request;
+use Debugbar;
 
 class OrderControllerAPI extends Controller
 {
@@ -22,8 +23,9 @@ class OrderControllerAPI extends Controller
                 "message" => "User not found",
             ], 404);
         }
-//        $user = \Auth::guard('api')->user();
-//        $null = null;
+
+        //        $user = \Auth::guard('api')->user();
+        //        $null = null;
 
         if ($request->has('page')) {
             /*return OrderResource::collection(DB::table('orders')
@@ -37,6 +39,7 @@ class OrderControllerAPI extends Controller
                 ->WhereIn('state', ['in preparation', 'confirmed'])
                 ->orWhere('state', 'confirmed')
                 ->orWhereNull('responsible_cook_id')
+                ->where('state', 'confirmed')
                 ->orderByRaw('FIELD(responsible_cook_id, ?) desc', $id)
                 ->orderByRaw('responsible_cook_id is NULL desc')
                 ->orderBy('state', 'desc')
@@ -101,6 +104,21 @@ class OrderControllerAPI extends Controller
         $order->update($request->all());
 
         return new OrderResource($order);
+    }
+
+    public function confirmOrder(Request $request)
+    {
+        foreach ($request->input('orders') as $order) {
+            $order = Order::findOrFail($order);
+            Debugbar::info('Found order');
+            
+            $order->state = "confirmed";
+            $order->save();
+        }
+
+        return response()->json([
+            'message' => 'Orders confirmed'
+        ], 200);
     }
 
     public static function canDeleteItem($id)

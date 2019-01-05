@@ -44,38 +44,31 @@
             return {
                 items: [],
                 selected: [],
-                saveOrder: false
+                orders: ''
             }
         },
         methods: {
             addOrder() {
                 axios.post('/api/meals/addOrder/' + this.selectedMeal, { items: this.selected })
                     .then((response) => {
-                        console.log(response.data);
+                        this.orders = response.data.items;
                         
-                        // TODO: Need order id/object to update it's state
-                        
-                        //this.$toasted.success(response.data.message);
-                        console.log("here");
-
-                        this.$toasted.info('5 seconds to confirm order',
+                        this.$toasted.info('You have 5 seconds to cancel the order',
                         {
-                            icon: 'info',
                             duration: 5000,
                             action : [
                                 {
                                     text : 'Cancel',
                                     onClick : (e, toastObject) => {
                                         toastObject.goAway(0);
-                                        console.log('Cancel order(s)');
                                     }
                                 }
                             ],
-                            onComplete() {
-                                console.log('Confirm order(s)');
-                            }
-                        },
-                    );
+                            onComplete: (() => {
+                                // Confirm Order in DB
+                                this.confirmOrder();
+                            })
+                        });
 
                     })
                     .catch((error) => {
@@ -83,19 +76,25 @@
                         this.$toasted.error("An error occurred, please try again later!");
                     })
             },
-            changeOrderStateToConfirmed() {
-                this.$toasted.info("Order confirmed");   
-                
-                // Emit new order to cooks
-                let message = this.selected.length > 1 ? 'New orders to prepare!' : 'New order to prepare!';
-
-                this.$socket.emit('new_order', message, this.$store.state.user);
-
-                this.close();
+            confirmOrder() {
+                // Confirm order(s) in DB
+                axios.patch('/api/orders/confirmOrder/', { orders: this.orders })
+                    .then((response) => {                        
+                        this.notifyCooks();
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        this.$toasted.error("An error occurred, please try again later!");
+                    })
+                    .finally(() => {
+                        this.close();
+                    });
             },
-            deleteOrder() {
-                this.$toasted.show("Order must be deleted!");
-                
+            notifyCooks() {
+                let message = this.selected.length > 1 ? 'New orders to prepare!' : 'New order to prepare!';
+                this.$socket.emit('new_order', message, this.$store.state.user);
+                console.log("Here");
+
                 this.close();
             },
             getItems() {
@@ -114,6 +113,7 @@
             close() {
                 this.reset();
                 this.show = false;
+                this.$emit('close');
             }
         },
         computed: {

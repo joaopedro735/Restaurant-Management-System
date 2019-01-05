@@ -25,10 +25,6 @@ app.listen(8080, function(){
 
 let loggedUsers = new LoggedUsers();
 
-let loggedCashiers = new LoggedCashiers();
-let loggedCooks = new LoggedCooks();
-let loggedManagers = new LoggedManagers();
-let loggedWaiters = new LoggedWaiters();
 
 io.on('connection', function (socket) {
     console.log('Client connected (Socket ID: ' + socket.id + ')');
@@ -57,15 +53,17 @@ io.on('connection', function (socket) {
 
     // New order - Send to all cooks
     socket.on('new_order', (message, user) => {
-        if (user && user.type == 'waiter') {
+        /* if (user && user.type == 'waiter') {
             io.sockets.to('cooks').emit('new_order', message);
-        }
+        } */
+
+        io.sockets.to('cooks').emit('new_order', message);
     });
 
     // Order prepared - Send to responsible waiter
     socket.on('order_prepared', (order, from, to) => {
-        const userInfoFrom = loggedCooks.userInfoByID(from.id);
-        const userInfoTo = loggedWaiters.userInfoByID(to.id);
+        const userInfoFrom = loggedUsers.userInfoByID(from.id);
+        const userInfoTo = loggedUsers.userInfoByID(to.id);
 
         if (userInfoTo) {
             io.to(userInfoTo.socket.id).emit('order_prepared', order);
@@ -103,20 +101,16 @@ io.on('connection', function (socket) {
 
             if (user.type === 'cashier') {
                 socket.join('cashiers');
-                loggedCashiers.addUserInfo(user, socket.id);
             }
             
             if (user.type === 'cook') {
                 socket.join('cooks');
-                loggedCooks.addUserInfo(user, socket.id);
             }
             if (user.type === 'manager') {
                 socket.join('managers');
-                loggedManagers.addUserInfo(user, socket.id);
             }
             if (user.type === 'waiter') {
                 socket.join('waiters');
-                loggedWaiters.addUserInfo(user, socket.id);
             }
         }
     });

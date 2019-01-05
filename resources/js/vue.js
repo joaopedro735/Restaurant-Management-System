@@ -20,16 +20,6 @@ import VueSocketIO from 'vue-socket.io';
 
 Vue.config.productionTip = false;
 
-const toastedOptions = {
-    duration: 3000,
-    position: "top-center",
-    className: "toasted-css",
-    theme: "bubble",
-    onClick: (e, toastObject) => {
-        toastObject.goAway(0);
-    }
-};
-
 Vue.use(Moment);
 Vue.use(VueRouter);
 Vue.use(store);
@@ -38,9 +28,6 @@ Vue.use(new VueSocketIO({
     debug: false,
     connection: 'http://127.0.0.1:8080'
 }));
-Vue.use(Toasted, toastedOptions, {
-    router
-});
 Vue.use(Vuelidate);
 
 /* Components para users */
@@ -141,6 +128,19 @@ const router = new VueRouter({
     routes,
     linkActiveClass: 'active'
 });
+
+const toastedOptions = {
+    duration: 3000,
+    position: "top-center",
+    className: "toasted-css",
+    theme: "bubble",
+    onClick: (e, toastObject) => {
+        toastObject.goAway(0);
+    },
+    router
+};
+
+Vue.use(Toasted, toastedOptions);
 
 router.beforeEach((to, from, next) => {
     if ((to.name === 'profile') || (to.name === 'logout') || (to.name === 'orders') || (to.name === 'tables') || (to.name === 'logout') || (to.name === 'invoices')) {

@@ -135,40 +135,30 @@
         watch: {
             pagination: {
                 handler () {
-                    if (this.showPage) {
+                    /* if (this.showPage) {
                         this.getDataFromApi().then(data => {
                                 this.orders = data.data.orders;
                                 this.totalOrders = data.data.totalOrders;
                         });
+                    } */
+                        this.getDataFromApi();
                     }
                 },
                 deep: true
-            }
         },
         methods: {
             getDataFromApi () {
                 this.loading = true;
 
-                var config = {
-                    headers: {
-                        'Authorization': 'Bearer ' + this.$store.state.token,
-                        'Accept': 'application/json'
-                    }
-                };
-
-                return axios.get('/api/orders', {
+                axios.get('/api/orders', {
                     params: {
                         page: this.pagination.page, rowsPerPage: this.pagination.rowsPerPage, cookID: this.userID
                     }
                 })
-                    .then((ordersRes) => {
+                .then((ordersRes) => {
                     this.loading = false;
-                    return {
-                        data: {
-                            orders: ordersRes.data.data,
-                            totalOrders: ordersRes.data.meta.total
-                        }
-                    }
+                    this.orders = ordersRes.data.data
+                    this.totalOrders = ordersRes.data.meta.total;
                 });
             },
             filterOrders() {
@@ -197,7 +187,7 @@
                 if (order.responsible_cook_id !== 0) {
                     axios.put('/api/orders/' + orderToUpdate.id + '?state=' + state)
                     .then(response => {
-                        Vue.set(this.orders, index, response.data.data);
+                        /* Vue.set(this.orders, index, response.data.data);
 
                         if (state === 'prepared') {
                             this.orders.splice(index, 1);
@@ -219,7 +209,7 @@
 
                             this.orders.splice(totalInPreparation, 0, response.data.data);
                             this.orders.splice((index + 1), 1);
-                        }
+                        } */
 
                         this.$toasted.success('Order updated',
                             {
@@ -228,7 +218,7 @@
                         );
                     })
                     .catch((error) => {
-                        this.$toasted.succerroress(error,
+                        this.$toasted.error(error,
                             {
                                 icon: 'error',
                             }
@@ -238,7 +228,7 @@
                 else { // Order doesn't have a cook
                     axios.put('/api/orders/' + orderToUpdate.id + '?state=' + state + '&responsible_cook_id=' + this.userID)
                     .then(response => {
-                        Vue.set(this.orders, index, response.data.data);
+                        /* Vue.set(this.orders, index, response.data.data);
 
                         if (state === 'prepared') {
                             this.orders.splice(index, 1);
@@ -259,7 +249,7 @@
 
                             this.orders.splice(totalInPreparation, 0, response.data.data);
                             this.orders.splice((index + 1), 1);
-                        }
+                        } */
 
                         this.$toasted.success('Order updated',
                             {
@@ -275,6 +265,8 @@
                         );
                     })
                 }
+
+                this.getDataFromApi();
             },
             changeSort (column) {
                 if (this.pagination.sortBy === column)
