@@ -49,6 +49,7 @@
 </template>
 
 <script>
+
     function initialState() {
         return {
             title: "Login",
@@ -107,6 +108,7 @@
                     })
                     .finally(() => {
                         this.form.loading = false;
+                        router.push({ path: 'home' });
                     });
             },
             clear() {

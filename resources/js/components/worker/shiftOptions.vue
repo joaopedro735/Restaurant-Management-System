@@ -1,7 +1,7 @@
 <template>
     <v-container>
 
-        <v-toolbar @problems="something">
+        <v-toolbar>
             <v-dialog
                     v-model="dialog"
                     width="500"
@@ -108,7 +108,7 @@
                 //TODO: TODO DURATION
                 this.$store.commit('setDuration', this.duration);
             }, something(){
-
+                console.log("something")
             }
         }, created() {
             this.$store.commit('loadTokenAndUserFromSession');

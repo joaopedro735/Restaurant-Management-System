@@ -105,7 +105,6 @@ io.on('connection', function (socket) {
                 console.log("Connected to managers");
                 socket.join('managers');
                 socket.join('problems');
-                loggedManagers.addUserInfo(user, socket.id);
             }
             if (user.type === 'waiter') {
                 console.log("Connected to waiters");
@@ -139,9 +138,6 @@ io.on('connection', function (socket) {
     });
 
     socket.on('problems_Management', (msg, user) => {
-        console.log("problems_management")
-        console.log(user.name)
-        io.sockets.to('problems').emit('problems', { msg: msg,
-                                                    name: user.name});
+        io.sockets.to('problems').emit('problems', { msg: msg, name: user.name});
     });
 });

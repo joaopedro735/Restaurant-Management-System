@@ -170,6 +170,7 @@ const app = new Vue({
     data: {
         workingText: "",
         user: undefined,
+        notifications: [],
     },
     methods: {
         getInformationFromLoggedUser() {
@@ -311,6 +312,8 @@ const app = new Vue({
         },
         problems(dataFromServer){
             this.$toasted.error(dataFromServer.name + ": " + dataFromServer.msg);
+            console.log("emitted");
+            this.notifications.push(dataFromServer);
         }
     },
 });

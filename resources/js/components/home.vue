@@ -10,7 +10,7 @@
             >
                 <shift-options v-on:shift-start='working = true'
                                v-on:shift-end='working = false'
-                               v-if="worker === true" :user="user"
+                               v-if="isLogged === true && worker === true" :user="user"
                                :working="working"></shift-options>
             </v-layout>
             <v-layout
@@ -37,7 +37,8 @@
         methods: {
             getInformationFromLoggedUser() {
                 this.user = this.$store.state.user;
-                console.log("getInformation: isLogged = " + this.isLogged)
+            },addNotification(){
+                console.log("parent")
             }
         },
         created() {
