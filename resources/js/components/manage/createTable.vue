@@ -107,10 +107,8 @@
                             table.table_number = this.table.table_number;
                         }
 
-
-                        this.clear();
                         this.$emit('update', table);
-                        this.$emit('close');
+                        this.close();
 
                         this.$toasted.success('Table added',
                             {

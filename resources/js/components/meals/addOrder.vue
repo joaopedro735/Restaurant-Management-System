@@ -44,33 +44,58 @@
             return {
                 items: [],
                 selected: [],
+                orders: ''
             }
         },
         methods: {
             addOrder() {
                 axios.post('/api/meals/addOrder/' + this.selectedMeal, { items: this.selected })
                     .then((response) => {
-                        console.log(response.data);
-
-                        this.$toasted.success(response.data.message);
-
-                        /**
-                         * TODO: Wait 5 seconds if waiter doesn't cancel
-                         * If waiter doesn't cancel the order, update to confirmed
-                         * If waiter cancels the order, delete order from database
-                         */
+                        this.orders = response.data.items;
                         
-                        // Emit new order to cooks
-                        let message = this.selected.length > 1 ? 'New orders to prepare!' : 'New order to prepare!';
+                        this.$toasted.info('You have 5 seconds to cancel the order',
+                        {
+                            duration: 5000,
+                            action : [
+                                {
+                                    text : 'Cancel',
+                                    onClick : (e, toastObject) => {
+                                        toastObject.goAway(0);
+                                    }
+                                }
+                            ],
+                            onComplete: (() => {
+                                // Confirm Order in DB
+                                this.confirmOrder();
+                            })
+                        });
 
-                        this.$socket.emit('new_order', message, this.$store.state.user);
-
-                        this.close();
                     })
                     .catch((error) => {
                         console.log(error);
                         this.$toasted.error("An error occurred, please try again later!");
                     })
+            },
+            confirmOrder() {
+                // Confirm order(s) in DB
+                axios.patch('/api/orders/confirmOrder/', { orders: this.orders })
+                    .then((response) => {                        
+                        this.notifyCooks();
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        this.$toasted.error("An error occurred, please try again later!");
+                    })
+                    .finally(() => {
+                        this.close();
+                    });
+            },
+            notifyCooks() {
+                let message = this.selected.length > 1 ? 'New orders to prepare!' : 'New order to prepare!';
+                this.$socket.emit('new_order', message, this.$store.state.user);
+                console.log("Here");
+
+                this.close();
             },
             getItems() {
                 axios.get('/api/menu/')
@@ -88,6 +113,7 @@
             close() {
                 this.reset();
                 this.show = false;
+                this.$emit('close');
             }
         },
         computed: {
@@ -104,7 +130,7 @@
         },
         mounted() {
             this.getItems();
-        },
+        }
     }
 </script>
 
