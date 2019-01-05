@@ -136,6 +136,21 @@ io.on('connection', function (socket) {
             }
         }
     });
+    socket.on('begin_shift', function (worker) {
+        if (worker !== undefined && worker !== null) {
+            console.log("startSocket");
+            socket.join('working_' + worker.type);
+            socket.emit('shift_started', { msg: "Started working", name: "You"});
+        }
+    });
+    socket.on('shift-end', function (worker) {
+        if (worker !== undefined && worker !== null) {
+            console.log('endSocket');
+            socket.leave('working_' + worker.type);
+            loggedUsers.removeUserInfoByID(worker.id);
+            socket.emit('shift_ended', { msg: "Stopped working", name: "You" });
+        }
+    });
 
     socket.on('problems_Management', (msg, user) => {
         io.sockets.to('problems').emit('problems', { msg: msg, name: user.name});

@@ -42,7 +42,6 @@
                 timePassed: "",
                 duration: "",
                 panel: [],
-                currentNotifications: this.notifications,
             }
         },
 

@@ -209,6 +209,7 @@ const app = new Vue({
                     icon: "info"
                 }
             );
+            this.notifications.push(dataFromServer);
         },
         shift_ended(dataFromServer) {
             console.log("end");
@@ -217,6 +218,7 @@ const app = new Vue({
                     icon: "info"
                 }
             );
+            this.notifications.push(dataFromServer);
         },
         problem_Managers(dataFromServer) {
             this.$toasted.error(dataFromServer,
