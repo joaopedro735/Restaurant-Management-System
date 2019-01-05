@@ -42,7 +42,6 @@ Vue.use(Toasted, toastedOptions, {
     router
 });
 Vue.use(Vuelidate);
-
 /* Components para users */
 const users = Vue.component('users-component', () =>
     import('./components/users2')
@@ -194,7 +193,7 @@ const app = new Vue({
 
             if (store.state.user) {
                 this.$socket.emit('user_enter', this.$store.state.user);
-            }         
+            }
         },
         shift_started(dataFromServer) {
             console.log("start");
@@ -258,7 +257,7 @@ const app = new Vue({
                         },
                         {
                             text : 'View orders',
-                            push : { 
+                            push : {
                                 name : 'orders',
                                 dontClose : true
                              }

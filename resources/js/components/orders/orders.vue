@@ -312,7 +312,7 @@
                             }
                         );
                     }
-                    
+
                     this.$router.push('/menu');
                 }
             }

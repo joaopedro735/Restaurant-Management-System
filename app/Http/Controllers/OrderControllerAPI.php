@@ -37,6 +37,7 @@ class OrderControllerAPI extends Controller
                 ->WhereIn('state', ['in preparation', 'confirmed'])
                 ->orWhere('state', 'confirmed')
                 ->orWhereNull('responsible_cook_id')
+                ->where('state', 'confirmed')
                 ->orderByRaw('FIELD(responsible_cook_id, ?) desc', $id)
                 ->orderByRaw('responsible_cook_id is NULL desc')
                 ->orderBy('state', 'desc')
@@ -65,7 +66,7 @@ class OrderControllerAPI extends Controller
         $activeMeals = Meal::where('responsible_waiter_id', $userID)->where('state', 'active')->select('id')->get();
         return OrderResourceMeal::collection(Order::whereIn('meal_id', $activeMeals)
             ->where('state', 'prepared')
-            ->paginate($request->input('rowsPerPage', 10)));    
+            ->paginate($request->input('rowsPerPage', 10)));
     }
 
     public function deliverOrder(Request $request, $orderID) {
