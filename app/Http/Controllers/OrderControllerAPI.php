@@ -37,7 +37,6 @@ class OrderControllerAPI extends Controller
             );*/
             return OrderResource::collection(Order::where('responsible_cook_id', $id)
                 ->WhereIn('state', ['in preparation', 'confirmed'])
-                ->orWhere('state', 'confirmed')
                 ->orWhereNull('responsible_cook_id')
                 ->where('state', 'confirmed')
                 ->orderByRaw('FIELD(responsible_cook_id, ?) desc', $id)
@@ -105,14 +104,15 @@ class OrderControllerAPI extends Controller
 
         /* return new OrderResource($order); */
         return response()->json([
-            'message' => 'Order updated'
+            'message' => $request->input('state') == 'prepared' ? 'Order completed' : 'Order updated'
         ], 200);
     }
 
-    public function confirmOrder(Request $request)
+    public function confirm(Request $request)
     {
         foreach ($request->input('orders') as $order) {
             $order = Order::findOrFail($order);
+            Debugbar::info($order);
             Debugbar::info('Found order');
             
             $order->state = "confirmed";
@@ -120,7 +120,17 @@ class OrderControllerAPI extends Controller
         }
 
         return response()->json([
-            'message' => 'Orders confirmed'
+            'message' => count($request->input('orders')) > 1 ? 'Orders confirmed' : 'Order confirmed'
+        ], 200);
+    }
+
+    public function delete($id) {
+        $order = Order::findOrFail($id);
+        
+        $order->delete();
+
+        return response()->json([
+            'message' => 'Orders deleted'
         ], 200);
     }
 

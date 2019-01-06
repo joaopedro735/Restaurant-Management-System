@@ -2,7 +2,7 @@
     <v-card>
         <v-card-title class="headline info white--text" primary-title>Menu
             <v-spacer></v-spacer>
-            <v-btn fab dark v-if="showManagerOptions" slot="activator" @click="showCreateItem = true">
+            <v-btn fab dark  v-if="showManagerOptions" slot="activator" @click="showCreateItem = true">
                 <v-icon>add</v-icon>
             </v-btn>
         </v-card-title>
@@ -15,13 +15,13 @@
                             Drinks
                         </v-card-title>
                         <v-data-table
-                                :headers="headers"
-                                :items="drinks"
-                                :pagination.sync="paginationDrinks"
-                                :rows-per-page-items="rowsPerPageItemsDrinks"
-                                :total-items="totalDrinks"
-                                :loading="loadingDrinks"
-                                class="elevation-1">
+                            :headers="headers"
+                            :items="drinks"
+                            :pagination.sync="paginationDrinks"
+                            :rows-per-page-items="rowsPerPageItemsDrinks"
+                            :total-items="totalDrinks"
+                            :loading="loadingDrinks"
+                            class="elevation-1">
                             <template slot="items" slot-scope="props">
                                 <tr :key="props.item.id" @click="props.expanded = !props.expanded" :class="{
                                     'isExpanded': props.expanded }">
@@ -33,25 +33,25 @@
                                     <td class="text-xs-left">
                                         {{ props.item.name }}
                                     </td>
-                                    <td class="text-xs-left">{{ props.item.description.length > 100 ?
-                                        props.item.description.substr(0, 100) + (' ...') : props.item.description }}
-                                    </td>
+                                    <td class="text-xs-left">{{ props.item.description.length > 100 ? props.item.description.substr(0, 100) + (' ...') : props.item.description }}</td>
                                     <td class="text-xs-rigth">
-                                        <h4>{{ appendSign(props.item.price) }}</h4>
+                                        <h4>{{ props.item.price }}€</h4>
                                     </td>
                                     <td class="text-xs-right">
                                         <span>
-                                            <v-btn small round color="info" v-if="showManagerOptions"
-                                                   @click="updateItem(props.index, props.item), props.expanded=!props.expanded">
-                                                <v-icon>edit</v-icon>
-                                                &nbsp; Update
+                                            <v-btn small round color="primary"
+                                                v-if="showManagerOptions"
+                                                @click="updateItem(props.index, props.item), props.expanded=!props.expanded">
+                                                    <v-icon>edit</v-icon>
+                                                    &nbsp; Update
                                             </v-btn>
                                         </span>
                                         <span>
-                                            <v-btn small round color="error" v-if="showManagerOptions"
-                                                   @click="deleteItem(props.index, props.item), props.expanded=!props.expanded">
-                                                <v-icon>delete</v-icon>
-                                                &nbsp; Delete
+                                            <v-btn small round color="error"
+                                                v-if="showManagerOptions"
+                                                @click="deleteItem(props.index, props.item), props.expanded=!props.expanded">
+                                                    <v-icon>delete</v-icon>
+                                                    &nbsp; Delete
                                             </v-btn>
                                         </span>
                                     </td>
@@ -81,16 +81,15 @@
                             Dishes
                         </v-card-title>
                         <v-data-table
-                                :headers="headers"
-                                :items="dishes"
-                                :pagination.sync="paginationDishes"
-                                :rows-per-page-items="rowsPerPageItemsDishes"
-                                :total-items="totalDishes"
-                                :loading="loadingDishes"
-                                class="elevation-1">
+                            :headers="headers"
+                            :items="dishes"
+                            :pagination.sync="paginationDishes"
+                            :rows-per-page-items="rowsPerPageItemsDishes"
+                            :total-items="totalDishes"
+                            :loading="loadingDishes"
+                            class="elevation-1">
                             <template slot="items" slot-scope="props">
-                                <tr :key="props.item.id" @click="props.expanded = !props.expanded"
-                                    :class="{'isExpanded' : props.expanded}">
+                                <tr :key="props.item.id" @click="props.expanded = !props.expanded" :class="{'isExpanded' : props.expanded}">
                                     <td>
                                         <v-list-tile-avatar>
                                             <img :src="getImagePath(props.item.photo_url)">
@@ -99,25 +98,25 @@
                                     <td class="text-xs-left">
                                         {{ props.item.name }}
                                     </td>
-                                    <td class="text-xs-left">{{ props.item.description.length > 100 ?
-                                        props.item.description.substr(0, 100) + (' ...') : props.item.description }}
-                                    </td>
+                                    <td class="text-xs-left">{{ props.item.description.length > 100 ? props.item.description.substr(0, 100) + (' ...') : props.item.description }}</td>
                                     <td class="text-xs-left">
-                                        <h4>{{ appendSign(props.item.price) }}</h4>
+                                        <h4>{{ props.item.price }}€</h4>
                                     </td>
                                     <td class="text-xs-right">
                                         <span>
-                                            <v-btn small round color="info" slot="activator" v-if="showManagerOptions"
-                                                   @click="updateItem(props.index, props.item), props.expanded=!props.expanded">
-                                                <v-icon>edit</v-icon>
-                                                &nbsp; Update
+                                            <v-btn small round color="primary" slot="activator"
+                                                v-if="showManagerOptions"
+                                                @click="updateItem(props.index, props.item), props.expanded=!props.expanded">
+                                                    <v-icon>edit</v-icon>
+                                                    &nbsp; Update
                                             </v-btn>
                                         </span>
                                         <span>
-                                            <v-btn small round color="error" v-if="showManagerOptions"
-                                                   @click="deleteItem(props.index, props.item), props.expanded=!props.expanded">
-                                                <v-icon>delete</v-icon>
-                                                &nbsp; Delete
+                                            <v-btn small round color="error"
+                                                v-if="showManagerOptions"
+                                                @click="deleteItem(props.index, props.item), props.expanded=!props.expanded">
+                                                    <v-icon>delete</v-icon>
+                                                    &nbsp; Delete
                                             </v-btn>
                                         </span>
                                     </td>
@@ -143,9 +142,8 @@
                 </v-flex>
             </v-layout>
         </v-container>
-        <create-item :visible="showCreateItem" @close="showCreateItem = false" @update="newItemRow"></create-item>
-        <update-item :visible="showUpdateItem" @close="showUpdateItem = false" @update="updateItemRow"
-                     :item="currentItem"></update-item>
+        <create-item :visible="showCreateItem" @close="showCreateItem = false" @update="update"></create-item>
+        <update-item :visible="showUpdateItem" @close="showUpdateItem = false" @update="update" :item="currentItem"></update-item>
     </v-card>
 </template>
 
@@ -168,6 +166,7 @@
                     'price': ''
                 },
                 currentItemIndex: '',
+                deletingItem: false,
                 totalDrinks: 0,
                 totalDishes: 0,
                 drinks: [],
@@ -179,11 +178,11 @@
                 rowsPerPageItemsDrinks: [15, 25, 50, 100],
                 rowsPerPageItemsDishes: [15, 25, 50, 100],
                 headers: [
-                    {text: '', value: 'photo_url', width: '1px'},
-                    {text: 'Name', value: 'name', width: this.showManagerOptions ? '180px' : '250px'},
-                    {text: 'Description', value: 'description', width: this.showManagerOptions ? '150px' : '550px'},
-                    {text: 'Price', value: 'price', width: '20px'},
-                    {text: '', value: 'actions', width: this.showManagerOptions ? '220px' : ''}
+                    { text: '', value: 'photo_url', width: '1px' },
+                    { text: 'Name', value: 'name', width: this.showManagerOptions ? '180px' : '250px' },
+                    { text: 'Description', value: 'description', width: this.showManagerOptions ? '150px' : '550px' },
+                    { text: 'Price', value: 'price', width: '20px' },
+                    { text: '', value: 'actions', width: this.showManagerOptions ? '220px' : ''}
                 ],
                 showCreateItem: false,
                 showUpdateItem: false
@@ -192,19 +191,13 @@
         watch: {
             paginationDrinks: {
                 handler() {
-                    this.getDrinkDataFromApi().then(data => {
-                        this.drinks = data.data.drinks;
-                        this.totalDrinks = data.data.totalDrinks;
-                    });
+                    this.getDrinkDataFromApi();
                 },
                 deep: true
             },
             paginationDishes: {
                 handler() {
-                    this.getDishDataFromApi().then(data => {
-                        this.dishes = data.data.dishes;
-                        this.totalDishes = data.data.totalDishes;
-                    });
+                    this.getDishDataFromApi();
                 },
                 deep: true
             }
@@ -213,69 +206,50 @@
             getDrinkDataFromApi() {
                 this.loadingDrinks = true;
 
-                return axios.all([
-                    axios.get('/api/menu/drinks',
-                        {
-                            params: {
-                                page: this.paginationDrinks.page, rowsPerPage: this.paginationDrinks.rowsPerPage
-                            }
+                axios.get('/api/menu/drinks',
+                    {
+                        params: {
+                            page: this.paginationDrinks.page, rowsPerPage: this.paginationDrinks.rowsPerPage
                         }
-                    )
-                ]).then(axios.spread(drinkRes => {
-                        this.loadingDrinks = false;
+                    }
+                )
+                .then(response => {
+                    this.loadingDrinks = false;
 
-                        return {
-                            data: {
-                                drinks: drinkRes.data.data,
-                                totalDrinks: drinkRes.data.meta.total
-                            }
-                        };
-                    })
-                );
+                    this.drinks = response.data.data;
+                    this.totalDrinks = response.data.meta.total;
+                });
             },
             getDishDataFromApi() {
                 this.loadingDishes = true;
 
-                return axios.all([
-                    axios.get('/api/menu/dishes',
-                        {
-                            params: {
-                                page: this.paginationDishes.page, rowsPerPage: this.paginationDishes.rowsPerPage
-                            }
+               axios.get('/api/menu/dishes',
+                    {
+                        params: {
+                            page: this.paginationDishes.page, rowsPerPage: this.paginationDishes.rowsPerPage
                         }
-                    )
-                ]).then(axios.spread(dishRes => {
-                        this.loadingDishes = false;
+                    }
+                )
+                .then(response => {
+                    this.loadingDishes = false;
 
-                        return {
-                            data: {
-                                dishes: dishRes.data.data,
-                                totalDishes: dishRes.data.meta.total
-                            }
-                        };
-                    })
-                );
+                    this.dishes = response.data.data;
+                    this.totalDishes = response.data.meta.total;
+                });
             },
             deleteItem(index, item) {
+                this.deletingItem = true;
+
                 this.item.id = item.id;
 
-                let config = {
-                    headers: {
-                        Authorization: 'Bearer ' + this.$store.state.token,
-                        Accept: 'application/json'
-                    }
-                };
-
-                axios.delete('/api/menu/' + this.item.id, config)
+                axios.delete('/api/menu/' + this.item.id)
                     .then(response => {
                             if (item.type === 'drink') {
-                                this.totalDrinks--;
-                                this.drinks.splice(index, 1);
+                                this.getDrinkDataFromApi();
                             }
 
                             if (item.type === 'dish') {
-                                this.totalDishes--;
-                                this.dishes.splice(index, 1);
+                                this.getDishDataFromApi();
                             }
 
                             this.$toasted.success('Item deleted',
@@ -292,43 +266,20 @@
                                 icon: 'error',
                             }
                         );
+                    })
+                    .finally(() => {
+                        this.deletingItem = false;
                     });
             },
             getImagePath(filename) {
                 return '/storage/items/' + filename;
             },
-            appendSign(price) {
-                return price + '€';
-            },
-            newItemRow(item) {
-                if (item.type === 'drink') {
-                    this.totalDrinks++;
-
-                    if (this.drinks.length < this.paginationDrinks.rowsPerPage) {
-                        Vue.set(this.drinks, this.drinks.length, item);
-                    }
-                }
-
-                if (item.type === 'dish') {
-                    this.totalDishes++;
-
-                    if (this.dishes.length < this.paginationDishes.rowsPerPage) {
-                        Vue.set(this.dishes, this.dishes.length, item);
-                    }
-                }
-            },
-            updateItemRow(item) {
-                if (item.type === 'drink') {
-                    Vue.set(this.drinks, this.currentItemIndex, item);
-                }
-
-                if (item.type === 'dish') {
-                    Vue.set(this.dishes, this.currentItemIndex, item);
-                }
+            update() {
+                this.getDrinkDataFromApi();
+                this.getDishDataFromApi();
             },
             updateItem(index, item) {
                 this.currentItem = Object.assign({}, item);
-                this.currentItemIndex = index;
 
                 this.showUpdateItem = true;
             },
@@ -347,13 +298,13 @@
                             duration: 5000
                         }
                     ); */
-
+                
             }
         },
         mounted() {
             this.getInformationFromLoggedUser();
             this.isUserAWorker(this.user);
-
+            
         },
         components: {
             'create-item': CreateItem,
@@ -371,3 +322,6 @@
     }
 </script>
 
+<style scoped>
+
+</style>

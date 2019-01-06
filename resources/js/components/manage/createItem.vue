@@ -57,7 +57,7 @@
                         ></v-text-field>
                         <input
                                 type="file"
-                                style="display: none"
+                                style="display: none;"
                                 ref="image"
                                 accept="image/*"
                                 @change="onFilePicked"
@@ -80,7 +80,7 @@
                     <v-btn
                             small
                             round
-                            color="info"
+                            color="primary"
                             :disabled="!form.valid"
                             :loading="form.loading"
                             @click="submit"
@@ -91,7 +91,7 @@
                 </v-card-actions>
                 <v-card class="text-xs-center">
                     <v-spacer></v-spacer>
-                    <img :src="imageUrl" height="100" v-if="imageUrl">
+                    <img :src="imageUrl" height="100" v-if="imageUrl"/>
                 </v-card>
             </v-card>
         </v-dialog>
@@ -140,16 +140,19 @@
                     }
                 ]
                 /*rules: {
-                              required: v => !!v || "Required",
-                              min: v => v.length >= 3 || "Min 3 characters",
-                              max: v => v.length <= 255 || "Max 255 characters",
-                              price: value => {
-                                  const pattern = /^\d{0,6}(\.\d{1,2})?$/;
-                                  return pattern.test(value) || "Invalid price";
-                              }
-                          } */
+                    required: v => !!v || "Required",
+                    min: v => v.length >= 3 || "Min 3 characters",
+                    max: v => v.length <= 255 || "Max 255 characters",
+                    price: value => {
+                        const pattern = /^\d{0,6}(\.\d{1,2})?$/;
+                        return pattern.test(value) || "Invalid price";
+                    }
+                } */
             },
-            types: [{text: "Drink", value: "drink"}, {text: "Dish", value: "dish"}]
+            types: [
+                {text: "Drink", value: "drink"},
+                {text: "Dish", value: "dish"}
+            ]
         };
     }
 
@@ -163,6 +166,8 @@
         },
         methods: {
             submit() {
+                this.form.loading = true;
+
                 if (this.$refs.form.validate()) {
                     if (this.imageFile) {
                         this.uploadImageAndCreateItem();
@@ -179,111 +184,103 @@
                 this.$emit("close");
             },
             createItemWithoutImage() {
-                let config = {
-                    headers: {
-                        Authorization: "Bearer " + this.$store.state.token,
-                        Accept: "application/json"
-                    }
-                };
+                this.item.photo_url = 'placeholder.png'
 
-                if (!Number.isInteger(this.item.price)) {
-                    this.item.price = this.item.price + ".00";
-                }
-
-                this.item.photo_url = "placeholder.png";
-
-                axios
-                    .post("/api/menu/", this.item, config)
+                axios.post('/api/menu/', this.item)
                     .then(response => {
                         var item = response.data.data;
 
                         this.clear();
-                        this.$emit("update", item);
-                        this.$emit("close");
+                        console.log('CR');
+                        console.log(item);
+                        this.$emit('update', item);
+                        this.$emit('close');
 
-                        this.$toasted.success("Item created", {
-                            icon: "info"
-                        });
+                        this.$toasted.success('Item created',
+                            {
+                                icon: 'info',
+                            }
+                        );
                     })
                     .catch(error => {
-                        this.$toasted.error(error, {
-                            icon: "error"
-                        });
+                        this.$toasted.error(error,
+                            {
+                                icon: 'error',
+                            });
+                    })
+                    .finally(() => {
+                        this.form.loading = false;
                     });
             },
             uploadImageAndCreateItem() {
                 const formData = new FormData();
 
-                formData.append("file", this.imageFile);
+                formData.append('file', this.imageFile);
 
-                let config = {
-                    headers: {
-                        Authorization: "Bearer " + this.$store.state.token,
-                        Accept: "application/json"
-                    }
-                };
-
-                axios
-                    .post("/api/menu/image", formData, config)
+                axios.post('/api/menu/image', formData)
                     .then(response => {
-                        if (!Number.isInteger(this.item.price)) {
-                            this.item.price = this.item.price + ".00";
-                        }
 
                         this.item.photo_url = response.data.hashName;
 
-                        axios
-                            .post("/api/menu/", this.item, config)
+                        axios.post('/api/menu/', this.item)
                             .then(response => {
                                 var item = response.data.data;
 
-                                this.imageName = "";
-                                this.imageFile = "";
-                                this.imageUrl = "";
+                                this.imageName = '';
+                                this.imageFile = '';
+                                this.imageUrl = '';
 
                                 this.clear();
-                                this.$emit("update", item);
-                                this.$emit("close");
+                                this.$emit('update', item);
+                                this.$emit('close');
 
-                                this.$toasted.success("Item created", {
-                                    icon: "info"
-                                });
+                                this.$toasted.success('Item created',
+                                    {
+                                        icon: 'info',
+                                    }
+                                );
                             })
                             .catch(error => {
-                                this.$toasted.error(error, {
-                                    icon: "error"
-                                });
+                                this.$toasted.error(error,
+                                    {
+                                        icon: 'error',
+                                    });
+                            })
+                            .finally(() => {
+                                this.form.loading = false;
                             });
                     })
                     .catch(error => {
-                        this.$toasted.error("Error uploading image", {
-                            icon: "error"
-                        });
-                        this.item.photo_url = "placeholder.png";
+                        this.$toasted.error('Error uploading image',
+                            {
+                                icon: 'error',
+                            });
+                        this.item.photo_url ='placeholder.png';
                     });
             },
-            pickFile() {
+            pickFile () {
                 this.$refs.image.click();
             },
-            onFilePicked(e) {
+            onFilePicked (e) {
                 const files = e.target.files;
 
-                if (files[0] !== undefined) {
+                if(files[0] !== undefined) {
                     this.imageName = files[0].name;
 
-                    if (this.imageName.lastIndexOf(".") <= 0) {
+                    if(this.imageName.lastIndexOf('.') <= 0) {
                         return;
                     }
-                    const fr = new FileReader();
+                    const fr = new FileReader ();
 
-                    fr.readAsDataURL(files[0]);
-                    fr.addEventListener("load", () => {
+                    fr.readAsDataURL(files[0])
+                    fr.addEventListener('load', () => {
                         this.imageUrl = fr.result;
                         this.imageFile = files[0]; // this is an image file that can be sent to server...
-                    });
-                } else {
-                    this.imageFile = "";
-                    this.imageUrl = "";
+                    })
+                }
+                else {
+                    this.imageFile = '';
+                    this.imageUrl = '';
                 }
             }
         },
@@ -296,11 +293,10 @@
                     if (!value) {
                         this.clear();
 
-                        this.$emit("close");
+                        this.$emit('close');
                     }
                 }
             }
         }
     };
 </script>
-
