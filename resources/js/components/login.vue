@@ -101,6 +101,11 @@
                         this.$toasted.success("Login successful", {
                             icon: "fingerprint"
                         });
+
+                        if (this.$store.state.user.shift_active === 1) {
+                            this.$socket.emit('user_enter', this.$store.state.user);
+                        }
+
                         Object.assign(this.$data, initialState());
                     })
                     .catch(error => {

@@ -323,6 +323,11 @@ const app = new Vue({
             });
         }
     },
+    mounted() {
+        if (this.$store.state.user.shift_active == 1) {
+            this.$socket.emit('user_enter', this.$store.state.user);
+        }
+    }
 });
 
 axios.interceptors.response.use(
