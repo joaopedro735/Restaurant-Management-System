@@ -4,8 +4,8 @@
             <v-card-title class="headline info white--text" primary-title>
                 Meals
                 <v-spacer></v-spacer>
-                <v-btn big flat color="info" 
-                    :loading="loadingMealInfo" 
+                <v-btn big flat color="info"
+                    :loading="loadingMealInfo"
                     :disabled="loadingMealInfo">
                 </v-btn>
                 <v-btn fab dark @click="showAddMeal = true" slot="activator" class="mb-2">
@@ -47,9 +47,9 @@
                                 </v-btn>
                             </span>
                             <!-- <span v-if="props.item.state === 'Active' && props.item.responsible_waiter === $store.state.user.name">
-                                <v-btn small round color="primary" 
-                                    :loading="loadingMealInfo" 
-                                    :disabled="loadingMealInfo" 
+                                <v-btn small round color="primary"
+                                    :loading="loadingMealInfo"
+                                    :disabled="loadingMealInfo"
                                     @click.stop="mealInfo(props.item.id)">
                                         <v-icon>info</v-icon>
                                         &nbsp;Meal Info
@@ -66,8 +66,8 @@
                 </template>
             </v-data-table>
         </v-card>
-        
-        <add-meal 
+
+        <add-meal
             :visible="showAddMeal"
             @update="updateLists"
             @close="showAddMeal = false">
@@ -134,7 +134,7 @@
                     this.getDataFromApi();
                 },
                 deep: true
-            },
+            }
         },
         methods: {
             getDataFromApi() {
@@ -194,6 +194,7 @@
                 axios.patch('/api/meals/terminate/' + $mealID)
                     .then((response) => {
                         this.$toasted.show(response.data.message);
+                        this.$socket.emit("meal_terminated");
                         this.getDataFromApi();
                     })
                     .catch((error) => {
@@ -209,10 +210,8 @@
             AddMeal,
             AddOrder,
             MealInfo
-        },
+        }
     };
 </script>
 
-<style scoped>
 
-</style>

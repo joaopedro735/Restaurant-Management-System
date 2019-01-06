@@ -1,8 +1,9 @@
 <template>
     <v-dialog persistent v-model="show" @click.stop="close" max-width="600px">
         <v-card>
-            <v-card-title class="headline blue darken-4 white--text">
-                Add order to meal #{{ this.selectedMeal }}
+            <v-card-title
+                    class="headline blue darken-4 white--text"
+            >Add order to meal #{{ this.selectedMeal }}
             </v-card-title>
 
             <v-card-text>
@@ -36,10 +37,10 @@
 
 <script>
     export default {
-        name: 'add-order',
+        name: "add-order",
         props: {
             visible: Boolean,
-            selectedMeal: Number,
+            selectedMeal: Number
         },
         data() {
             return {
@@ -59,10 +60,10 @@
                         this.$toasted.info('You have 5 seconds to cancel the order',
                         {
                             duration: 5000,
-                            action : [
+                            action: [
                                 {
-                                    text : 'Cancel',
-                                    onClick : (e, toastObject) => {
+                                    text: "Cancel",
+                                    onClick: (e, toastObject) => {
                                         toastObject.goAway(0);
                                         this.cancelOrder();
                                     }
@@ -73,17 +74,16 @@
                                 this.confirmOrder();
                             })
                         });
-
                     })
                     .catch((error) => {
                         console.log(error);
-                        this.$toasted.error('An error occurred, please try again later!');
-                    })
+                        this.$toasted.error("An error occurred, please try again later!");
+                    });
             },
             confirmOrder() {
                 // Confirm order(s) in DB
                 axios.patch('/api/orders/confirm/', { orders: this.orders })
-                    .then((response) => {                        
+                    .then((response) => {
                         this.notifyCooks(response.data.message);
                         this.$emit('update');
                     })
@@ -100,19 +100,19 @@
 
                 this.orders.forEach(order => {
                     axios.delete('/api/orders/delete/' + order)
-                    .then((response) => {                        
+                    .then((response) => {
                         message = response.data.message;
                     })
                     .catch((error) => {
                         console.log(error);
-                        this.$toasted.error('An error occurred, please try again later!');
+                        this.$toasted.error("An error occurred, please try again later!");
                     })
                 });
 
                 this.$toasted.info(this.orders.length > 1 ? 'Orders canceled' : 'Order canceled');
 
                 /* axios.delete('/api/orders/delete/', { orders: this.orders })
-                    .then((response) => {                        
+                    .then((response) => {
                         this.$toasted.info('Order canceled');
                     })
                     .catch((error) => {
@@ -131,14 +131,14 @@
                 this.$socket.emit('new_order', message, this.$store.state.user);
             },
             getItems() {
-                axios.get('/api/menu/')
-                    .then((response) => {
+                axios.get("/api/menu/")
+                    .then(response => {
                         console.log(response);
                         this.items = response.data.data;
                     })
                     .catch((error) => {
                         console.log(error);
-                    })
+                    });
             },
             reset() {
                 this.selected = [];
@@ -146,7 +146,7 @@
             close() {
                 this.reset();
                 this.show = false;
-                this.$emit('close');
+                this.$emit("close");
             }
         },
         computed: {
@@ -156,17 +156,14 @@
                 },
                 set(value) {
                     if (!value) {
-                        this.$emit('close');
+                        this.$emit("close");
                     }
                 }
-            },
+            }
         },
         mounted() {
             this.getItems();
         }
-    }
+    };
 </script>
 
-<style scoped>
-
-</style>

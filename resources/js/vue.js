@@ -10,17 +10,18 @@ require("./bootstrap");
 
 window.Vue = require("vue");
 
-import VueRouter from 'vue-router';
-import store from './stores/global-store';
-import Vuetify from 'vuetify';
-import Toasted from 'vue-toasted';
-import Moment from 'vue-moment';
-import Vuelidate from 'vuelidate';
-import VueSocketIO from 'vue-socket.io';
+import VueRouter from "vue-router";
+import store from "./stores/global-store";
+import Vuetify from "vuetify";
+import Toasted from "vue-toasted";
+import Vuelidate from "vuelidate";
+import VueSocketIO from "vue-socket.io";
+import moment from "moment";
+
 
 Vue.config.productionTip = false;
 
-Vue.use(Moment);
+Vue.prototype.$moment = moment;
 Vue.use(VueRouter);
 Vue.use(store);
 Vue.use(Vuetify);
@@ -147,17 +148,24 @@ const toastedOptions = {
 Vue.use(Toasted, toastedOptions);
 
 router.beforeEach((to, from, next) => {
-    if ((to.name === 'profile') || (to.name === 'logout') || (to.name === 'orders') || (to.name === 'tables') || (to.name === 'invoices')) {
+    if (
+        to.name === "profile" ||
+        to.name === "logout" ||
+        to.name === "orders" ||
+        to.name === "tables" ||
+        to.name === "logout" ||
+        to.name === "invoices"
+    ) {
         if (!store.state.user) {
-            next('/login');
+            next("/login");
             return;
         }
     }
     next();
 });
 
-Vue.filter('capitalize', function (value) {
-    if (!value) return '';
+Vue.filter("capitalize", function (value) {
+    if (!value) return "";
     value = value.toString();
     return value.charAt(0).toUpperCase() + value.slice(1);
 });
@@ -175,11 +183,11 @@ const app = new Vue({
     methods: {
         getInformationFromLoggedUser() {
             //todo
-            this.user = this.$store.state.user;//
+            this.user = this.$store.state.user; //
             if (this.user === null) {
                 axios.get("api/users");
             }
-        },
+        }
     },
     created() {
         store.commit('loadTokenAndUserFromSession');
@@ -204,39 +212,31 @@ const app = new Vue({
         },
         shift_started(dataFromServer) {
             console.log("start");
-            this.$toasted.success("You started working",
-                {
-                    icon: "info"
-                }
-            );
+            this.$toasted.success("You started working", {
+                icon: "info"
+            });
             this.notifications.push(dataFromServer);
         },
         shift_ended(dataFromServer) {
             console.log("end");
-            this.$toasted.error("You stopped working",
-                {
-                    icon: "info"
-                }
-            );
+            this.$toasted.error("You stopped working", {
+                icon: "info"
+            });
             this.notifications.push(dataFromServer);
         },
         user_blocked(message) {
-            this.$toasted.error(message,
-                {
-                    icon: 'error'
-                }
-            );
+            this.$toasted.error(message, {
+                icon: "error"
+            });
 
             store.commit('setBlock', true);
 
             this.$router.push('/menu');
         },
         user_unblocked(message) {
-            this.$toasted.info(message,
-                {
-                    icon: 'info'
-                }
-            );
+            this.$toasted.info(message, {
+                icon: "info"
+            });
 
             store.commit('setBlock', false);
 
@@ -247,26 +247,24 @@ const app = new Vue({
              * Show toast only to cooks (all)
              * Show link to orders (possibly highlighting order)
              */
-            this.$toasted.info(message,
-                {
-                    icon: 'info',
-                    action : [
-                        {
-                            text : 'OK',
-                            onClick : (e, toastObject) => {
-                                toastObject.goAway(0);
-                            }
-                        },
-                        {
-                            text : 'View orders',
-                            push : { 
-                                name : 'orders',
-                                dontClose : true
-                             }
+            this.$toasted.info(message, {
+                icon: "info",
+                action: [
+                    {
+                        text: "OK",
+                        onClick: (e, toastObject) => {
+                            toastObject.goAway(0);
                         }
-                    ]
-                },
-            );
+                    },
+                    {
+                        text: "View orders",
+                        push: {
+                            name: "orders",
+                            dontClose: true
+                        }
+                    }
+                ]
+            });
         },
         order_prepared(data) {
             /**
@@ -292,21 +290,19 @@ const app = new Vue({
              * Show link to meal invoice (possibly highlighting order)
              */
             this.$toasted.info(message, {
-                    icon: 'info'
-                }
-            );
+                icon: "info"
+            });
         },
         message_to_managers(message, from) {
             /**
              * Show toast only to cashiers (all)
              * Show link to meal invoice (possibly highlighting order)
              */
-            this.$toasted.info('Message from: ' + from.name + ' - ' + message, {
-                    icon: 'info'
-                }
-            );
+            this.$toasted.info("Message from: " + from.name + " - " + message, {
+                icon: "info"
+            });
         },
-        problems(dataFromServer){
+        problems(dataFromServer) {
             this.$toasted.error(dataFromServer.name + ": " + dataFromServer.msg, {
                 action: [
                     {
@@ -320,6 +316,11 @@ const app = new Vue({
             });
             console.log("emitted");
             this.notifications.push(dataFromServer);
+        },
+        new_invoice() {
+            this.$toasted.info("Meal finished. A new invoice was generated", {
+                icon: "info"
+            });
         }
     },
 });

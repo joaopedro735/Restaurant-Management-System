@@ -2,63 +2,74 @@
     <div class="text-xs-center">
         <v-dialog width="500" v-model="show" @click.stop="show = false">
             <v-card>
-                <v-card-title class="headline blue darken-4 white--text" primary-title color="purple">
-                    Create Item
+                <v-card-title
+                        class="headline blue darken-4 white--text"
+                        primary-title
+                        color="purple"
+                >Create Item
                 </v-card-title>
 
                 <v-divider light></v-divider>
 
-                <v-alert :value="alert.show" type="error" transition="scale-transition" dismissible outline> {{ alert.error }} </v-alert>
+                <v-alert
+                        :value="alert.show"
+                        type="error"
+                        transition="scale-transition"
+                        dismissible
+                        outline
+                >{{ alert.error }}
+                </v-alert>
 
                 <v-card-text>
                     <v-form ref="form" v-model="form.valid" lazy-validation>
                         <v-text-field
-                            v-model="item.name"
-                            :rules="form.nameDescriptionRules"
-                            label="Item name"
-                            prepend-icon="local_dining"
-                            autofocus
-                            required>
-                        </v-text-field>
+                                v-model="item.name"
+                                :rules="form.nameDescriptionRules"
+                                label="Item name"
+                                prepend-icon="local_dining"
+                                autofocus
+                                required
+                        ></v-text-field>
                         <v-select
-                            v-model="item.type"
-                            :items="types"
-                            :rules="form.typeRules"
-                            item-text="text"
-                            item-value="value"
-                            label="Item type"
-                            prepend-icon="category"
-                            required
+                                v-model="item.type"
+                                :items="types"
+                                :rules="form.typeRules"
+                                item-text="text"
+                                item-value="value"
+                                label="Item type"
+                                prepend-icon="category"
+                                required
                         ></v-select>
                         <v-text-field
-                            v-model="item.description"
-                            :rules="form.nameDescriptionRules"
-                            label="Item description"
-                            prepend-icon="description"
-                            required>
-                        </v-text-field>
+                                v-model="item.description"
+                                :rules="form.nameDescriptionRules"
+                                label="Item description"
+                                prepend-icon="description"
+                                required
+                        ></v-text-field>
 
                         <v-text-field
-                            v-model="imageName"
-                            label="Item Photo"
-                            @click="pickFile"
-                            prepend-icon="attach_file"
-                            readonly>
-                        </v-text-field>
+                                v-model="imageName"
+                                label="Item Photo"
+                                @click="pickFile"
+                                prepend-icon="attach_file"
+                                readonly
+                        ></v-text-field>
                         <input
-                            type="file"
-                            style="display: none"
-                            ref="image"
-                            accept="image/*" 
-                            @change="onFilePicked">
-                        
+                                type="file"
+                                style="display: none;"
+                                ref="image"
+                                accept="image/*"
+                                @change="onFilePicked"
+                        >
+
                         <v-text-field
-                            v-model="item.price"
-                            :rules="form.priceRules"
-                            label="Item price"
-                            prepend-icon="euro_symbol"
-                            required>
-                        </v-text-field>
+                                v-model="item.price"
+                                :rules="form.priceRules"
+                                label="Item price"
+                                prepend-icon="euro_symbol"
+                                required
+                        ></v-text-field>
                     </v-form>
                 </v-card-text>
 
@@ -66,8 +77,14 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn small round color="primary" :disabled="!form.valid" :loading="form.loading" @click="submit">
-                        Create
+                    <v-btn
+                            small
+                            round
+                            color="primary"
+                            :disabled="!form.valid"
+                            :loading="form.loading"
+                            @click="submit"
+                    >Create
                     </v-btn>
                     <v-btn small round @click="clear()">Clear</v-btn>
                     <v-btn small round @click="close()">Cancel</v-btn>
@@ -84,39 +101,39 @@
 <script>
     function initialState() {
         return {
-            title: 'Create item',
+            title: "Create item",
             item: {
-                name: '',
-                type: '',
-                description: '',
-                photo_url: '',
-                price: ''
+                name: "",
+                type: "",
+                description: "",
+                photo_url: "",
+                price: ""
             },
-            imageName: '',
-            imageUrl: '',
-            imageFile: '',
+            imageName: "",
+            imageUrl: "",
+            imageFile: "",
             alert: {
                 show: false,
-                error: ''
+                error: ""
             },
             form: {
                 valid: true,
                 loading: false,
                 p_show: false,
                 nameDescriptionRules: [
-                    v => !!v || 'Required',
-                    v => (v && v.length >= 3) || 'Must be at least than 3 characters',
-                    v => (v && v.length <= 255) || 'Must be shorter than 256 characters' 
+                    v => !!v || "Required",
+                    v => (v && v.length >= 3) || "Must be at least than 3 characters",
+                    v => (v && v.length <= 255) || "Must be shorter than 256 characters"
                 ],
                 typeRules: [
-                    v => !!v || 'Required',
+                    v => !!v || "Required",
                     v => {
-                        const type = ['drink', 'dish'];
+                        const type = ["drink", "dish"];
                         return type.includes(v) || "Invalid type";
                     }
                 ],
                 priceRules: [
-                    v => !!v || 'Required',
+                    v => !!v || "Required",
                     value => {
                         const pattern = /^\d{0,6}(\.\d{1,2})?$/;
                         return pattern.test(value) || "Invalid price";
@@ -154,8 +171,7 @@
                 if (this.$refs.form.validate()) {
                     if (this.imageFile) {
                         this.uploadImageAndCreateItem();
-                    }
-                    else {
+                    } else {
                         this.createItemWithoutImage();
                     }
                 }
@@ -165,9 +181,9 @@
             },
             close() {
                 this.clear();
-                this.$emit('close');
+                this.$emit("close");
             },
-            createItemWithoutImage() {                
+            createItemWithoutImage() {
                 this.item.photo_url = 'placeholder.png'
 
                 axios.post('/api/menu/', this.item)
@@ -198,7 +214,7 @@
             },
             uploadImageAndCreateItem() {
                 const formData = new FormData();
-                
+
                 formData.append('file', this.imageFile);
 
                 axios.post('/api/menu/image', formData)
@@ -275,16 +291,12 @@
                 },
                 set(value) {
                     if (!value) {
-                        this.clear();                       
-                        
+                        this.clear();
+
                         this.$emit('close');
                     }
                 }
             }
         }
-    }
+    };
 </script>
-
-<style scoped>
-
-</style>

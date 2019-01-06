@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <v-dialog max-width="600" v-model="dialog">
             <v-btn color="white" round flat slot="activator">Login</v-btn>
             <login @close="dialog = false"></login>
@@ -14,17 +13,12 @@
     export default {
         name: "loginModal",
         data: () => ({
-            dialog: false,
+            dialog: false
         }),
-        methods: {
-
-        },
+        methods: {},
         components: {
-            "login": Login
+            login: Login
         }
-    }
+    };
 </script>
 
-<style scoped>
-
-</style>

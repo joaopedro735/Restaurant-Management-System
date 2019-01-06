@@ -1,7 +1,7 @@
 <template>
     <div>
         <meal-list></meal-list>
-        <br/>
+        <br>
         <orders-list></orders-list>
     </div>
 </template>
@@ -11,9 +11,6 @@
 
     export default {
         components: {OrdersList, MealList}
-    }
+    };
 </script>
 
-<style scoped>
-
-</style>

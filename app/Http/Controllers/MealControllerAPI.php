@@ -103,7 +103,7 @@ class MealControllerAPI extends Controller
             ]);
         }
 
-        return ;
+        return true;
     }
 
 

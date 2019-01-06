@@ -31,10 +31,6 @@
 </template>
 
 <script>
-    import moment from 'moment'
-
-    Vue.use(moment);
-
     export default {
         props:['notifications'],
         data() {
@@ -64,10 +60,12 @@
                     case "invoices":
                         return ((this.$store.state.user.type === "manager" || this.$store.state.user.type === "cashier") && !this.$store.state.user.blocked);
                 }
-            }, calcTime() {
+            },
+            calcTime() {
                 let date = this.$store.state.user.last_shift_start;
-                this.timePassed = moment(date).fromNow();
-            }, addNotification: function (notification) {
+                this.timePassed = this.$moment(date).fromNow();
+            },
+            addNotification: function (notification) {
                 console.log("added");
                 this.currentNotifications.push(notification);
             }
@@ -93,7 +91,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>
