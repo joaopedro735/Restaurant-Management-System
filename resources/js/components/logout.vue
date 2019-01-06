@@ -31,11 +31,11 @@
             .then(response => {
                 // TODO: Use Vuex stores
                 this.$store.commit('clearUserAndToken');
+                this.$socket.emit('user_exit', this.$store.state.user);
+
                 this.$router.push({name: 'home'});
                 this.$toasted.success("Logged out",
                     {
-                        position: "top-center",
-                        duration: 3000,
                         icon: "exit_to_app",
                     });
             })

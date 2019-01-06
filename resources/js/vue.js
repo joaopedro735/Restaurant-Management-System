@@ -198,9 +198,9 @@ const app = new Vue({
              */
 
 
-            if (store.state.user) {
+            /* if (store.state.user) {
                 this.$socket.emit('user_enter', this.$store.state.user);
-            }         
+            }  */        
         },
         shift_started(dataFromServer) {
             console.log("start");

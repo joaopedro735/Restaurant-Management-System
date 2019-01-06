@@ -6,12 +6,13 @@
             <v-divider light></v-divider>
 
             <v-alert
-                    :value="alert.show"
-                    type="error"
-                    transition="scale-transition"
-                    dismissible
-                    outline
-            >{{ alert.error }}</v-alert>
+                :value="alert.show"
+                type="error"
+                transition="scale-transition"
+                dismissible
+                outline>
+                    {{ alert.error }}
+            </v-alert>
 
             <v-card-text>
                 <v-form ref="form" v-model="form.valid" lazy-validation>
@@ -87,6 +88,7 @@
         methods: {
             login() {
                 this.form.loading = true;
+                
                 axios
                     .post("/api/login", this.user)
                     .then(response => {

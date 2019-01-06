@@ -8,6 +8,7 @@
                 <v-btn color="white" flat round v-if="checkDisplay('users')" to="/users" exact>Users</v-btn>
                 <v-btn color="white" flat round v-if="checkDisplay('orders')" to="/orders">Orders</v-btn>
                 <v-btn color="white" flat round v-if="checkDisplay('meals')" to="/meals">Meals</v-btn>
+                <v-btn color="white" flat round v-if="checkDisplay('invoices')" to="/invoices">Invoices</v-btn>
                 <v-btn color="white" flat round v-if="checkDisplay('tables')" to="/management/tables">Tables</v-btn>
                 <notifications :notifications="currentNotifications"></notifications>
 
