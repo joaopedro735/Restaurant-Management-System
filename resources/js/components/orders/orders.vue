@@ -71,35 +71,47 @@
                         <td class="text-xs-right">
                             <!-- IN PREPARATION BY LOGGED COOK-->
                             <span v-if="props.item.responsible_cook_id === user.id & props.item.state === 'In preparation' & user.type === 'cook'">
-                                <v-btn small round color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">
-                                    <v-icon></v-icon>
-                                    Prepared
+                                <v-btn small round color="success"
+                                    :disabled="!user.shift_active"
+                                    @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">
+                                        <v-icon></v-icon>
+                                        Prepared
                                 </v-btn>
                             </span>
                             <!-- CONFIRMED BY LOGGED COOK-->
                             <span v-if="props.item.responsible_cook_id === user.id & props.item.state === 'Confirmed' & user.type === 'cook'">
-                                <v-btn small round color="primary" @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">
-                                    <v-icon></v-icon>
-                                    Prepare
+                                <v-btn small round color="primary"
+                                    :disabled="!user.shift_active"
+                                    @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">
+                                        <v-icon></v-icon>
+                                        Prepare
                                 </v-btn>
-                                <v-btn small round color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">
-                                    <v-icon></v-icon>
-                                    Prepared
+                                <v-btn small round color="success"
+                                    :disabled="!user.shift_active"
+                                    @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">
+                                        <v-icon></v-icon>
+                                        Prepared
                                 </v-btn>
                             </span>
                             <!-- CONFIRMED WITH NO RESPONSIBLE COOK-->
                             <span v-if="props.item.responsible_cook_id === 0 & props.item.state === 'Confirmed' & user.type === 'cook'">
-                                <v-btn small round  @click.native="changeOrderState(props.index, props.item, 'confirmed'), props.expanded=!props.expanded">
-                                    <v-icon></v-icon>
-                                    Confirm
+                                <v-btn small round
+                                    :disabled="!user.shift_active"
+                                    @click.native="changeOrderState(props.index, props.item, 'confirmed'), props.expanded=!props.expanded">
+                                        <v-icon></v-icon>
+                                        Confirm
                                 </v-btn>
-                                <v-btn small round color="primary" @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">
-                                    <v-icon></v-icon>
-                                    Prepare
+                                <v-btn small round color="primary"
+                                    :disabled="!user.shift_active"
+                                    @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">
+                                        <v-icon></v-icon>
+                                        Prepare
                                 </v-btn>
-                                <v-btn small round color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">
-                                    <v-icon></v-icon>
-                                    Prepared
+                                <v-btn small round color="success"
+                                    :disabled="!user.shift_active"
+                                    @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">
+                                        <v-icon></v-icon>
+                                        Prepared
                                 </v-btn>
                             </span>
                         </td>
