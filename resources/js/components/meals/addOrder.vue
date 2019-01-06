@@ -27,7 +27,7 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn small round color="info" @click.stop="addOrder">Save</v-btn>
+                <v-btn small round color="primary" @click.stop="addOrder">Save</v-btn>
                 <v-btn small round flat @click.stop="close">Close</v-btn>
             </v-card-actions>
         </v-card>

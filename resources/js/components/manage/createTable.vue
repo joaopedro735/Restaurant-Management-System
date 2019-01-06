@@ -26,7 +26,7 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn small round color="info" :disabled="!form.valid" :loading="form.loading" @click="submit">
+                    <v-btn small round color="primary" :disabled="!form.valid" :loading="form.loading" @click="submit">
                         Create
                     </v-btn>
                     <v-btn small round @click="close()">Cancel</v-btn>
@@ -92,14 +92,9 @@
                 this.$emit('close');
             },
             create() {
-                let config = {
-                    headers: {
-                        'Authorization': 'Bearer ' + this.$store.state.token,
-                        'Accept': 'application/json'
-                    }
-                };
+                this.form.loading = true;
 
-                axios.post('/api/tables/', this.table, config)
+                axios.post('/api/tables/', this.table)
                     .then(response => {
                         var table = response.data.data;
                         
@@ -107,7 +102,7 @@
                             table.table_number = this.table.table_number;
                         }
 
-                        this.$emit('update', table);
+                        this.$emit('update');
                         this.close();
 
                         this.$toasted.success('Table added',
@@ -119,9 +114,14 @@
                     .catch(error => {
                         this.$toasted.error(error.response.data.table_number[0],
                         {
-                            icon: 'erro',
+                            icon: 'error',
                         });
+                    })
+                    .finally(() => {
+                        this.form.loading = false;
                     });
+
+                
             }
         },
         computed: {

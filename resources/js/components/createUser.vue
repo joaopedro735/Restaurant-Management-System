@@ -53,14 +53,17 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn
-                            :disabled="!form.valid"
-                            :loading="form.loading"
-                            @click="submit"
-                    >
-                        submit
+                    <v-btn small round color="primary"
+                        :disabled="!form.valid"
+                        :loading="form.loading"
+                        @click="submit">
+                            Submit
                     </v-btn>
-                    <v-btn @click="clear">clear</v-btn>
+                    <v-btn
+                        small round
+                        @click="clear">
+                            Clear
+                    </v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -128,12 +131,18 @@
                         "Accept": "application/json"
                     }
                 };
+
+                this.form.loading = true;
+
                 axios.post("/api/account/create", this.user, config)
                     .then(response => {
                         this.$toasted.success("User created successfully");
                     })
                     .catch(error => {
                         console.log(error);
+                    })
+                    .finally(() => {
+                        this.form.loading = false;
                     });
             }
         },

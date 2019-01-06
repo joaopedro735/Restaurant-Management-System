@@ -65,7 +65,7 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn small round color="info" :disabled="!form.valid" :loading="form.loading" @click="submit">
+                    <v-btn small round color="primary" :disabled="!form.valid" :loading="form.loading" @click="submit">
                         Update
                     </v-btn>
                     <v-btn small round @click="close()">Cancel</v-btn>
@@ -137,6 +137,8 @@
         },
         methods: {
             submit() {
+                this.form.loading = true;
+
                 if (this.$refs.form.validate()) {
                     if (this.imageFile) {
                         this.uploadImageAndUpdateItem();
@@ -153,18 +155,7 @@
                 this.$emit('close');
             },
             updateItem() {
-                let config = {
-                    headers: {
-                        'Authorization': 'Bearer ' + this.$store.state.token,
-                        'Accept': 'application/json'
-                    }
-                };
-
-                if (!Number.isInteger(this.item.price)) {
-                    this.item.price = this.item.price + '.00';
-                }
-
-                axios.put('/api/menu/' + this.item.id, this.item, config)
+                axios.put('/api/menu/' + this.item.id, this.item)
                     .then(response => {
                         var item = response.data.data;
 
@@ -186,21 +177,17 @@
                             {
                                 icon: 'error',
                             });
+                    })
+                    .finally(() => {
+                        this.form.loading = false;
                     });
             },
             uploadImageAndUpdateItem() {
                 const formData = new FormData();
                 
                 formData.append('file', this.imageFile);
-                
-                let config = {
-                    headers: {
-                        'Authorization': 'Bearer ' + this.$store.state.token,
-                        'Accept': 'application/json'
-                    }
-                };
 
-                axios.post('/api/menu/image', formData, config)
+                axios.post('/api/menu/image', formData)
                     .then(response => {
                         if (!Number.isInteger(this.item.price)) {
                             this.item.price = this.item.price + '.00';
@@ -208,7 +195,7 @@
                         
                         this.item.photo_url = response.data.hashName;
 
-                        axios.put('/api/menu/' + this.item.id, this.item, config)
+                        axios.put('/api/menu/' + this.item.id, this.item)
                             .then(response => {
                                 var item = response.data.data;
 
@@ -238,6 +225,9 @@
                             });
                             
                         this.item.photo_url ='placeholder.png';
+                    })
+                    .finally(() => {
+                        this.form.loading = false;
                     });
             },
             pickFile () {

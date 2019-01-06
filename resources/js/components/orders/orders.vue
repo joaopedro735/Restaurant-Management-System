@@ -78,7 +78,7 @@
                             </span>
                             <!-- CONFIRMED BY LOGGED COOK-->
                             <span v-if="props.item.responsible_cook_id === user.id & props.item.state === 'Confirmed' & user.type === 'cook'">
-                                <v-btn small round color="info" @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">
+                                <v-btn small round color="primary" @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">
                                     <v-icon></v-icon>
                                     Prepare
                                 </v-btn>
@@ -93,7 +93,7 @@
                                     <v-icon></v-icon>
                                     Confirm
                                 </v-btn>
-                                <v-btn small round color="info" @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">
+                                <v-btn small round color="primary" @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">
                                     <v-icon></v-icon>
                                     Prepare
                                 </v-btn>
