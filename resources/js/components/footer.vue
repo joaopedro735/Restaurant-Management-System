@@ -20,16 +20,16 @@ export default {
     }),
     methods: {
         vueToast() {
-            this.$toasted.success("VueToasted", {
+            this.$toasted.success("Success", {
                 icon: "info"
             });
-            this.$toasted.error("VueToasted", {
+            this.$toasted.error("Error", {
                 icon: "error"
             });
-            this.$toasted.info("VueToasted", {
+            this.$toasted.info("Info", {
                 icon: "done"
             });
-            this.$toasted.show("VueToasted", {
+            this.$toasted.show("Show", {
                 icon: "grade"
             });
         }

@@ -105,7 +105,7 @@ class OrderControllerAPI extends Controller
 
         /* return new OrderResource($order); */
         return response()->json([
-            'message' => 'Order updated'
+            'message' => $request->input('state') == 'prepared' ? 'Order completed' : 'Order updated'
         ], 200);
     }
 

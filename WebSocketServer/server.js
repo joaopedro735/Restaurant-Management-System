@@ -46,23 +46,24 @@ io.on('connection', function (socket) {
 
     // New order - Send to all cooks
     socket.on('new_order', (message, user) => {
-        /* if (user && user.type == 'waiter') {
+        if (user && user.type == 'waiter') {
             io.sockets.to('cooks').emit('new_order', message);
-        } */
+        }
 
-        io.sockets.to('cooks').emit('new_order', message);
+        //io.sockets.to('cooks').emit('new_order', message);
     });
 
     // Order prepared - Send to responsible waiter
-    socket.on('order_prepared', (order, from, to) => {
-        const userInfoFrom = loggedUsers.userInfoByID(from.id);
-        const userInfoTo = loggedUsers.userInfoByID(to.id);
+    socket.on('order_prepared', (message, order) => {
+        const userInfoFrom = loggedUsers.userInfoByID(order.responsible_cook_id);
+        const userInfoTo = loggedUsers.userInfoByID(order.responsible_waiter_id);
 
         if (userInfoTo) {
-            io.to(userInfoTo.socket.id).emit('order_prepared', order);
+            io.to(userInfoTo.socketID).emit('order_prepared', {message: message, order: order});
         } else {
+            let offLineMessage = 'The waiter responsible for the order is offline';
             // Send message to cook who prepared teh order warning waiter is unavailible
-            io.to(userInfoFrom.socket.id).emit('responsible_waiter_unavailable', to);
+            io.to(userInfoFrom.socketID).emit('responsible_waiter_unavailable', offLineMessage);
         }
     });
 
