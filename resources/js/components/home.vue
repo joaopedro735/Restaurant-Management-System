@@ -3,24 +3,24 @@
         <section>
             <v-layout
                     column
-                    wrap
-                    class="my-5"
                     align-center
                     v-if="isLogged === true"
             >
+
                 <shift-options v-on:shift-start='working = true'
                                v-on:shift-end='working = false'
                                v-if="isLogged === true && worker === true" :user="user"
                                :working="working"></shift-options>
+
             </v-layout>
+
             <v-layout
                     column
-                    wrap
-                    class="my-5"
                     align-center
-                    v-if="isLogged === false"
+                    v-if="isLogged === false || worker === false"
             >
                 <h1>Sup y'all</h1>
+
             </v-layout>
         </section>
     </div>
@@ -37,13 +37,17 @@
         methods: {
             getInformationFromLoggedUser() {
                 this.user = this.$store.state.user;
-            },addNotification(){
+            }, addNotification() {
                 console.log("parent")
             }
         },
         created() {
             this.getInformationFromLoggedUser();
-        }, computed: {
+        },
+        mounted(){
+            this.getInformationFromLoggedUser();
+        },
+        computed: {
             isLogged() {
                 return this.$store.state.user !== null && this.$store.state.user !== undefined;
             },

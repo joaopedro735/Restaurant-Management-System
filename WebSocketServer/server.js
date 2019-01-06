@@ -152,7 +152,7 @@ io.on('connection', function (socket) {
         }
     });
 
-    socket.on('problems_Management', (msg, user) => {
-        io.sockets.to('problems').emit('problems', { msg: msg, name: user.name});
+    socket.on('problems_Management', (msg, user, where) => {
+        io.sockets.to('problems').emit('problems', { msg: msg, name: user.name, where: where});
     });
 });

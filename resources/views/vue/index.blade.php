@@ -5,7 +5,6 @@
 @section('content')
     <v-app>
         <main-nav :notifications='notifications'></main-nav>
-
         <v-content>
             <v-container fluid>
                 <router-view>

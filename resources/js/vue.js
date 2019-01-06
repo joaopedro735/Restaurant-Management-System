@@ -147,7 +147,7 @@ const toastedOptions = {
 Vue.use(Toasted, toastedOptions);
 
 router.beforeEach((to, from, next) => {
-    if ((to.name === 'profile') || (to.name === 'logout') || (to.name === 'orders') || (to.name === 'tables') || (to.name === 'logout') || (to.name === 'invoices')) {
+    if ((to.name === 'profile') || (to.name === 'logout') || (to.name === 'orders') || (to.name === 'tables') || (to.name === 'invoices')) {
         if (!store.state.user) {
             next('/login');
             return;
@@ -219,13 +219,6 @@ const app = new Vue({
                 }
             );
             this.notifications.push(dataFromServer);
-        },
-        problem_Managers(dataFromServer) {
-            this.$toasted.error(dataFromServer,
-                {
-                    icon: "error"
-                }
-            );
         },
         user_blocked(message) {
             this.$toasted.error(message,
@@ -313,7 +306,17 @@ const app = new Vue({
             );
         },
         problems(dataFromServer){
-            this.$toasted.error(dataFromServer.name + ": " + dataFromServer.msg);
+            this.$toasted.error(dataFromServer.name + ": " + dataFromServer.msg, {
+                action: [
+                    {
+                        text: 'Go to',
+                        onClick: (e, toastObject) => {
+                            toastObject.goAway(0);
+                            router.push(dataFromServer.where);
+                        }
+                    }
+                ]
+            });
             console.log("emitted");
             this.notifications.push(dataFromServer);
         }

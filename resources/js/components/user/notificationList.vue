@@ -8,10 +8,11 @@
                 <v-icon>notifications_active</v-icon>
             </v-btn>
 
-            <v-list v-if="notifications.length !== 0">
+            <v-list v-if="notifications.length !== 0" two-line subheader>
                 <v-list-tile
                         v-for="(notification, i) in notifications"
                         :key="i"
+                        @click="goto(notification.where)"
                 >
                     <v-list-tile-content>
                         <v-list-tile-title><strong>{{ notification.name }}</strong> {{": " + notification.msg }}
@@ -39,6 +40,11 @@
         data() {
             return {
                 fab: false,
+            }
+        },methods: {
+            goto(where){
+                console.log(where);
+                this.$router.push({path: where});
             }
         }
     }

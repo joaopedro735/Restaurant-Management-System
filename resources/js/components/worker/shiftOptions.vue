@@ -100,7 +100,7 @@
                     });
             }, notifyManagers(userProblem) {
                 this.dialog = false;
-                this.$socket.emit('problems_Management', userProblem, this.worker);
+                this.$socket.emit('problems_Management', userProblem, this.worker, 'home');
             }, resetTime() {
                 this.duration = 0;
                 //clearInterval();
