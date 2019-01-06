@@ -13,7 +13,7 @@ app.listen(8080, function(){
 // Estrutura dados - server
 // ------------------------
 
-// loggedUsers = the list (map) of logged users. 
+// loggedUsers = the list (map) of logged users.
 // Each list element has the information about the user and the socket id
 // Check loggedusers.js file
 
@@ -83,6 +83,11 @@ io.on('connection', function (socket) {
         }
     });
 
+    socket.on('meal_terminated', () => {
+        console.log("meal");
+        io.to('cashiers').emit('new_invoice');
+    });
+
     // CHANNELS
     // JOIN
     socket.on('user_enter', user => {
@@ -96,7 +101,7 @@ io.on('connection', function (socket) {
                 console.log("Connected to cashiers ");
                 socket.join('cashiers');
             }
-            
+
             if (user.type === 'cook') {
                 console.log("Connected to cooks");
                 socket.join('cooks');
@@ -121,17 +126,17 @@ io.on('connection', function (socket) {
             socket.leave('global');
 
             if(user.type === 'cashier') {
-                socket.leave('cashier');
+                socket.leave('cashiers');
             }
-            
+
             if(user.type === 'cook') {
                 socket.leave('cooks');
             }
-            
+
             if(user.type === 'manager') {
                 socket.leave('managers');
             }
-            
+
             if(user.type === 'waiter') {
                 socket.leave('waiters');
             }

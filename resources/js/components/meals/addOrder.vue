@@ -1,8 +1,9 @@
 <template>
     <v-dialog persistent v-model="show" @click.stop="close" max-width="600px">
         <v-card>
-            <v-card-title class="headline blue darken-4 white--text">
-                Add order to meal #{{ this.selectedMeal }}
+            <v-card-title
+                    class="headline blue darken-4 white--text"
+            >Add order to meal #{{ this.selectedMeal }}
             </v-card-title>
 
             <v-card-text>
@@ -38,51 +39,53 @@
         name: "add-order",
         props: {
             visible: Boolean,
-            selectedMeal: Number,
+            selectedMeal: Number
         },
         data() {
             return {
                 items: [],
                 selected: [],
-                orders: ''
-            }
+                orders: ""
+            };
         },
         methods: {
             addOrder() {
-                axios.post('/api/meals/addOrder/' + this.selectedMeal, { items: this.selected })
-                    .then((response) => {
+                axios
+                    .post("/api/meals/addOrder/" + this.selectedMeal, {
+                        items: this.selected
+                    })
+                    .then(response => {
                         this.orders = response.data.items;
-                        
-                        this.$toasted.info('You have 5 seconds to cancel the order',
-                        {
+
+                        this.$toasted.info("You have 5 seconds to cancel the order", {
                             duration: 5000,
-                            action : [
+                            action: [
                                 {
-                                    text : 'Cancel',
-                                    onClick : (e, toastObject) => {
+                                    text: "Cancel",
+                                    onClick: (e, toastObject) => {
                                         toastObject.goAway(0);
                                     }
                                 }
                             ],
-                            onComplete: (() => {
+                            onComplete: () => {
                                 // Confirm Order in DB
                                 this.confirmOrder();
-                            })
+                            }
                         });
-
                     })
-                    .catch((error) => {
+                    .catch(error => {
                         console.log(error);
                         this.$toasted.error("An error occurred, please try again later!");
-                    })
+                    });
             },
             confirmOrder() {
                 // Confirm order(s) in DB
-                axios.patch('/api/orders/confirmOrder/', { orders: this.orders })
-                    .then((response) => {                        
+                axios
+                    .patch("/api/orders/confirmOrder/", {orders: this.orders})
+                    .then(response => {
                         this.notifyCooks();
                     })
-                    .catch((error) => {
+                    .catch(error => {
                         console.log(error);
                         this.$toasted.error("An error occurred, please try again later!");
                     })
@@ -91,21 +94,25 @@
                     });
             },
             notifyCooks() {
-                let message = this.selected.length > 1 ? 'New orders to prepare!' : 'New order to prepare!';
-                this.$socket.emit('new_order', message, this.$store.state.user);
+                let message =
+                    this.selected.length > 1
+                        ? "New orders to prepare!"
+                        : "New order to prepare!";
+                this.$socket.emit("new_order", message, this.$store.state.user);
                 console.log("Here");
 
                 this.close();
             },
             getItems() {
-                axios.get('/api/menu/')
-                    .then((response) => {
+                axios
+                    .get("/api/menu/")
+                    .then(response => {
                         console.log(response);
                         this.items = response.data.data;
                     })
-                    .catch((error) => {
+                    .catch(error => {
                         console.log(error);
-                    })
+                    });
             },
             reset() {
                 this.selected = [];
@@ -113,7 +120,7 @@
             close() {
                 this.reset();
                 this.show = false;
-                this.$emit('close');
+                this.$emit("close");
             }
         },
         computed: {
@@ -126,14 +133,11 @@
                         this.$emit("close");
                     }
                 }
-            },
+            }
         },
         mounted() {
             this.getItems();
         }
-    }
+    };
 </script>
 
-<style scoped>
-
-</style>
