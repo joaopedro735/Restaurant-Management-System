@@ -275,20 +275,21 @@ const app = new Vue({
                 },
             );
         },
-        order_prepared(message, order) {
+        order_prepared(data) {
             /**
              * Show toast only to responsible waiter
              * Show link to orders (possibly highlighting order)
              */
-            this.$toasted.info(order + message, {
+            let message = data.message + ': ' + data.order.item + ' for table ' + data.order.table_number;
+            this.$toasted.info(message , {
                     icon: 'info'
                 }
             );
         },
-        responsible_waiter_unavailable(message, waiter) {
-            this.$toasted.error(waiter.name + message,
+        responsible_waiter_unavailable(message) {
+            this.$toasted.show(message,
                 {
-                    icon: 'error'
+                    icon: 'info'
                 }
             );
         },

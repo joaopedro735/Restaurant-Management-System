@@ -22,6 +22,8 @@ class OrderResource extends JsonResource
             'item' => $this->item->name,
             'responsible_cook_id' => $this->responsible_cook_id ?? 0,
             'responsible_cook' => $this->responsibleCook()->value('name'),
+            'responsible_waiter_id' => $this->meal->responsible_waiter_id,
+            'table_number' => $this->meal->table_number,
             'start' => Carbon::parse($this->start)->format('d/m/Y \(H:m\)'),
             'end' => Carbon::parse($this->end)->format('d/m/Y \(H:m\)'),
             'created_at' => Carbon::parse($this->created_at)->format('d/m/Y \(H:m\)'),
