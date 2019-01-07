@@ -109,7 +109,7 @@ const meals = Vue.component('meals', () => import("./components/meals/meal"));
 
 
 //List of notifications
-const notificationsList = Vue.component('notifications', () => import("./components/user/notificationList"))
+const notificationsList = Vue.component('notifications', () => import("./components/user/notificationList"));
 
 const routes = [
     { path: '/', component: home, name: 'home' },
