@@ -19,10 +19,10 @@
                 </v-menu>
                 <v-spacer></v-spacer>
                 <v-btn v-if="this.$store.state.user && working" round color="success">{{'WORKING since ' +
-                    this.$store.state.user.last_shift_start + ' (' + timePassed + ')'}}
+                    this.$store.state.user.last_shift_start + ' (Started ' + timePassed + ')'}}
                 </v-btn>
                 <v-btn v-if="this.$store.state.user && !working" round color="error">{{'NOT WORKING since ' +
-                    this.$store.state.user.last_shift_end + ' (' + duration + ')'}}
+                    this.$store.state.user.last_shift_end + ' (Worked for ' + duration + ')'}}
                 </v-btn>
                 <v-chip outline color="white" v-if="this.$store.state.user != null">
                     <v-icon v-if="this.$store.state.user.blocked" color="red">block</v-icon>

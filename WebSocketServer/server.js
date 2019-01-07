@@ -59,7 +59,11 @@ io.on('connection', function (socket) {
         const userInfoTo = loggedUsers.userInfoByID(order.responsible_waiter_id);
 
         if (userInfoTo) {
-            io.to(userInfoTo.socketID).emit('order_prepared', {name: user.name, msg: 'Order#' + order.id + ' prepared', where: '/meals'});
+            io.to(userInfoTo.socketID).emit('order_prepared', {
+                name: user.name,
+                msg: 'Order#' + order.id + ' prepared',
+                where: '/meals'
+            });
         } else {
             let offLineMessage = 'The waiter responsible for the order is offline';
             // Send message to cook who prepared teh order warning waiter is unavailible
@@ -96,9 +100,17 @@ io.on('connection', function (socket) {
         io.to('cooks').emit('remove_unfinished_orders', message);
     });
 
-    socket.on('meal_terminated', ( user, mealId) => {
-        io.to('cashiers').emit('new_invoice', {name: user.name, msg: 'Meal#' + mealId + ' finished. A new invoice was generated', where: '/invoices' });
-        io.to('managers').emit('new_invoice', {name: user.name, msg: 'Meal#' + mealId + ' finished. A new invoice was generated', where: '/invoices' });
+    socket.on('meal_terminated', (user, mealId) => {
+        io.to('cashiers').emit('new_invoice', {
+            name: user.name,
+            msg: 'Meal#' + mealId + ' finished. A new invoice was generated',
+            where: '/invoices'
+        });
+        io.to('managers').emit('new_invoice', {
+            name: user.name,
+            msg: 'Meal#' + mealId + ' finished. A new invoice was generated',
+            where: '/invoices'
+        });
     });
 
     // CHANNELS
@@ -160,10 +172,15 @@ io.on('connection', function (socket) {
     });
 
     socket.on('begin_shift', function () {
-            socket.emit('shift_started', {msg: "Started working", name: "You"});
+        socket.emit('shift_started', {msg: "Started working", name: "You"});
     });
     socket.on('shift_end', function () {
-            socket.emit('shift_ended', {msg: "Stopped working", name: "You"});
+        socket.emit('shift_ended', {msg: "Stopped working", name: "You"});
+    });
+
+    socket.on('invoice_closed', function (invoiceID) {
+        const user = loggedUsers.userInfoBySocketID(socket.id).user;
+        io.to('managers').emit('invoice_close', {msg:'Invoice #' + invoiceID + ' was paid', name: user.name, where: '/invoices'});
     });
 
     socket.on('problems_Management', (msg, where) => {

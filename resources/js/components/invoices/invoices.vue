@@ -262,6 +262,9 @@
         sockets: {
             new_invoice() {
                 this.getDataFromApi();
+            },
+            invoice_close() {
+                this.getDataFromApi();
             }
         }
     }
