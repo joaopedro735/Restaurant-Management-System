@@ -18,10 +18,10 @@
                     </v-list>
                 </v-menu>
                 <v-spacer></v-spacer>
-                <v-btn v-if="this.$store.state.token && working" round color="success">{{'WORKING since ' +
+                <v-btn v-if="this.$store.state.user && working" round color="success">{{'WORKING since ' +
                     this.$store.state.user.last_shift_start + ' (' + timePassed + ')'}}
                 </v-btn>
-                <v-btn v-if="this.$store.state.token && !working" round color="error">{{'NOT WORKING since ' +
+                <v-btn v-if="this.$store.state.user && !working" round color="error">{{'NOT WORKING since ' +
                     this.$store.state.user.last_shift_end + ' (' + duration + ')'}}
                 </v-btn>
                 <v-chip outline color="white" v-if="this.$store.state.user != null">
@@ -29,11 +29,11 @@
                     &nbsp;{{ this.$store.state.user.name }}
                     &nbsp;<strong>({{this.$store.state.user.type}})</strong>
                 </v-chip>
-                <login-modal v-if="!this.$store.state.token"></login-modal>
-                <notifications
-                    v-if="this.$store.state.token"
-                    :notifications="notifications"></notifications>
+                <notifications v-if="this.$store.state.token"
+                               :notifications="notifications"></notifications>
                 <user-nav v-if="this.$store.state.user"></user-nav>
+                <login-modal v-if="!this.$store.state.token"></login-modal>
+
             </v-toolbar>
         </v-flex>
     </v-layout>

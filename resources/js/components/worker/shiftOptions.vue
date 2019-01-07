@@ -5,7 +5,7 @@
                     v-model="dialog"
                     width="500"
             >
-                <v-toolbar-title v-if="userNotManagerWorking"
+                <v-toolbar-title v-show ="userNotManagerWorking"
                                  slot="activator">
                     <v-chip color="red" text-color="white">
                         <v-icon left>info</v-icon>
@@ -63,9 +63,9 @@
                 axios.put('api/users/me/start')
                     .then(response => {
                         this.$store.commit('setUser', response.data.data);
-                        this.$socket.emit('begin_shift', this.worker);
-
                         this.$socket.emit('user_enter', this.$store.state.user);
+                        this.$socket.emit('begin_shift');
+
                         //setInterval(this.updateTime,1000);
                     })
                     .catch(error => {
@@ -76,7 +76,7 @@
                 axios.put('api/users/me/end')
                     .then(response => {
                         this.$store.commit('setUser', response.data.data);
-                        this.$socket.emit('shift-end', this.worker);
+                        this.$socket.emit('shift_end', this.worker);
                         this.$socket.emit('user_exit', this.$store.state.user);
                     })
                     .catch(error => {

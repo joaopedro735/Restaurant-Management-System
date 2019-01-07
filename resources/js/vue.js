@@ -18,6 +18,10 @@ import moment from "moment";
 import Vuelidate from 'vuelidate';
 import VueSocketIO from 'vue-socket.io';
 
+function loadComponent(component) {
+    return () => import(/* webpackChunkName: "[request]" */ `./components/${component}.vue`);
+}
+
 Vue.config.productionTip = false;
 
 Vue.prototype.$moment = moment;
@@ -210,6 +214,8 @@ const app = new Vue({
 
             if (store.state.user && store.state.user.shift_active === 1) {
                 this.$socket.emit('user_enter', this.$store.state.user);
+            } else {
+                this.$socket.emit('user_exit');
             }
         },
         shift_started(dataFromServer) {

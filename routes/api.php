@@ -114,6 +114,8 @@ Route::group([
     Route::get('/dishes', 'ItemControllerAPI@indexDishes');
 });
 
+Route::get('teste', 'MealControllerAPI@teste');
+
 Route::post('login', 'LoginControllerAPI@login');
 Route::post('/account/confirm', 'UserControllerAPI@confirm');
 Route::group([
