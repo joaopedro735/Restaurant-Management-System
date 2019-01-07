@@ -13,7 +13,17 @@
                         :key="i"
                         @click="goto(notification.where)">
                     <v-list-tile-content>
-                        <v-list-tile-title><strong>{{ notification.name }}</strong> {{": " + notification.msg }}
+                        <v-list-tile-title>
+                            <strong>{{ notification.name }}</strong> {{": " + notification.msg }}
+                            <v-icon @click="deleteNotification(i)" class="text-xs-center">clear</v-icon>
+                        </v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile @click="deleteAllNotifications()">
+                    <v-list-tile-content>
+                        <v-list-tile-title class="text-xs-center">
+                                <v-icon>clear</v-icon>
+                                &nbsp; Clear all
                         </v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
@@ -43,6 +53,14 @@
             goto(where){
                 console.log(where);
                 this.$router.push({path: where});
+            },
+            deleteAllNotifications() {
+                //this.$root.notifcations = [];
+                this.$root.notifications.splice(0, this.$root.notifications.length);
+            },
+            deleteNotification(i) {
+                //this.$root.notifcations.splice(i, 1);
+                this.$delete(this.notifications, i)
             }
         }
     }
