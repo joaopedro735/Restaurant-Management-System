@@ -198,9 +198,9 @@ const app = new Vue({
              */
 
 
-            /* if (store.state.user) {
+            if (store.state.user && store.state.user.shift_active === 1) {
                 this.$socket.emit('user_enter', this.$store.state.user);
-            }  */
+            }
         },
         shift_started(dataFromServer) {
             console.log("start");
@@ -321,11 +321,6 @@ const app = new Vue({
             this.$toasted.info("Meal finished. A new invoice was generated", {
                 icon: "info"
             });
-        }
-    },
-    mounted() {
-        if (this.$store.state.user && this.$store.state.user.shift_active === 1) {
-            this.$socket.emit('user_enter', this.$store.state.user);
         }
     },
 });

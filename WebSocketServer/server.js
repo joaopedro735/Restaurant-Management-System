@@ -161,7 +161,13 @@ io.on('connection', function (socket) {
         }
     });
 
-    socket.on('problems_Management', (msg, user, where) => {
+    socket.on('problems_Management', (msg, where) => {
+        const user = loggedUsers.userInfoBySocketID(socket.id).user;
         io.sockets.to('problems').emit('problems', { msg: msg, name: user.name, where: where});
+    });
+
+    socket.on('disconnect', function () {
+        console.log("disconnected");
+        const user = loggedUsers.removeUserInfoBySocketID(socket.id);
     });
 });
