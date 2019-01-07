@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class IsWaiter
+class isWaiter
 {
     /**
      * Handle an incoming request.

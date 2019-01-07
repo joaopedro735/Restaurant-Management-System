@@ -86,7 +86,6 @@ Route::group([
         'prefix' => 'meals',
         'middleware' => 'waiter'
     ], function () {
-        Route::get('/', 'MealControllerAPI@index');
         Route::post('/', 'MealControllerAPI@store');
         Route::get('/my/active', 'MealControllerAPI@active');
         Route::post('/addOrder/{id}', 'MealControllerAPI@addOrderToMeal');
@@ -94,6 +93,14 @@ Route::group([
         Route::patch('/terminate/{id}', 'MealControllerAPI@terminateMeal');
         Route::get('/{id}', 'MealControllerAPI@show');
         Route::get('/{id}/average', 'MealControllerAPI@waiterMealsPerDay');
+    });
+
+    Route::group([
+        'prefix' => 'meals',
+        'middleware' => 'waiter.manager'
+    ], function () {
+        Route::get('/', 'MealControllerAPI@index');
+        Route::patch('/terminate/{id}', 'MealControllerAPI@terminateMeal');
     });
 
     Route::group([

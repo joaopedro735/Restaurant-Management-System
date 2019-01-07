@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class IsCook
+class isCook
 {
     /**
      * Handle an incoming request.

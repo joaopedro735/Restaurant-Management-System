@@ -3,9 +3,8 @@
         <v-toolbar>
             <v-toolbar-items class="sm-and-down">
                 <v-dialog
-                        v-model="dialog"
-                        width="500"
-                >
+                    v-model="dialog"
+                    width="500">
                     <v-toolbar-title v-if="userNotManagerWorking"
                                      slot="activator">
                         <v-chip color="red" text-color="white">
@@ -15,32 +14,32 @@
                     </v-toolbar-title>
                     <v-card>
                         <v-card-title
-                                class="headline grey lighten-2"
-                                primary-title
-                        >
-                            Describe your problem
+                            class="headline grey lighten-2"
+                            primary-title>
+                                Describe your problem
                         </v-card-title>
 
-                    <v-card-text>
-                        <v-text-field
-                                label="Your problem"
-                                v-model='problem'
-                        ></v-text-field>
-                    </v-card-text>
+                        <v-card-text>
+                            <v-text-field
+                                    label="Your problem"
+                                    v-model='problem'
+                            ></v-text-field>
+                        </v-card-text>
 
-                    <v-divider></v-divider>
+                        <v-divider></v-divider>
 
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn
-                                color="error"
-                                flat
-                                @click="notifyManagers(problem)">
-                            Notify management
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                    color="error"
+                                    flat
+                                    @click="notifyManagers(problem)">
+                                Notify management
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </v-toolbar-items>
             <v-spacer></v-spacer>
             <v-toolbar-items class="sm-and-down">
                 <v-btn flat v-show="!userWorking" color="success" @click="beginShift">Begin shift</v-btn>

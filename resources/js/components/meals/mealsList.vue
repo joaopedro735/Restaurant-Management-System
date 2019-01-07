@@ -99,6 +99,7 @@
                 selectedMealInfo: {},
                 numberOfOrdersPending: null,
                 loadingMealInfo: false,
+                url: '',
                 table: {
                     rowsPerPageItems: [5, 10, 15, 25, 50],
                     loading: true,
@@ -127,7 +128,14 @@
             getDataFromApi() {
                 this.table.loading = true;
 
-                axios.get('/api/meals/my/active', {
+                if(this.$store.state.user.type === 'manager') {
+                    this.url = '/api/meals/';
+                }
+                else {
+                    this.url = '/api/meals/my/active';
+                }
+
+                axios.get(this.url, {
                     params: {
                         page: this.table.pagination.page,
                         rowsPerPage: this.table.pagination.rowsPerPage

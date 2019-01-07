@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class IsCashier
+class isCashier
 {
     /**
      * Handle an incoming request.
