@@ -46,20 +46,20 @@ io.on('connection', function (socket) {
 
     // New order - Send to all cooks
     socket.on('new_order', (message, user) => {
-        if (user && user.type == 'waiter') {
-            io.sockets.to('cooks').emit('new_order', message);
+        if (user && user.type === 'waiter') {
+            io.sockets.to('cooks').emit('new_order', {name: user.name, msg: message, where: '/orders'});
         }
 
         //io.sockets.to('cooks').emit('new_order', message);
     });
 
     // Order prepared - Send to responsible waiter
-    socket.on('order_prepared', (message, order) => {
+    socket.on('order_prepared', (user, order) => {
         const userInfoFrom = loggedUsers.userInfoByID(order.responsible_cook_id);
         const userInfoTo = loggedUsers.userInfoByID(order.responsible_waiter_id);
 
         if (userInfoTo) {
-            io.to(userInfoTo.socketID).emit('order_prepared', {message: message, order: order});
+            io.to(userInfoTo.socketID).emit('order_prepared', {name: user.name, msg: 'Order#' + order.id + ' prepared', where: '/meals'});
         } else {
             let offLineMessage = 'The waiter responsible for the order is offline';
             // Send message to cook who prepared teh order warning waiter is unavailible
@@ -69,8 +69,8 @@ io.on('connection', function (socket) {
 
     // Finished meal - Send to all cashiers
     socket.on('finished_meal', (message, user) => {
-        if (user && user.type == 'waiter') {
-            io.sockets.to('cashiers').emit('finished_meal', message);
+        if (user && user.type === 'waiter') {
+            io.sockets.to('cashiers').emit('finished_meal', {name: user.name, msg: message, where: '/meals'});
         }
     });
 
@@ -80,12 +80,12 @@ io.on('connection', function (socket) {
 
         if (userInfoFrom) {
             // Emit with message and user who sent the message
-            io.sockets.to('managers').emit('message_to_managers', message, from);
+            io.sockets.to('managers').emit('message_to_managers', message);
         }
     });
 
-    socket.on('meal_terminated', () => {
-        io.to('cashiers').emit('new_invoice');
+    socket.on('meal_terminated', ( user, mealId) => {
+        io.to('cashiers').emit('new_invoice', {name: user.name, msg: 'Meal#' + mealId + ' finished. A new invoice was generated', where: '/invoices' });
     });
 
     // CHANNELS

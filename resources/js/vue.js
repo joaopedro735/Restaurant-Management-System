@@ -238,42 +238,37 @@ const app = new Vue({
 
             this.$router.push('/menu');
         },
-        new_order(message) {
+        new_order(dataFromServer) {
             /**
              * Show toast only to cooks (all)
              * Show link to orders (possibly highlighting order)
              */
-            this.$toasted.info(message,
+            this.$toasted.info(dataFromServer.msg,
                 {
                     icon: 'info',
                     action : [
                         {
-                            text : 'OK',
+                            text : 'Go to',
                             onClick : (e, toastObject) => {
                                 toastObject.goAway(0);
+                                router.push(dataFromServer.where)
                             }
                         },
-                        {
-                            text : 'View orders',
-                            push : {
-                                name : 'orders',
-                                dontClose : true
-                             }
-                        }
                     ]
                 },
             );
+            this.notifications.push(dataFromServer);
         },
-        order_prepared(data) {
+        order_prepared(dataFromServer) {
             /**
              * Show toast only to responsible waiter
              * Show link to orders (possibly highlighting order)
              */
-            let message = data.message + ': ' + data.order.item + ' for table ' + data.order.table_number;
-            this.$toasted.info(message , {
+            this.$toasted.info(dataFromServer.msg , {
                     icon: 'info'
                 }
             );
+            this.notifications.push(dataFromServer);
         },
         responsible_waiter_unavailable(message) {
             this.$toasted.show(message,
@@ -317,10 +312,20 @@ const app = new Vue({
             console.log("emitted");
             this.notifications.push(dataFromServer);
         },
-        new_invoice() {
-            this.$toasted.info("Meal finished. A new invoice was generated", {
-                icon: "info"
+        new_invoice(dataFromServer) {
+            this.$toasted.info(dataFromServer.name, {
+                icon: "info",
+                action:[
+                    {
+                        text: 'Go to',
+                        onClick: (e, toastObject) => {
+                            toastObject.goAway(0);
+                            router.push(dataFromServer.where);
+                        }
+                    }
+                ]
             });
+            this.notifications.push(dataFromServer);
         }
     },
     mounted() {

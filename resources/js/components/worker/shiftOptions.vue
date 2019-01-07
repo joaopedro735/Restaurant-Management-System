@@ -1,47 +1,47 @@
 <template>
     <v-container>
         <v-toolbar>
-            <v-dialog
-                    v-model="dialog"
-                    width="500"
-            >
-                <v-toolbar-title v-if="worker.type !== 'manager' && this.working === true"
-                                 slot="activator">
-                    <v-chip color="red" text-color="white">
-                        <v-icon left>info</v-icon>
-                        Report a problem
-                    </v-chip>
-                </v-toolbar-title>
-                <v-card>
-                    <v-card-title
-                            class="headline grey lighten-2"
-                            primary-title
-                    >
-                        Describe your problem
-                    </v-card-title>
-
-                    <v-card-text>
-                        <v-text-field
-                                label="Your problem"
-                                v-model='problem'
-                        ></v-text-field>
-                    </v-card-text>
-
-                    <v-divider></v-divider>
-
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn
-                                color="error"
-                                flat
-                                @click="notifyManagers(problem)"
-                        >
-                            Notify management
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
             <v-toolbar-items class="sm-and-down">
+                <v-dialog
+                        v-model="dialog"
+                        width="500"
+                >
+                    <v-toolbar-title v-if="worker.type !== 'manager' && this.working === true"
+                                     slot="activator">
+                        <v-chip color="red" text-color="white">
+                            <v-icon left>info</v-icon>
+                            Report a problem
+                        </v-chip>
+                    </v-toolbar-title>
+                    <v-card>
+                        <v-card-title
+                                class="headline grey lighten-2"
+                                primary-title
+                        >
+                            Describe your problem
+                        </v-card-title>
+
+                        <v-card-text>
+                            <v-text-field
+                                    label="Your problem"
+                                    v-model='problem'
+                            ></v-text-field>
+                        </v-card-text>
+
+                        <v-divider></v-divider>
+
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                    color="error"
+                                    flat
+                                    @click="notifyManagers(problem)"
+                            >
+                                Notify management
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
             </v-toolbar-items>
             <v-spacer></v-spacer>
             <v-toolbar-items class="sm-and-down">
@@ -110,13 +110,13 @@
                 this.$store.commit('setDuration', this.duration);
             },
             something() {
-                axios.get('api/meals/' + this.worker.id + '/average')
+                /*axios.get('api/meals/' + this.worker.id + '/average')
                     .then(response => {
                         console.log(response.data);
                     })
                     .catch(error => {
                         console.log(error.data);
-                    })
+                    })*/
             }
         }
     }

@@ -295,7 +295,7 @@
                 console.log(order.responsible_cook_id);
 
                 let message = 'Order prepared';
-                this.$socket.emit('order_prepared', message, order);
+                this.$socket.emit('order_prepared', this.user, order);
             },
             changeSort (column) {
                 if (this.pagination.sortBy === column)
