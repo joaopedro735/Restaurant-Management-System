@@ -186,8 +186,7 @@
                 axios.patch('/api/meals/terminate/' + $mealID)
                     .then((response) => {
                         this.$toasted.show(response.data.message);
-                        
-                        this.$socket.emit("meal_terminated");
+                        this.$socket.emit("meal_terminated", this.$store.state.user, $mealID);
                         this.getDataFromApi();
                     })
                     .catch((error) => {

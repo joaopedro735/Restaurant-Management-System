@@ -139,7 +139,7 @@
                                         <div slot="activator">
                                             <v-list-tile-title>Order ID</v-list-tile-title>
                                             <v-list-tile-sub-title>{{ props.item.id }}</v-list-tile-sub-title>
-                                        </div>                                    
+                                        </div>
                                     </v-list-tile-content>
                                 </v-list-tile>
 
@@ -297,10 +297,9 @@
                     order.responsible_cook_id = this.userID
                 }
 
-                let message = '';
-
                 console.log(order.responsible_cook_id);
 
+                let message = 'Order prepared';
                 if (state === 'prepared') {
                     message = 'Order prepared';
                 } else if (state == 'confirmed') {
@@ -308,8 +307,8 @@
                 } else {
                     message = 'Order in preparation'
                 }
-                
-                this.$socket.emit('order_prepared', message, order);
+
+                this.$socket.emit('order_prepared', this.user, order);
             },
             changeSort (column) {
                 if (this.pagination.sortBy === column)
