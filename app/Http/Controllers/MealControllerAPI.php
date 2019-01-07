@@ -10,6 +10,7 @@ use App\Meal;
 use App\Order;
 use Auth;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 
 class MealControllerAPI extends Controller
@@ -107,6 +108,18 @@ class MealControllerAPI extends Controller
         return true;
     }
 
+    public function teste() {
+//        $meals = Meal::select(DB::raw("count(*) as meals, responsible_waiter_id as waiter"))
+//            ->groupBy('responsible_waiter_id')->get();
+
+//        $firstDay = Meal::select('start')->orderBy('start', 'asc')->first();
+//        $lastDay = Meal::select('start')->orderBy('start', 'desc')->first();
+//        $date = Carbon::parse($firstDay->start);
+//        $days = $date->diffInDays(Carbon::parse($lastDay->start));
+//
+//        return $days;
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -144,11 +157,11 @@ class MealControllerAPI extends Controller
                 'message' => "Meal isn't active"
             ]);
         } */
-        
+
         $orders = array();
 
         //$priceSum = 0.0;
-        
+
         foreach ($request->input('items') as $item) {
             //$i = Item::select('price')->find($item);
             $order = new Order;
@@ -160,7 +173,7 @@ class MealControllerAPI extends Controller
             array_push($orders, $order->id);
             //$priceSum += $i->price;
         }
-        
+
         //$meal->total_price_preview += $priceSum;
        // $meal->save();
 

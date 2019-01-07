@@ -5,7 +5,7 @@ var io = require('socket.io')(app);
 var LoggedUsers = require('./loggedusers.js');
 
 
-app.listen(8080, function(){
+app.listen(8080, function () {
     console.log('listening on *:8080');
 });
 
@@ -90,6 +90,7 @@ io.on('connection', function (socket) {
 
     socket.on('meal_terminated', ( user, mealId) => {
         io.to('cashiers').emit('new_invoice', {name: user.name, msg: 'Meal#' + mealId + ' finished. A new invoice was generated', where: '/invoices' });
+        io.to('managers').emit('new_invoice', {name: user.name, msg: 'Meal#' + mealId + ' finished. A new invoice was generated', where: '/invoices' });
     });
 
     // CHANNELS
@@ -128,46 +129,38 @@ io.on('connection', function (socket) {
         if (user) {
             socket.leave('global');
 
-            if(user.type === 'cashier') {
+            if (user.type === 'cashier') {
                 console.log(user.username + ' ended shift (left cashiers channel)');
                 socket.leave('cashiers');
             }
 
-            if(user.type === 'cook') {
+            if (user.type === 'cook') {
                 console.log(user.username + ' ended shift (left cooks channel)');
                 socket.leave('cooks');
             }
 
-            if(user.type === 'manager') {
+            if (user.type === 'manager') {
                 console.log(user.username + ' ended shift (left managers channel)');
                 socket.leave('managers');
             }
 
-            if(user.type === 'waiter') {
+            if (user.type === 'waiter') {
                 console.log(user.username + ' ended shift (left waiters channel)');
                 socket.leave('waiters');
             }
         }
     });
-    socket.on('begin_shift', function (worker) {
-        if (worker !== undefined && worker !== null) {
-            console.log("startSocket");
-            socket.join('working_' + worker.type);
-            socket.emit('shift_started', { msg: "Started working", name: "You"});
-        }
+
+    socket.on('begin_shift', function () {
+            socket.emit('shift_started', {msg: "Started working", name: "You"});
     });
-    socket.on('shift-end', function (worker) {
-        if (worker !== undefined && worker !== null) {
-            console.log('endSocket');
-            socket.leave('working_' + worker.type);
-            loggedUsers.removeUserInfoByID(worker.id);
-            socket.emit('shift_ended', { msg: "Stopped working", name: "You" });
-        }
+    socket.on('shift_end', function () {
+            socket.emit('shift_ended', {msg: "Stopped working", name: "You"});
     });
 
     socket.on('problems_Management', (msg, where) => {
         const user = loggedUsers.userInfoBySocketID(socket.id).user;
-        io.sockets.to('problems').emit('problems', { msg: msg, name: user.name, where: where});
+        io.sockets.to('problems').emit('problems', {msg: msg, name: user.name, where: where});
     });
 
     socket.on('disconnect', function () {
