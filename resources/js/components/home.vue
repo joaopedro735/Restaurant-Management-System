@@ -4,20 +4,17 @@
             <v-layout
                     column
                     align-center
-                    v-if="isLogged === true"
-            >
+                    v-if="isLogged === true">
 
                 <shift-options v-if="isLogged === true && worker === true"></shift-options>
 
             </v-layout>
 
             <v-layout
-                    column
-                    align-center
-                    v-if="isLogged === false || worker === false"
-            >
+                column
+                align-center
+                v-if="isLogged === false || worker === false">
                 <h1>Sup y'all</h1>
-
             </v-layout>
         </section>
     </div>
@@ -25,10 +22,6 @@
 
 <script>
     export default {
-        data: function () {
-            return {
-            }
-        },
         methods: {
             addNotification() {
                 console.log("parent")

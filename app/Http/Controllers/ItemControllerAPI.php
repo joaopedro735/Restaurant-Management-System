@@ -8,6 +8,7 @@ use App\Http\Resources\ItemResource;
 
 use App\Item;
 use Validator;
+use Debugbar;
 
 class ItemControllerAPI extends Controller
 {
@@ -49,9 +50,15 @@ class ItemControllerAPI extends Controller
         ], 400);
     }
 
-
     public static function getItemName($id) {
         return Item::find($id)->name;
+    }
+
+    public static function getItemPrice($id) {
+        $itemPrice = Item::select('price')->where('id', $id)->first();
+        //Debugbar::info($itemPrice->price);
+
+        return $itemPrice->price;
     }
 
     public function store(Request $request) {

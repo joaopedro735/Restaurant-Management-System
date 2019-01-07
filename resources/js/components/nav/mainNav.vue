@@ -8,12 +8,13 @@
                         <v-icon dark>arrow_drop_down</v-icon>
                     </v-toolbar-title>
                     <v-list>
-                        <v-list-tile :to="{name: 'home'}">Home</v-list-tile>
-                        <v-list-tile to="/menu"">Menu</v-list-tile>
-                        <v-list-tile v-if="checkDisplay('users')" to="/users"">Users</v-list-tile>
-                        <v-list-tile v-if="checkDisplay('orders')" to="/orders">Orders</v-list-tile>
-                        <v-list-tile v-if="checkDisplay('meals')" to="/meals">Meals</v-list-tile>
-                        <v-list-tile v-if="checkDisplay('tables')" to="/management/tables">Tables</v-list-tile>
+                        <v-list-tile :to="{name: 'home'}" exact>Home</v-list-tile>
+                        <v-list-tile to="/menu" exact>Menu</v-list-tile>
+                        <v-list-tile v-if="checkDisplay('users')" to="/users" exact>Users</v-list-tile>
+                        <v-list-tile v-if="checkDisplay('orders')" to="/orders" exact>Orders</v-list-tile>
+                        <v-list-tile v-if="checkDisplay('meals')" to="/meals" exact>Meals</v-list-tile>
+                        <v-list-tile v-if="checkDisplay('tables')" to="/management/tables" exact>Tables</v-list-tile>
+                        <v-list-tile v-if="checkDisplay('invoices')" to="/invoices" exact>Invoices</v-list-tile>
                     </v-list>
                 </v-menu>
                 <v-spacer></v-spacer>
@@ -29,6 +30,8 @@
                     {{ this.$store.state.user.name }}&nbsp;<strong>({{this.$store.state.user.type}})</strong>
                 </v-chip>
                 <login-modal v-if="!this.$store.state.token"></login-modal>
+                <notifications v-if="this.$store.state.token"
+                               :notifications="notifications"></notifications>
                 <user-nav v-if="this.$store.state.user"></user-nav>
             </v-toolbar>
         </v-flex>

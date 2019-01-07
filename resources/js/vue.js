@@ -21,6 +21,15 @@ import VueSocketIO from 'vue-socket.io';
 Vue.config.productionTip = false;
 
 Vue.prototype.$moment = moment;
+Vue.use({
+    install(V) {
+        let bus = new Vue();
+        V.prototype.$bus = bus;
+        V.bus = bus;
+    }
+});
+
+
 Vue.use(VueRouter);
 Vue.use(store);
 Vue.use(Vuetify);
@@ -30,6 +39,7 @@ Vue.use(new VueSocketIO({
 }));
 Vue.use(Vuelidate);
 
+// #region Components
 /* Components para users */
 const users = Vue.component('users-component', () =>
     import('./components/users2')
@@ -108,10 +118,10 @@ const invoices = Vue.component('invoices', () =>
 //Meals
 const meals = Vue.component('meals', () => import("./components/meals/meal"));
 
-
 //List of notifications
 const notificationsList = Vue.component('notifications', () => import("./components/user/notificationList"));
 
+// #endregion
 const routes = [
     { path: '/', component: home, name: 'home' },
     { path: '/users', component: users, name: 'users' },

@@ -15,8 +15,7 @@
                 <v-card>
                     <v-card-title
                             class="headline grey lighten-2"
-                            primary-title
-                    >
+                            primary-title>
                         Describe your problem
                     </v-card-title>
 
@@ -34,16 +33,14 @@
                         <v-btn
                                 color="error"
                                 flat
-                                @click="notifyManagers(problem)"
-                        >
+                                @click="notifyManagers(problem)">
                             Notify management
                         </v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
-            <v-toolbar-items class="sm-and-down">
-            </v-toolbar-items>
             <v-spacer></v-spacer>
+
             <v-toolbar-items class="sm-and-down">
                 <v-btn flat v-show="!userWorking" color="success" @click="beginShift">Begin shift</v-btn>
                 <v-btn flat v-show="userWorking" color="error" @click="endShift">End shift</v-btn>

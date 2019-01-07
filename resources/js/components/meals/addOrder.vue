@@ -27,7 +27,10 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn small round color="primary" @click.stop="addOrder">Save</v-btn>
+                <v-btn small round color="primary"
+                    :loading="loading"
+                    :disabled="loading"
+                    @click.stop="addOrder">Save</v-btn>
                 <v-btn small round flat @click.stop="close">Close</v-btn>
             </v-card-actions>
         </v-card>
@@ -45,16 +48,17 @@
             return {
                 items: [],
                 selected: [],
-                orders: []
+                orders: [],
+                loading: false
             }
         },
         methods: {
             addOrder() {
+                this.loading = true;
+
                 axios.post('/api/meals/addOrder/' + this.selectedMeal, { items: this.selected })
                     .then((response) => {
                         this.orders = response.data.items;
-
-                        this.close();
 
                         this.$toasted.info('You have 5 seconds to cancel the order',
                         {
@@ -72,12 +76,19 @@
                                 // Confirm Order in DB
                                 this.confirmOrder();
                             })
-                        });
+                        })
+                        this.$emit('update');
+                        this.$bus.$emit('update-pending');
+
+                        this.close();
                     })
                     .catch((error) => {
                         console.log(error);
                         this.$toasted.error("An error occurred, please try again later!");
                     })
+                    .finally(() => {
+                            this.loading = false;
+                    });
             },
             confirmOrder() {
                 // Confirm order(s) in DB
@@ -85,6 +96,7 @@
                     .then((response) => {
                         this.notifyCooks(response.data.message);
                         this.$emit('update');
+                        this.$bus.$emit('update-pending');
                     })
                     .catch((error) => {
                         console.log(error);
@@ -101,6 +113,7 @@
                     axios.delete('/api/orders/delete/' + order)
                         .then((response) => {
                             message = response.data.message;
+                            this.$bus.$emit('update-pending');
                         })
                         .catch((error) => {
                             console.log(error);

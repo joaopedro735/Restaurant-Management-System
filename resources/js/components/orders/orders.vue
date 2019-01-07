@@ -136,23 +136,28 @@
                             <v-list>
                                 <v-list-tile>
                                     <v-list-tile-content>
-                                        <v-tooltip bottom>
-                                            <div slot="activator">
-                                                <v-list-tile-title>Item</v-list-tile-title>
-                                                <v-list-tile-sub-title>{{ props.item.item }}</v-list-tile-sub-title>
-                                            </div>
-                                        </v-tooltip>
+                                        <div slot="activator">
+                                            <v-list-tile-title>Order ID</v-list-tile-title>
+                                            <v-list-tile-sub-title>{{ props.item.id }}</v-list-tile-sub-title>
+                                        </div>                                    
                                     </v-list-tile-content>
                                 </v-list-tile>
 
                                 <v-list-tile>
                                     <v-list-tile-content>
-                                        <v-tooltip bottom>
-                                            <div slot="activator">
-                                                <v-list-tile-title><Table>Table</Table></v-list-tile-title>
-                                                <v-list-tile-sub-title>{{ props.item.table_number }}</v-list-tile-sub-title>
-                                            </div>
-                                        </v-tooltip>
+                                        <div slot="activator">
+                                            <v-avatar size="56px">
+                                                <img v-bind:src=props.item.photo_url alt="avatar">
+                                            </v-avatar>
+                                        </div>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+
+                                <v-list-tile>
+                                    <v-list-tile-content>
+                                        <div slot="activator">
+                                            <v-list-tile-sub-title>{{ props.item.item }}</v-list-tile-sub-title>
+                                        </div>
                                     </v-list-tile-content>
                                 </v-list-tile>
                             </v-list>
