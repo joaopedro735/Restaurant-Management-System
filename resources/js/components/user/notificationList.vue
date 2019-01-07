@@ -37,8 +37,7 @@
             return {
                 fab: false,
             }
-                fab: false,
-            },
+        },
         methods: {
             goto(where){
                 console.log(where);
