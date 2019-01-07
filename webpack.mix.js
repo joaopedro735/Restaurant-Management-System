@@ -19,4 +19,4 @@ mix.webpackConfig({
 
 
 mix.js('resources/js/vue.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css');
+   .sass('resources/sass/app.scss', 'public/css', { implementation: require('node-sass') });

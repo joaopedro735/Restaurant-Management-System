@@ -52,7 +52,10 @@
                 return this.$store.state.user !== null && this.$store.state.user !== undefined;
             },
             worker() {
-                if (this.$store.state.user.type === "cashier" || this.$store.state.user.type === "waiter" || this.$store.state.user.type === "cook") {
+                if (this.$store.state.user.type === "manager" ||
+                    this.$store.state.user.type === "cashier" ||
+                    this.$store.state.user.type === "waiter" ||
+                    this.$store.state.user.type === "cook") {
                     console.log("worker= true")
                     this.working = this.$store.state.user.shift_active === 1;
                     return true;

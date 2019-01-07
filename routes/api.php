@@ -79,6 +79,7 @@ Route::group([
         Route::get('/checkTerminate/{id}', 'MealControllerAPI@mealHasPendingOrders');
         Route::patch('/terminate/{id}', 'MealControllerAPI@terminateMeal');
         Route::get('/{id}', 'MealControllerAPI@show');
+        Route::get('/{id}/average', 'MealControllerAPI@waiterMealsPerDay');
     });
 
     Route::group([

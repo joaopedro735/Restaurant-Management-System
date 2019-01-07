@@ -108,7 +108,7 @@
                     })
                     .finally(() => {
                         this.form.loading = false;
-                        router.push({ path: 'home' });
+                        //router.push({ path: 'home' });
                     });
             },
             clear() {
