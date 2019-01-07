@@ -29,6 +29,7 @@ Vue.use(new VueSocketIO({
     connection: 'http://127.0.0.1:8080'
 }));
 Vue.use(Vuelidate);
+
 /* Components para users */
 const users = Vue.component('users-component', () =>
     import('./components/users2')
@@ -109,7 +110,7 @@ const meals = Vue.component('meals', () => import("./components/meals/meal"));
 
 
 //List of notifications
-const notificationsList = Vue.component('notifications', () => import("./components/user/notificationList"))
+const notificationsList = Vue.component('notifications', () => import("./components/user/notificationList"));
 
 const routes = [
     { path: '/', component: home, name: 'home' },
@@ -169,6 +170,7 @@ const app = new Vue({
     data: {
         workingText: "",
         user: undefined,
+        notifications: [],
     },
     methods: {
         getInformationFromLoggedUser() {
@@ -196,32 +198,23 @@ const app = new Vue({
              */
 
 
-            if (store.state.user) {
+            /* if (store.state.user) {
                 this.$socket.emit('user_enter', this.$store.state.user);
-            }
+            }  */
         },
         shift_started(dataFromServer) {
             console.log("start");
-            this.$toasted.success("You started working",
-                {
-                    icon: "info"
-                }
-            );
+            this.$toasted.success("You started working", {
+                icon: "info"
+            });
+            this.notifications.push(dataFromServer);
         },
         shift_ended(dataFromServer) {
             console.log("end");
-            this.$toasted.error("You stopped working",
-                {
-                    icon: "info"
-                }
-            );
-        },
-        problem_Managers(dataFromServer) {
-            this.$toasted.error(dataFromServer,
-                {
-                    icon: "error"
-                }
-            );
+            this.$toasted.error("You stopped working", {
+                icon: "info"
+            });
+            this.notifications.push(dataFromServer);
         },
         user_blocked(message) {
             this.$toasted.error(message,
@@ -271,20 +264,21 @@ const app = new Vue({
                 },
             );
         },
-        order_prepared(message, order) {
+        order_prepared(data) {
             /**
              * Show toast only to responsible waiter
              * Show link to orders (possibly highlighting order)
              */
-            this.$toasted.info(order + message, {
+            let message = data.message + ': ' + data.order.item + ' for table ' + data.order.table_number;
+            this.$toasted.info(message , {
                     icon: 'info'
                 }
             );
         },
-        responsible_waiter_unavailable(message, waiter) {
-            this.$toasted.error(waiter.name + message,
+        responsible_waiter_unavailable(message) {
+            this.$toasted.show(message,
                 {
-                    icon: 'error'
+                    icon: 'info'
                 }
             );
         },
@@ -308,8 +302,30 @@ const app = new Vue({
                 }
             );
         },
-        problems(dataFromServer){
-            this.$toasted.error(dataFromServer.name + ": " + dataFromServer.msg);
+        problems(dataFromServer) {
+            this.$toasted.error(dataFromServer.name + ": " + dataFromServer.msg, {
+                action: [
+                    {
+                        text: 'Go to',
+                        onClick: (e, toastObject) => {
+                            toastObject.goAway(0);
+                            router.push(dataFromServer.where);
+                        }
+                    }
+                ]
+            });
+            console.log("emitted");
+            this.notifications.push(dataFromServer);
+        },
+        new_invoice() {
+            this.$toasted.info("Meal finished. A new invoice was generated", {
+                icon: "info"
+            });
+        }
+    },
+    mounted() {
+        if (this.$store.state.user && this.$store.state.user.shift_active === 1) {
+            this.$socket.emit('user_enter', this.$store.state.user);
         }
     },
 });

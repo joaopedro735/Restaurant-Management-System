@@ -1,7 +1,5 @@
 <template>
-    <div>
-
-    </div>
+    <div></div>
 </template>
 
 <script>
@@ -12,7 +10,6 @@
             };
         },
         methods: {
-
         },
         mounted () {
             if (!this.$store.state.token) {
@@ -20,22 +17,14 @@
                 return;
             }
 
-            var config = {
-                headers: {
-                    'Authorization': 'Bearer ' + this.$store.state.token,
-                    'Accept': 'application/json'
-                }
-            };
+            this.$socket.emit('user_exit', this.$store.state.user);
 
-            axios.post('/api/logout', {}, config)
+            axios.post('/api/logout')
             .then(response => {
-                // TODO: Use Vuex stores
                 this.$store.commit('clearUserAndToken');
                 this.$router.push({name: 'home'});
                 this.$toasted.success("Logged out",
                     {
-                        position: "top-center",
-                        duration: 3000,
                         icon: "exit_to_app",
                     });
             })

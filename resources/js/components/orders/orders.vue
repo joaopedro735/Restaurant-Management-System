@@ -69,32 +69,47 @@
                         <td>{{ props.item.start }}</td>
                         <td>{{ props.item.updated_at }}</td>
                         <td class="text-xs-right">
-                            <span v-if="props.item.state === 'In preparation' & props.item.responsible_cook_id === user.id & user.type === 'cook'">
-                                <v-btn small round color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">
+                            <!-- IN PREPARATION BY LOGGED COOK-->
+                            <span v-if="props.item.responsible_cook_id === user.id & props.item.state === 'In preparation' & user.type === 'cook'">
+                                <v-btn small round color="success"
+                                       :disabled="!user.shift_active"
+                                       @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">
                                     <v-icon></v-icon>
                                     Prepared
                                 </v-btn>
                             </span>
+                            <!-- CONFIRMED BY LOGGED COOK-->
                             <span v-if="props.item.responsible_cook_id === user.id & props.item.state === 'Confirmed' & user.type === 'cook'">
-                                <v-btn small round color="info" @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">
+                                <v-btn small round color="primary"
+                                       :disabled="!user.shift_active"
+                                       @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">
                                     <v-icon></v-icon>
                                     Prepare
                                 </v-btn>
-                                <v-btn small round color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">
+                                <v-btn small round color="success"
+                                       :disabled="!user.shift_active"
+                                       @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">
                                     <v-icon></v-icon>
                                     Prepared
                                 </v-btn>
                             </span>
-                            <span v-if="props.item.responsible_cook_id === 0 & user.type === 'cook'">
-                                <v-btn small round  @click.native="changeOrderState(props.index, props.item, 'confirmed'), props.expanded=!props.expanded">
+                            <!-- CONFIRMED WITH NO RESPONSIBLE COOK-->
+                            <span v-if="props.item.responsible_cook_id === 0 & props.item.state === 'Confirmed' & user.type === 'cook'">
+                                <v-btn small round
+                                       :disabled="!user.shift_active"
+                                       @click.native="changeOrderState(props.index, props.item, 'confirmed'), props.expanded=!props.expanded">
                                     <v-icon></v-icon>
                                     Confirm
                                 </v-btn>
-                                <v-btn small round color="info" @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">
+                                <v-btn small round color="primary"
+                                       :disabled="!user.shift_active"
+                                       @click.native="changeOrderState(props.index, props.item, 'in preparation'), props.expanded=!props.expanded">
                                     <v-icon></v-icon>
                                     Prepare
                                 </v-btn>
-                                <v-btn small round color="success" @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">
+                                <v-btn small round color="success"
+                                       :disabled="!user.shift_active"
+                                       @click.native="changeOrderState(props.index, props.item, 'prepared'), props.expanded=!props.expanded">
                                     <v-icon></v-icon>
                                     Prepared
                                 </v-btn>
@@ -118,7 +133,29 @@
                 <template slot="expand" slot-scope="props">
                     <v-card flat>
                         <v-card-text>
-                            Order details: <strong>{{ props.item.item}}</strong>
+                            <v-list>
+                                <v-list-tile>
+                                    <v-list-tile-content>
+                                        <v-tooltip bottom>
+                                            <div slot="activator">
+                                                <v-list-tile-title>Item</v-list-tile-title>
+                                                <v-list-tile-sub-title>{{ props.item.item }}</v-list-tile-sub-title>
+                                            </div>
+                                        </v-tooltip>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+
+                                <v-list-tile>
+                                    <v-list-tile-content>
+                                        <v-tooltip bottom>
+                                            <div slot="activator">
+                                                <v-list-tile-title><Table>Table</Table></v-list-tile-title>
+                                                <v-list-tile-sub-title>{{ props.item.table_number }}</v-list-tile-sub-title>
+                                            </div>
+                                        </v-tooltip>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+                            </v-list>
                         </v-card-text>
                     </v-card>
                 </template>
@@ -206,35 +243,15 @@
                 if (order.responsible_cook_id !== 0) {
                     axios.put('/api/orders/' + orderToUpdate.id + '?state=' + state)
                     .then(response => {
-                        /* Vue.set(this.orders, index, response.data.data);
-
-                        if (state === 'prepared') {
-                            this.orders.splice(index, 1);
-                            this.totalOrders--;
-                        }
-
-                        if (state === 'in preparation') {
-                            var totalInPreparation = 0;
-
-                            this.orders.forEach(order => {
-                                if (order.state === 'In preparation') {
-                                    totalInPreparation++;
-                                }
-                            });
-
-                            if (totalInPreparation > 0 && totalInPreparation <= this.pagination.rowsPerPage) {
-                                totalInPreparation--;
-                            }
-
-                            this.orders.splice(totalInPreparation, 0, response.data.data);
-                            this.orders.splice((index + 1), 1);
-                        } */
-
                         this.$toasted.info(response.data.message,
                             {
                                 icon: 'info',
                             }
                         );
+
+                        if (state === 'prepared') {
+                            this.notifyWaiter(order);
+                        }
                     })
                     .catch((error) => {
                         this.$toasted.error(error,
@@ -247,34 +264,16 @@
                 else { // Order doesn't have a cook
                     axios.put('/api/orders/' + orderToUpdate.id + '?state=' + state + '&responsible_cook_id=' + this.userID)
                     .then(response => {
-                        /* Vue.set(this.orders, index, response.data.data);
-
-                        if (state === 'prepared') {
-                            this.orders.splice(index, 1);
-                        }
-
-                        if (state === 'in preparation') {
-                            var totalInPreparation = 0;
-
-                            this.orders.forEach(order => {
-                                if (order.state === 'In preparation') {
-                                    totalInPreparation++;
-                                }
-                            });
-
-                            if (totalInPreparation > 0 && totalInPreparation <= this.pagination.rowsPerPage) {
-                                totalInPreparation--;
-                            }
-
-                            this.orders.splice(totalInPreparation, 0, response.data.data);
-                            this.orders.splice((index + 1), 1);
-                        } */
 
                         this.$toasted.info(response.data.message,
                             {
                                 icon: 'info',
                             }
                         );
+
+                        if (state === 'prepared') {
+                            this.notifyWaiter(order);
+                        }
                     })
                     .catch((error) => {
                         this.$toasted.error(error,
@@ -286,6 +285,17 @@
                 }
 
                 this.getDataFromApi();
+            },
+            notifyWaiter(order) {
+                console.log(order.responsible_cook_id);
+                if (order.responsible_cook_id == 0) {
+                    order.responsible_cook_id = this.userID
+                }
+
+                console.log(order.responsible_cook_id);
+
+                let message = 'Order prepared';
+                this.$socket.emit('order_prepared', message, order);
             },
             changeSort (column) {
                 if (this.pagination.sortBy === column)
@@ -332,6 +342,11 @@
         mounted() {
             this.getInformationFromLoggedUser();
             this.isUserAWorker(this.user);
+        },
+        sockets: {
+            new_order() {
+                this.getDataFromApi();
+            }
         }
     }
 </script>

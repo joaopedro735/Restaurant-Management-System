@@ -1,12 +1,11 @@
 <template>
     <v-container>
-
-        <v-toolbar @problems="something">
+        <v-toolbar>
             <v-dialog
                     v-model="dialog"
                     width="500"
             >
-                <v-toolbar-title v-show="this.working === true"
+                <v-toolbar-title v-if="worker.type !== 'manager' && this.working === true"
                                  slot="activator">
                     <v-chip color="red" text-color="white">
                         <v-icon left>info</v-icon>
@@ -77,41 +76,48 @@
                         this.$store.commit('setUser', response.data.data);
                         this.$socket.emit('begin_shift', this.worker);
                         this.working = true;
+
+                        this.$socket.emit('user_enter', this.$store.state.user);
                         //setInterval(this.updateTime,1000);
                     })
                     .catch(error => {
 
                     });
-            }, endShift() {
-                let config = {
-                    headers: {
-                        'Authorization': 'Bearer ' + this.$store.state.token,
-                        'Accept': 'application/json'
-                    }
-                };
-                axios.put('api/users/me/end', config)
+            },
+            endShift() {
+                axios.put('api/users/me/end')
                     .then(response => {
                         this.$store.commit('setUser', response.data.data);
                         this.$socket.emit('shift-end', this.worker);
                         this.working = false;
+
+                        this.$socket.emit('user_exit', this.$store.state.user);
                     })
                     .catch(error => {
 
                     });
-            }, notifyManagers(userProblem) {
+            },
+            notifyManagers(userProblem) {
                 this.dialog = false;
-                this.$socket.emit('problems_Management', userProblem, this.worker);
-            }, resetTime() {
+                this.$socket.emit('problems_Management', userProblem, this.worker, 'home');
+            },
+            resetTime() {
                 this.duration = 0;
                 //clearInterval();
-            }, updateTime() {
+            },
+            updateTime() {
                 //TODO: TODO DURATION
                 this.$store.commit('setDuration', this.duration);
-            }, something(){
-
+            },
+            something() {
+                axios.get('api/meals/' + this.worker.id + '/average')
+                    .then(response => {
+                        console.log(response.data);
+                    })
+                    .catch(error => {
+                        console.log(error.data);
+                    })
             }
-        }, created() {
-            this.$store.commit('loadTokenAndUserFromSession');
         }
     }
 </script>

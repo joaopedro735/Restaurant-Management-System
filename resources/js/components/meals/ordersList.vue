@@ -1,9 +1,7 @@
 <template>
     <div>
         <v-card>
-            <v-card-title class="headline info white--text"
-                          primary-title
-            >
+            <v-card-title class="headline info white--text" primary-title>
                 {{ cardTitle }}
                 <v-spacer></v-spacer>
                 <v-btn @click="switchType" color="primary" dark class="mb-2">{{ buttonTitle }}</v-btn>
@@ -16,19 +14,14 @@
                     :total-items="totalOrders"
                     :loading="table.loading"
                     :rows-per-page-items="table.rowsPerPageItems"
-                    class="elevation-1"
-            >
+                    class="elevation-1">
                 <template slot="items" slot-scope="props">
-                    <tr :key="props.item.id"
-                        :class="{
-                                'pending': (props.item.state.toLowerCase() === 'pending')
-                            }"
-                    >
+                    <tr :key="props.item.id" :class="{'pending': (props.item.state.toLowerCase() === 'pending')}">
                         <td>{{ props.item.id}}</td>
                         <td>{{ props.item.item}}</td>
                         <td>{{ props.item.table_number }}</td>
                         <td>{{ props.item.responsible_cook || "No cook assigned"}}</td>
-                        <td>€{{ props.item.price }}</td>
+                        <td>{{ props.item.price }}€</td>
                         <td>{{ props.item.state }}</td>
                         <td class="text-xs-right">
                             <span v-if="props.item.state.toLowerCase() === 'prepared'">
@@ -67,7 +60,7 @@
                         {text: "Responsible Cook", value: "waiter"},
                         {text: "Price", value: "price"},
                         {text: "State", value: "state"},
-                        {text: "Actions", sortable: false},
+                        {text: "", sortable: false},
                     ],
                 },
             }
@@ -139,6 +132,11 @@
             },
             buttonTitle() {
                 return this.ordersType === "prepared" ? 'Pending/Confirmed orders' : 'Prepared orders';
+            }
+        },
+        sockets: {
+            order_prepared() {
+                this.updateData();
             }
         }
     }

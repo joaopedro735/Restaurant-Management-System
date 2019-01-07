@@ -49,9 +49,4 @@ class Order extends Model
     {
         return $this->belongsTo('App\Meal');
     }
-
-    public static function timestampToString($timestamp)
-    {
-        return mb_convert_encoding($timestamp, "UTF-8");
-    }
 }

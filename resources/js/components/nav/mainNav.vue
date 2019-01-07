@@ -1,45 +1,50 @@
 <template>
-    <div>
-        <v-toolbar class="primary lighten-1">
-            <v-toolbar-title>Restaurantte</v-toolbar-title>
-
-            <v-btn headline color="white" flat round exact :to="{name: 'home'}">
-                <v-icon>home</v-icon>
-                &nbsp;Home
-            </v-btn>
-            <v-btn color="white" flat round to="/menu">Menu</v-btn>
-            <v-btn color="white" flat round v-if="checkDisplay('users')" to="/users" exact>Users</v-btn>
-            <v-btn color="white" flat round v-if="checkDisplay('orders')" to="/orders">Orders</v-btn>
-            <v-btn color="white" flat round v-if="checkDisplay('meals')" to="/meals">Meals</v-btn>
-            <v-btn color="white" flat round v-if="checkDisplay('tables')" to="/management/tables">Tables</v-btn>
-            <v-btn color="white" flat round v-if="checkDisplay('invoices')" to="/invoices/">Invoices</v-btn>
-
-            <v-spacer></v-spacer>
-            <v-btn v-if="this.$store.state.token && working" round color="success">{{'WORKING since ' +
-                this.$store.state.user.last_shift_start}}
-            </v-btn>
-            <v-chip v-if="this.$store.state.token && working" outline color="white">
-                <strong>{{timePassed}}</strong>
-            </v-chip>
-            <v-btn v-if="this.$store.state.token && !working" round color="error">NOT WORKING</v-btn>
-            <notifications :notifications="currentNotifications"></notifications>
-            <v-chip outline color="white" v-if="this.$store.state.user != null">
-                <v-icon v-if="this.$store.state.user.blocked" color="red">block</v-icon>&nbsp;
-                {{ this.$store.state.user.name }}&nbsp;<strong>({{this.$store.state.user.type}})</strong>
-            </v-chip>
-            <login-modal v-if="!this.$store.state.token"></login-modal>
-            <user-nav v-if="this.$store.state.user"></user-nav>
-        </v-toolbar>
-    </div>
+    <v-layout row wrap>
+        <v-flex xs12>
+            <v-toolbar class="primary lighten-1">
+                <v-menu :nudge-width="100">
+                    <v-toolbar-title slot="activator">
+                        <span>Restaurantte</span>
+                        <v-icon dark>arrow_drop_down</v-icon>
+                    </v-toolbar-title>
+                    <v-list>
+                        <v-list-tile :to="{name: 'home'}">Home</v-list-tile>
+                        <v-list-tile to="/menu"">Menu</v-list-tile>
+                        <v-list-tile v-if="checkDisplay('users')" to="/users"">Users</v-list-tile>
+                        <v-list-tile v-if="checkDisplay('orders')" to="/orders">Orders</v-list-tile>
+                        <v-list-tile v-if="checkDisplay('meals')" to="/meals">Meals</v-list-tile>
+                        <v-list-tile v-if="checkDisplay('tables')" to="/management/tables">Tables</v-list-tile>
+                    </v-list>
+                </v-menu>
+                <v-spacer></v-spacer>
+                <v-btn v-if="this.$store.state.token && working" round color="success">{{'WORKING since ' +
+                    this.$store.state.user.last_shift_start + ' (' + timePassed + ')'}}
+                </v-btn>
+                <notifications v-if="this.$store.state.token"
+                               :notifications="notifications"></notifications>
+                <v-btn v-if="this.$store.state.token && !working" round color="error">{{'NOT WORKING since ' +
+                    this.$store.state.user.last_shift_end + ' (' + duration + ')'}}
+                </v-btn>
+                <v-chip outline color="white" v-if="this.$store.state.user != null">
+                    <v-icon v-if="this.$store.state.user.blocked" color="red">block</v-icon>&nbsp;
+                    {{ this.$store.state.user.name }}&nbsp;<strong>({{this.$store.state.user.type}})</strong>
+                </v-chip>
+                <login-modal v-if="!this.$store.state.token"></login-modal>
+                <user-nav v-if="this.$store.state.user"></user-nav>
+            </v-toolbar>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
     export default {
+        props: ['notifications'],
         data() {
             return {
                 time: "",
                 timePassed: "",
-                currentNotifications: [{name: "Jorge", msg: "something"}],
+                duration: "",
+                panel: [],
             }
         },
 
@@ -61,15 +66,25 @@
                     case "invoices":
                         return ((this.$store.state.user.type === "manager" || this.$store.state.user.type === "cashier") && !this.$store.state.user.blocked);
                 }
-            }, calcTime() {
-                let date = this.$store.state.user.last_shift_start;
-                this.timePassed = this.$moment(date).fromNow();
+            },
+            calcTime() {
+                if (this.$store.state.user) {
+                    let date = this.$store.state.user.last_shift_start;
+                    this.timePassed = this.$moment(date).fromNow();
+                }
+            },
+            addNotification: function (notification) {
+                console.log("added");
+                this.notifications.push(notification);
             }
         },
         computed: {
             working: function () {
-                if (this.$store.state.user.shift_active === 0) {
+                if (this.$store.state.user && this.$store.state.user.shift_active === 0) {
                     clearInterval();
+                    var x = this.$moment(this.$store.state.user.last_shift_start);
+                    var y = this.$moment(this.$store.state.user.last_shift_end);
+                    this.duration = this.$moment.duration(x.diff(y)).humanize();
                     return false;
                 } else {
                     clearInterval();

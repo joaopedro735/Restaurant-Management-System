@@ -6,6 +6,10 @@
             >
                 Meals
                 <v-spacer></v-spacer>
+                <v-btn big flat color="info"
+                    :loading="loadingMealInfo"
+                    :disabled="loadingMealInfo">
+                </v-btn>
                 <v-btn fab dark @click="showAddMeal = true" slot="activator" class="mb-2">
                     <v-icon>add</v-icon>
                 </v-btn>
@@ -18,24 +22,19 @@
                     :total-items="totalMeals"
                     :loading="table.loading"
                     :rows-per-page-items="table.rowsPerPageItems"
-                    class="elevation-1"
-            >
+                    class="elevation-1">
                 <template slot="items" slot-scope="props">
                     <tr>
                         <td>{{ props.item.id}}</td>
                         <td>{{ props.item.table_number }}</td>
                         <td>{{ props.item.responsible_waiter }}</td>
-                        <td>€{{ props.item.total_price_preview }}</td>
+                        <td>{{ props.item.total_price_preview }}€</td>
                         <td>{{ props.item.start }}</td>
                         <td>{{ props.item.state }}</td>
                         <td class="text-xs-right">
                             <span v-if="props.item.state === 'Active' && props.item.responsible_waiter === $store.state.user.name">
                                 <v-btn small round color="success" @click.stop="addOrder(props.item.id)">Add order</v-btn>
-                            </span>
-                            <span v-if="props.item.state === 'Active' && props.item.responsible_waiter === $store.state.user.name">
                                 <v-btn small round color="primary" @click.stop="mealInfo(props.item.id)">Meal Info</v-btn>
-                            </span>
-                            <span v-if="props.item.state === 'Active' && props.item.responsible_waiter === $store.state.user.name">
                                 <v-btn small round color="error" @click.stop="checkBeforeTerminateMeal(props.item.id)">Terminate meal</v-btn>
                             </span>
                         </td>
@@ -43,7 +42,10 @@
                 </template>
             </v-data-table>
         </v-card>
-        <add-meal :visible="showAddMeal" @close="showAddMeal = false"></add-meal>
+        <add-meal :visible="showAddMeal"
+                  @update="updateLists"
+                  @close="showAddMeal = false">
+        </add-meal>
         <add-order :visible="showAddOrder" :selectedMeal="selectedMeal" @close="showAddOrder = false"></add-order>
         <meal-info :visible="showMealInfo" :mealInfo="selectedMealInfo" @close="showMealInfo = false"></meal-info>
         <terminate-meal-modal :visible="showTerminateMealConfirmation"
@@ -73,13 +75,14 @@
                 selectedMeal: null,
                 selectedMealInfo: {},
                 numberOfOrdersPending: null,
+                loadingMealInfo: false,
                 table: {
                     rowsPerPageItems: [5, 10, 15, 25, 50],
                     loading: true,
                     pagination: {},
                     headers: [
                         {text: "Meal ID", value: "id", align: "left", sortable: false, width: "60px"},
-                        {text: "Table Number", value: "table_number"},
+                        {text: "Table Number", value: "table_number", width: '60px'},
                         {text: "Responsible Waiter", value: "waiter"},
                         {text: "Total Price", value: "price", width: "200px"},
                         {text: "Start date", value: "date"},
@@ -122,6 +125,7 @@
                 this.showAddOrder = true;
             },
             mealInfo($mealID) {
+                this.loadingMealInfo = true;
                 axios.get('/api/meals/' + $mealID)
                     .then((response) => {
                         this.selectedMealInfo = response.data.data;
@@ -133,6 +137,9 @@
                     })
                     .catch((error) => {
                         console.log(error);
+                    })
+                    .finally(() => {
+                        this.loadingMealInfo = false;
                     })
             },
             checkBeforeTerminateMeal($mealID) {
@@ -157,6 +164,9 @@
                     .catch((error) => {
                         console.log(error);
                     })
+            },
+            updateLists() {
+                this.getDataFromApi();
             }
         },
         components: {

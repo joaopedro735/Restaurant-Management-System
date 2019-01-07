@@ -21,7 +21,7 @@
                     <v-avatar size="56px">
                         <img v-bind:src=props.item.photo_url alt="avatar">
                     </v-avatar>
-                </td> 
+                </td>
                 <td>{{ props.item.name }}</td>
                 <td>{{ props.item.username }}</td>
                 <td>{{ props.item.type }}</td>
@@ -32,7 +32,7 @@
                             <v-icon>lock</v-icon>
                             &nbsp; Block
                         </v-btn>
-                        <v-btn small round color="info" v-if="showManagerOptions & user.email != props.item.email & props.item.blocked" @click="unblockUser(props.index, props.item)">
+                        <v-btn small round color="primary" v-if="showManagerOptions & user.email != props.item.email & props.item.blocked" @click="unblockUser(props.index, props.item)">
                             <v-icon>lock_open</v-icon>
                             &nbsp; Unblock
                         </v-btn>
@@ -123,7 +123,7 @@
             isUserAWorker(user) {
                 if (user.type === 'manager' && !user.blocked) {
                     this.showManagerOptions = true;
-                } 
+                }
             },
             blockUser(index, user) {
                 this.loading = true;

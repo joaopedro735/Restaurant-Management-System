@@ -21,8 +21,15 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" flat @click.stop="show = false">Close</v-btn>
-                <v-btn color="blue darken-1" flat @click.stop="addMeal">Save</v-btn>
+                <v-btn small round color="primary"
+                    :loading="loading"
+                    :disabled="loading"
+                    @click.stop="addMeal">
+                        Save
+                </v-btn>
+                <v-btn small round @click.stop="show = false">
+                    Close
+                </v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -36,6 +43,7 @@
         },
         data() {
             return {
+                loading: false,
                 tableNumber: null,
                 tables: [],
             }
@@ -56,17 +64,18 @@
                 this.tableNumber = "";
             },
             addMeal() {
+                this.loading = true;
+
                 axios.post('/api/meals/', {
                         table_number: this.tableNumber
                     })
                     .then(() => {
-                        this.show = false;
-                        this.$toasted.success("Meal created successfully", {
-                            position: "top-center",
-                            duration: 3000,
-                        });
-                        this.$emit("add");
-                        this.clear();
+                        this.$toasted.success("Meal created successfully",
+                            {
+                                icon: 'info'
+                            }
+                        );
+                        this.$emit('update');
                     })
                     .catch((error) => {
                         console.dir(error);
@@ -74,6 +83,14 @@
                             icon: "error_outline"
                         });
                     })
+                    .finally(() => {
+                        this.loading = false;
+                        this.close();
+                    })
+            },
+            close() {
+                this.clear();
+                this.$emit('close');
             }
         },
         computed: {

@@ -46,23 +46,24 @@ io.on('connection', function (socket) {
 
     // New order - Send to all cooks
     socket.on('new_order', (message, user) => {
-        /* if (user && user.type == 'waiter') {
+        if (user && user.type == 'waiter') {
             io.sockets.to('cooks').emit('new_order', message);
-        } */
+        }
 
-        io.sockets.to('cooks').emit('new_order', message);
+        //io.sockets.to('cooks').emit('new_order', message);
     });
 
     // Order prepared - Send to responsible waiter
-    socket.on('order_prepared', (order, from, to) => {
-        const userInfoFrom = loggedUsers.userInfoByID(from.id);
-        const userInfoTo = loggedUsers.userInfoByID(to.id);
+    socket.on('order_prepared', (message, order) => {
+        const userInfoFrom = loggedUsers.userInfoByID(order.responsible_cook_id);
+        const userInfoTo = loggedUsers.userInfoByID(order.responsible_waiter_id);
 
         if (userInfoTo) {
-            io.to(userInfoTo.socket.id).emit('order_prepared', order);
+            io.to(userInfoTo.socketID).emit('order_prepared', {message: message, order: order});
         } else {
+            let offLineMessage = 'The waiter responsible for the order is offline';
             // Send message to cook who prepared teh order warning waiter is unavailible
-            io.to(userInfoFrom.socket.id).emit('responsible_waiter_unavailable', to);
+            io.to(userInfoFrom.socketID).emit('responsible_waiter_unavailable', offLineMessage);
         }
     });
 
@@ -97,22 +98,21 @@ io.on('connection', function (socket) {
             loggedUsers.addUserInfo(user, socket.id);
 
             if (user.type === 'cashier') {
-                console.log("Connected to cashiers ");
+                console.log(user.username + ' started shift (joined cashiers channel)');
                 socket.join('cashiers');
             }
 
             if (user.type === 'cook') {
-                console.log("Connected to cooks");
+                console.log(user.username + ' started shift (joined cooks channel)');
                 socket.join('cooks');
             }
             if (user.type === 'manager') {
-                console.log("Connected to managers");
+                console.log(user.username + ' started shift (joined managers channel)');
                 socket.join('managers');
                 socket.join('problems');
-                loggedManagers.addUserInfo(user, socket.id);
             }
             if (user.type === 'waiter') {
-                console.log("Connected to waiters");
+                console.log(user.username + ' started shift (joined waiters channel)');
                 socket.join('waiters');
             }
         }
@@ -125,27 +125,43 @@ io.on('connection', function (socket) {
             socket.leave('global');
 
             if(user.type === 'cashier') {
-                socket.leave('cashier');
+                console.log(user.username + ' ended shift (left cashiers channel)');
+                socket.leave('cashiers');
             }
 
             if(user.type === 'cook') {
+                console.log(user.username + ' ended shift (left cooks channel)');
                 socket.leave('cooks');
             }
 
             if(user.type === 'manager') {
+                console.log(user.username + ' ended shift (left managers channel)');
                 socket.leave('managers');
             }
 
             if(user.type === 'waiter') {
+                console.log(user.username + ' ended shift (left waiters channel)');
                 socket.leave('waiters');
             }
         }
     });
+    socket.on('begin_shift', function (worker) {
+        if (worker !== undefined && worker !== null) {
+            console.log("startSocket");
+            socket.join('working_' + worker.type);
+            socket.emit('shift_started', { msg: "Started working", name: "You"});
+        }
+    });
+    socket.on('shift-end', function (worker) {
+        if (worker !== undefined && worker !== null) {
+            console.log('endSocket');
+            socket.leave('working_' + worker.type);
+            loggedUsers.removeUserInfoByID(worker.id);
+            socket.emit('shift_ended', { msg: "Stopped working", name: "You" });
+        }
+    });
 
-    socket.on('problems_Management', (msg, user) => {
-        console.log("problems_management")
-        console.log(user.name)
-        io.sockets.to('problems').emit('problems', { msg: msg,
-                                                    name: user.name});
+    socket.on('problems_Management', (msg, user, where) => {
+        io.sockets.to('problems').emit('problems', { msg: msg, name: user.name, where: where});
     });
 });

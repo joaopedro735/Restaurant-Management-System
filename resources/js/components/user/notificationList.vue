@@ -1,39 +1,32 @@
 <template>
-    <v-menu
-            transition="slide-y-transition"
-            bottom
-    >
-        <!--<v-toolbar color="cyan" dark>
-            <v-toolbar-side-icon></v-toolbar-side-icon>
-
-            <v-toolbar-title>Inbox</v-toolbar-title>
-
-            <v-spacer></v-spacer>
-
-            <v-btn icon>
-                <v-icon>search</v-icon>
+    <v-chip>
+        <v-menu open-on-hover bottom offset-y>
+            <v-btn slot="activator" icon>
+                <v-icon>notifications_active</v-icon>
             </v-btn>
-        </v-toolbar>
 
-        <v-list three-line>
-            <template v-for="(item, index) in notifications">
-                <v-subheader
-                        v-if="item.name"
-                        :key="item.name"
-                >
-                    {{ item.name }}
-                </v-subheader>
-
+            <v-list v-if="notifications.length !== 0" two-line subheader>
                 <v-list-tile
-                        v-else
-                        :key="item.msg"
-                        avatar
-                        @click=""
-                >
+                        v-for="(notification, i) in notifications"
+                        :key="i"
+                        @click="goto(notification.where)">
+                    <v-list-tile-content>
+                        <v-list-tile-title><strong>{{ notification.name }}</strong> {{": " + notification.msg }}
+                        </v-list-tile-title>
+                    </v-list-tile-content>
                 </v-list-tile>
-            </template>
-        </v-list>-->
-    </v-menu>
+            </v-list>
+            <v-list v-else>
+                <v-list-tile>
+                    <v-list-tile-content>
+                        <v-list-tile-title>
+                            <strong>Nothing to see here</strong>
+                        </v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+            </v-list>
+        </v-menu>
+    </v-chip>
 </template>
 
 <script>
@@ -43,6 +36,13 @@
         data() {
             return {
                 fab: false,
+            }
+                fab: false,
+            },
+        methods: {
+            goto(where){
+                console.log(where);
+                this.$router.push({path: where});
             }
         }
     }

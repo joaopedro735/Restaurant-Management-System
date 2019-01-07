@@ -52,12 +52,12 @@ class MealControllerAPI extends Controller
         if ($meal->state === 'terminated') {
             return response()->json([
                 'message' => "Meal already terminated"
-            ],400);
+            ], 400);
         }
         if ($meal->responsible_waiter_id !== $userID) {
             return response()->json([
                 'message' => "Unable to terminate another waiter's meal"
-            ],400);
+            ], 400);
         }
         $priceSum = 0.0;
         foreach ($meal->orders as $order) {
@@ -78,7 +78,8 @@ class MealControllerAPI extends Controller
         ]);
     }
 
-    public function generateInvoice(Meal $meal) {
+    public function generateInvoice(Meal $meal)
+    {
         /*$meal = Meal::findOrFail($mealID);*/
         $orders = json_decode($meal->orders->where('state', 'delivered'));
         $items_quantity = array_count_values(array_column($orders, 'item_id'));
@@ -221,5 +222,17 @@ class MealControllerAPI extends Controller
         $user = Meal::where('responsible_waiter_id', $id)->first();
 
         return $user ? false : true;
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Database\Query\Expression
+     */
+    public function waiterMealsPerDay(Request $request)
+    {
+        $waiterId = $request->input('id');
+        $total = Meal::where('responsible_waiter_id',$waiterId)->where('state','paid')->count();
+        $sum = 0;
+        return $sum;
     }
 }

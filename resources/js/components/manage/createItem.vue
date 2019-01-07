@@ -49,9 +49,9 @@
                             type="file"
                             style="display: none"
                             ref="image"
-                            accept="image/*" 
+                            accept="image/*"
                             @change="onFilePicked">
-                        
+
                         <v-text-field
                             v-model="item.price"
                             :rules="form.priceRules"
@@ -66,7 +66,7 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn small round color="info" :disabled="!form.valid" :loading="form.loading" @click="submit">
+                    <v-btn small round color="primary" :disabled="!form.valid" :loading="form.loading" @click="submit">
                         Create
                     </v-btn>
                     <v-btn small round @click="clear()">Clear</v-btn>
@@ -106,7 +106,7 @@
                 nameDescriptionRules: [
                     v => !!v || 'Required',
                     v => (v && v.length >= 3) || 'Must be at least than 3 characters',
-                    v => (v && v.length <= 255) || 'Must be shorter than 256 characters' 
+                    v => (v && v.length <= 255) || 'Must be shorter than 256 characters'
                 ],
                 typeRules: [
                     v => !!v || 'Required',
@@ -149,11 +149,12 @@
         },
         methods: {
             submit() {
+                this.form.loading = true;
+
                 if (this.$refs.form.validate()) {
                     if (this.imageFile) {
                         this.uploadImageAndCreateItem();
-                    }
-                    else {
+                    } else {
                         this.createItemWithoutImage();
                     }
                 }
@@ -166,24 +167,15 @@
                 this.$emit('close');
             },
             createItemWithoutImage() {
-                let config = {
-                    headers: {
-                        'Authorization': 'Bearer ' + this.$store.state.token,
-                        'Accept': 'application/json'
-                    }
-                };
-
-                if (!Number.isInteger(this.item.price)) {
-                    this.item.price = this.item.price + '.00';
-                }
-                
                 this.item.photo_url = 'placeholder.png'
 
-                axios.post('/api/menu/', this.item, config)
+                axios.post('/api/menu/', this.item)
                     .then(response => {
                         var item = response.data.data;
 
                         this.clear();
+                        console.log('CR');
+                        console.log(item);
                         this.$emit('update', item);
                         this.$emit('close');
 
@@ -198,29 +190,22 @@
                             {
                                 icon: 'error',
                             });
+                    })
+                    .finally(() => {
+                        this.form.loading = false;
                     });
             },
             uploadImageAndCreateItem() {
                 const formData = new FormData();
-                
-                formData.append('file', this.imageFile);
-                
-                let config = {
-                    headers: {
-                        'Authorization': 'Bearer ' + this.$store.state.token,
-                        'Accept': 'application/json'
-                    }
-                };
 
-                axios.post('/api/menu/image', formData, config)
+                formData.append('file', this.imageFile);
+
+                axios.post('/api/menu/image', formData)
                     .then(response => {
-                        if (!Number.isInteger(this.item.price)) {
-                            this.item.price = this.item.price + '.00';
-                        }
 
                         this.item.photo_url = response.data.hashName;
 
-                        axios.post('/api/menu/', this.item, config)
+                        axios.post('/api/menu/', this.item)
                             .then(response => {
                                 var item = response.data.data;
 
@@ -243,6 +228,9 @@
                                     {
                                         icon: 'error',
                                     });
+                            })
+                            .finally(() => {
+                                this.form.loading = false;
                             });
                     })
                     .catch(error => {
@@ -286,8 +274,8 @@
                 },
                 set(value) {
                     if (!value) {
-                        this.clear();                       
-                        
+                        this.clear();
+
                         this.$emit('close');
                     }
                 }
