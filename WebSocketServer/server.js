@@ -84,6 +84,10 @@ io.on('connection', function (socket) {
         }
     });
 
+    socket.on('meal_terminated_with_unfinished_orders', (message) => {
+        io.to('cooks').emit('remove_unfinished_orders', message);
+    });
+
     socket.on('meal_terminated', () => {
         io.to('cashiers').emit('new_invoice');
     });

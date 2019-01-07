@@ -30,6 +30,8 @@
             accept() {
                 this.$emit("continue");
                 this.show = false;
+                let message = 'A meal with unprepared orders has finished';
+                this.$socket.emit('meal_terminated_with_unfinished_orders', message);
             }
         },
         computed: {

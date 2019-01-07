@@ -239,7 +239,7 @@
                     }
                 );
             },
-            changeOrderState: function (index, order, state) {
+            changeOrderState(index, order, state) {
                 this.currentOrder = Object.assign({}, order);
 
                 const orderToUpdate = this.currentOrder;
@@ -254,8 +254,8 @@
                             }
                         );
 
-                        if (state === 'prepared') {
-                            this.notifyWaiter(order);
+                        if (state === 'prepared' || state === 'confirmed' || state === 'in preparation') {
+                            this.notifyWaiter(order, state);
                         }
                     })
                     .catch((error) => {
@@ -276,8 +276,8 @@
                             }
                         );
 
-                        if (state === 'prepared') {
-                            this.notifyWaiter(order);
+                        if (state === 'prepared' || state === 'confirmed' || state === 'in preparation') {
+                            this.notifyWaiter(order, state);
                         }
                     })
                     .catch((error) => {
@@ -291,15 +291,23 @@
 
                 this.getDataFromApi();
             },
-            notifyWaiter(order) {
-                console.log(order.responsible_cook_id);
+            notifyWaiter(order, state) {
                 if (order.responsible_cook_id == 0) {
                     order.responsible_cook_id = this.userID
                 }
 
+                let message = '';
+
                 console.log(order.responsible_cook_id);
 
-                let message = 'Order prepared';
+                if (state === 'prepared') {
+                    message = 'Order prepared';
+                } else if (state == 'confirmed') {
+                    message = 'Cook assigned to order';
+                } else {
+                    message = 'Order in preparation'
+                }
+                
                 this.$socket.emit('order_prepared', message, order);
             },
             changeSort (column) {
@@ -350,6 +358,9 @@
         },
         sockets: {
             new_order() {
+                this.getDataFromApi();
+            },
+            remove_unfinished_orders() {
                 this.getDataFromApi();
             }
         }

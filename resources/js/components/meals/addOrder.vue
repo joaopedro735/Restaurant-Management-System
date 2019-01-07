@@ -104,9 +104,6 @@
                     })
             },
             cancelOrder() {
-                // Confirm order(s) in DB
-                console.log(this.orders);
-
                 let message = '';
 
                 this.orders.forEach(order => {
@@ -122,15 +119,6 @@
                 });
 
                 this.$toasted.info(this.orders.length > 1 ? 'Orders canceled' : 'Order canceled');
-
-                /* axios.delete('/api/orders/delete/', { orders: this.orders })
-                    .then((response) => {
-                        this.$toasted.info('Order canceled');
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        this.$toasted.error('An error occurred, please try again later!');
-                    }) */
             },
             notifyCooks(confirmationMessage) {
                 this.$toasted.success(confirmationMessage,

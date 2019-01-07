@@ -285,9 +285,17 @@ const app = new Vue({
                 }
             );
         },
-        responsible_waiter_unavailable(message) {
+        meal_terminated_with_unfinished_orders(message) {
             this.$toasted.show(message,
                 {
+                    icon: 'info'
+                }
+            );
+        },
+        remove_unfinished_orders(message) {
+            this.$toasted.info(message,
+                {
+                    duration: 5000,
                     icon: 'info'
                 }
             );

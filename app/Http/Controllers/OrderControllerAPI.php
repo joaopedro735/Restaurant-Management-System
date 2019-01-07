@@ -112,21 +112,17 @@ class OrderControllerAPI extends Controller
     public function confirm(Request $request)
     {
         // Order ID
-        $orderID = $request->input('orders');
-
-        // Meal ID
-        $mealID = Order::select('meal_id')->where('id', $orderID)->first()->meal_id;
+        $orderID = $request->input('orders');       
 
         $priceSum = 0.0;
-
+        $mealID = null;
         foreach ($request->input('orders') as $order) {
             $order = Order::findOrFail($order);         
             $order->state = 'confirmed';
             $order->save();
-
-            $itemID = Order::select('item_id')->where('id', $orderID)->first();
-            $itemPrice = ItemControllerAPI::getItemPrice($itemID->item_id);
-            $priceSum += $itemPrice;
+            $mealID = $order->meal_id;
+            $item = Item::find($order->item_id);
+            $priceSum += $item->price;
         }
 
         MealControllerAPI::updateMealPrice($mealID, $priceSum);
