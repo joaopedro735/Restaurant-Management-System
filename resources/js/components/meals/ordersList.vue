@@ -124,6 +124,9 @@
                         console.log(error);
                         this.$toasted.error("An error occurred, please try again later!");
                     });
+            },
+            updatePending() {
+                this.updateData();
             }
         },
         computed: {
@@ -138,7 +141,15 @@
             order_prepared() {
                 this.updateData();
             }
-        }
+        },
+        created() {
+            // Escutar o evento
+            this.$bus.$on('update-pending', this.updateData);
+            
+        },
+        beforeDestroy() {
+            this.$eventHub.$off('update-pending');
+        },
     }
 
 </script>

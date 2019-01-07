@@ -20,6 +20,7 @@ class OrderResource extends JsonResource
             'id' => $this->id,
             'state' => Order::stateToStr($this->state),
             'item' => $this->item->name,
+            'photo_url' => 'storage/items/' . $this->item->photo_url,
             'responsible_cook_id' => $this->responsible_cook_id ?? 0,
             'responsible_cook' => $this->responsibleCook()->value('name'),
             'responsible_waiter_id' => $this->meal->responsible_waiter_id,

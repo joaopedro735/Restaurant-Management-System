@@ -91,7 +91,7 @@ io.on('connection', function (socket) {
     // CHANNELS
     // JOIN
     socket.on('user_enter', user => {
-        // JOIN WHEN SHIFT STARTS
+        // JOIN WHEN SHIFT STARTS OR AT LOGIN IF ON SHIFT
         if (user) {
             // All users join the global 'channel' to receive notifications in case the account gets blocked/unblocked
             socket.join('global');
@@ -120,7 +120,7 @@ io.on('connection', function (socket) {
 
     // LEAVE
     socket.on('user_exit', user => {
-        // LEAVE ALL WHEN SHIFT ENDS
+        // LEAVE ALL WHEN SHIFT ENDS OR LOGOUT FROM APP
         if (user) {
             socket.leave('global');
 

@@ -9,8 +9,8 @@
                     </v-toolbar-title>
                     <v-list>
                         <v-list-tile :to="{name: 'home'}">Home</v-list-tile>
-                        <v-list-tile to="/menu"">Menu</v-list-tile>
-                        <v-list-tile v-if="checkDisplay('users')" to="/users"">Users</v-list-tile>
+                        <v-list-tile to="/menu">Menu</v-list-tile>
+                        <v-list-tile v-if="checkDisplay('users')" to="/users">Users</v-list-tile>
                         <v-list-tile v-if="checkDisplay('orders')" to="/orders">Orders</v-list-tile>
                         <v-list-tile v-if="checkDisplay('meals')" to="/meals">Meals</v-list-tile>
                         <v-list-tile v-if="checkDisplay('tables')" to="/management/tables">Tables</v-list-tile>

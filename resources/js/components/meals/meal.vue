@@ -10,7 +10,10 @@
     import OrdersList from "./ordersList";
 
     export default {
-        components: {OrdersList, MealList}
+        components: {
+            OrdersList,
+            MealList
+        }
     }
 </script>
 

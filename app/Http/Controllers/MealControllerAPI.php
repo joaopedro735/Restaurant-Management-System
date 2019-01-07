@@ -137,20 +137,20 @@ class MealControllerAPI extends Controller
 
     public function addOrderToMeal(Request $request, $mealID)
     {
-        $meal = Meal::findOrFail($mealID);
+        /* $meal = Meal::findOrFail($mealID);
 
         if ($meal->state !== 'active') {
             return response()->json([
                 'message' => "Meal isn't active"
             ]);
-        }
+        } */
         
         $orders = array();
 
-        $priceSum = 0.0;
+        //$priceSum = 0.0;
         
         foreach ($request->input('items') as $item) {
-            $i = Item::select('price')->find($item);
+            //$i = Item::select('price')->find($item);
             $order = new Order;
             $order->state = "pending";
             $order->item_id = $item;
@@ -158,11 +158,11 @@ class MealControllerAPI extends Controller
             $order->start = Carbon::now();
             $order->save();
             array_push($orders, $order->id);
-            $priceSum += $i->price;
+            //$priceSum += $i->price;
         }
         
-        $meal->total_price_preview += $priceSum;
-        $meal->save();
+        //$meal->total_price_preview += $priceSum;
+       // $meal->save();
 
         return response()->json([
             'items' => $orders
@@ -222,6 +222,14 @@ class MealControllerAPI extends Controller
         $user = Meal::where('responsible_waiter_id', $id)->first();
 
         return $user ? false : true;
+    }
+
+    public static function updateMealPrice($id, $priceSum)
+    {
+        $meal = Meal::findOrFail($id);
+
+        $meal->total_price_preview += $priceSum;
+        $meal->save();
     }
 
     /**

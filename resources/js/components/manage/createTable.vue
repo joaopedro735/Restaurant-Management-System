@@ -26,8 +26,11 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn small round color="primary" :disabled="!form.valid" :loading="form.loading" @click="submit">
-                        Create
+                    <v-btn small round color="primary"
+                        :disabled="!form.valid"
+                        :loading="form.loading"
+                        @click="submit">
+                            Create
                     </v-btn>
                     <v-btn small round @click="close()">Cancel</v-btn>
                 </v-card-actions>
