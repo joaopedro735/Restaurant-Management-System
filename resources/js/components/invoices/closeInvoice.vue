@@ -8,21 +8,21 @@
                     <v-layout wrap>
                         <v-flex xs12>
                             <v-text-field
-                                    v-model="client.name"
-                                    label="Name"
-                                    :error-messages="nameErrors"
-                                    @input="$v.client.name.$touch()"
-                                    @blur="$v.client.name.$touch()"
+                                v-model="client.name"
+                                label="Name"
+                                :error-messages="nameErrors"
+                                @input="$v.client.name.$touch()"
+                                @blur="$v.client.name.$touch()"
                             ></v-text-field>
                         </v-flex>
                         <v-flex xs12>
                             <v-text-field
-                                    v-model="client.nif"
-                                    label="NIF"
-                                    type="number"
-                                    :error-messages="nifErrors"
-                                    @input="$v.client.nif.$touch()"
-                                    @blur="$v.client.nif.$touch()"
+                                v-model="client.nif"
+                                label="NIF"
+                                type="number"
+                                :error-messages="nifErrors"
+                                @input="$v.client.nif.$touch()"
+                                @blur="$v.client.nif.$touch()"
                             ></v-text-field>
                         </v-flex>
                     </v-layout>
@@ -30,8 +30,17 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" flat @click.stop="show = false">Close</v-btn>
-                <v-btn color="blue darken-1" flat @click.stop="saveInvoice">Save</v-btn>
+                <v-btn small round color="primary"
+                    :loading="loading"
+                    :disabled="loading"
+                    @click.stop="saveInvoice">
+                        Save
+                </v-btn>
+                <v-btn small round
+                :disabled="loading"
+                    @click.stop="show = false">
+                        Cancel
+                </v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -63,27 +72,41 @@
         data() {
             return {
                 client: {
-                    name: "",
+                    name: '',
                     nif: null,
                 },
+                loading: false
             }
         },
         methods: {
             saveInvoice() {
+                this.loading = true;
+
                 this.$v.$touch();
                 if (!this.$v.$invalid) {
                     axios.patch('/api/invoices/close/' + this.invoiceID, this.client)
                         .then(() => {
+                            this.$emit('update');
+
                             this.$toasted.success("Invoice closed successfully",
                                 {
-                                    position: "top-center",
-                                    duration: 3000,
-                                });
+                                    icon: 'info'
+                                }
+                            );
+
                             this.show = false;
                         })
                         .catch(error => {
-                            this.$toasted.error(error.response.data.message, {duration: 5000});
-                            console.log(error);
+                            this.$toasted.error(error.response.data.message,
+                                {
+                                    icon: 'error'
+                                }
+                            );
+
+                            this.show = false;
+                        })
+                        .finally(() => {
+                            this.loading = false;
                         });
                 }
             },

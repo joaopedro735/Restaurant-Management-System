@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-card>
-            <v-card-title class="headline info white--text " primary-title>
+            <v-card-title class="headline info white--text" primary-title>
                 Orders
                 <v-spacer></v-spacer>
                 <v-text-field @keypress.enter="filterOrders()" v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
@@ -248,6 +248,8 @@
                 if (order.responsible_cook_id !== 0) {
                     axios.put('/api/orders/' + orderToUpdate.id + '?state=' + state)
                     .then(response => {
+                        this.getDataFromApi();
+
                         this.$toasted.info(response.data.message,
                             {
                                 icon: 'info',
@@ -269,6 +271,7 @@
                 else { // Order doesn't have a cook
                     axios.put('/api/orders/' + orderToUpdate.id + '?state=' + state + '&responsible_cook_id=' + this.userID)
                     .then(response => {
+                        this.getDataFromApi();
 
                         this.$toasted.info(response.data.message,
                             {
@@ -288,8 +291,6 @@
                         );
                     })
                 }
-
-                this.getDataFromApi();
             },
             notifyWaiter(order, state) {
                 if (order.responsible_cook_id == 0) {

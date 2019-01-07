@@ -85,7 +85,7 @@ const activateAccount = Vue.component('activate-account', () =>
     import('./components/activateAccount.vue')
 );
 const changePassword = Vue.component('change-password', () =>
-    import('./components/account/changePassword1.vue')
+    import('./components/account/changePassword.vue')
 );
 
 /* Worker options */

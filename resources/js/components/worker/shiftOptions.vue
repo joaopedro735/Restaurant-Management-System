@@ -86,7 +86,7 @@
             notifyManagers(userProblem) {
                 this.dialog = false;
                 this.problem = "";
-                this.$socket.emit('problems_Management', userProblem, this.worker, 'home');
+                this.$socket.emit('problems_Management', userProblem, '/');
             },
             resetTime() {
                 this.duration = 0;
