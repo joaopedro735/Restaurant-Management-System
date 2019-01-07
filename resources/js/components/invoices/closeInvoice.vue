@@ -95,6 +95,7 @@
                             );
 
                             this.show = false;
+                            this.$socket.emit('invoice_closed', this.invoiceID);
                         })
                         .catch(error => {
                             this.$toasted.error(error.response.data.message,

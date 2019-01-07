@@ -355,6 +355,21 @@ const app = new Vue({
                 ]
             });
             this.notifications.push(dataFromServer);
+        },
+        invoice_close(dataFromServer) {
+            this.$toasted.info(dataFromServer.msg, {
+                icon: "info",
+                action:[
+                    {
+                        text: 'Go to',
+                        onClick: (e, toastObject) => {
+                            toastObject.goAway(0);
+                            router.push(dataFromServer.where);
+                        }
+                    }
+                ]
+            });
+            this.notifications.push(dataFromServer);
         }
     },
 });
