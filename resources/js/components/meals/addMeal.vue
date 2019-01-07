@@ -39,14 +39,14 @@
     export default {
         name: "add-meal",
         props: {
-            visible: Boolean
+            visible: Boolean,
         },
         data() {
             return {
                 loading: false,
                 tableNumber: null,
-                tables: []
-            };
+                tables: [],
+            }
         },
         methods: {
             getTables() {
@@ -106,8 +106,11 @@
                         this.$emit("close");
                     }
                 }
-            }
+            },
         },
-    };
+    }
 </script>
 
+<style scoped>
+
+</style>

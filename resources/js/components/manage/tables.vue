@@ -98,9 +98,9 @@
                     this.loading = false;
                 });
 
-                
+
             },
-            deleteTable(table_number, index) {                
+            deleteTable(table_number, index) {
                 this.table.table_number = table_number;
 
                 axios.delete('/api/tables/' + this.table.table_number)
@@ -151,7 +151,7 @@
                             }
                         );
                     }
-                    
+
                     this.$router.push('/menu');
                 }
             }

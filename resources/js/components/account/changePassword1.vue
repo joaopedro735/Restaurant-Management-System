@@ -3,24 +3,22 @@
         <v-layout row wrap>
             <v-flex xs4 offset-xs4>
                 <v-card>
-                    <v-card-title
-                            class="headline light-blue lighten-3"
-                            primary-title
-                            color="purple"
+                    <v-card-title class="headline light-blue lighten-3"
+                                  primary-title
+                                  color="purple"
                     >Change Password
                     </v-card-title>
 
                     <v-divider light></v-divider>
 
-                    <v-alert
-                            v-model="alert.show"
-                            :value="alert.show"
-                            type="error"
-                            transition="scale-transition"
-                            dismissible
-                            outline
-                    >{{ alert.error }}
-                    </v-alert>
+                    <v-alert v-model="alert.show"
+                             :value="alert.show"
+                             type="error"
+                             transition="scale-transition"
+                             dismissible
+                             outline
+                     >{{ alert.error }}
+                     </v-alert>
 
                     <v-card-text>
                         <form ref="form">
@@ -35,16 +33,16 @@
                                     @blur="$v.user.old_password.$touch()"
                             ></v-text-field>
                             <v-text-field
-                                    v-model="user.new_password"
-                                    :error-messages="newPasswordErrors"
-                                    :append-icon="p_show ? 'visibility_off' : 'visibility'"
-                                    :type="p_show ? 'text' : 'password'"
-                                    label="Password"
-                                    counter
-                                    @click:append="p_show = !p_show"
-                                    @input="$v.user.new_password.$touch()"
-                                    @blur="$v.user.new_password.$touch()"
-                            ></v-text-field>
+                                v-model="user.new_password"
+                                :error-messages="newPasswordErrors"
+                                :append-icon="p_show ? 'visibility_off' : 'visibility'"
+                                :type="p_show ? 'text' : 'password'"
+                                label="Password"
+                                counter
+                                @click:append="p_show = !p_show"
+                                @input="$v.user.new_password.$touch()"
+                                @blur="$v.user.new_password.$touch()"
+                        ></v-text-field>
                             <v-text-field
                                     v-model="user.new_password_confirmation"
                                     :error-messages="newPasswordConfirmationErrors"
@@ -57,6 +55,7 @@
                                     @blur="$v.user.new_password_confirmation.$touch()"
                             ></v-text-field>
                         </form>
+
                     </v-card-text>
 
                     <v-divider></v-divider>
@@ -73,36 +72,36 @@
 </template>
 
 <script>
-    import {minLength, required, sameAs} from "vuelidate/lib/validators";
+    import {required, minLength, sameAs} from 'vuelidate/lib/validators'
 
     export default {
         validations: {
             user: {
                 old_password: {
-                    required
+                    required,
                 },
                 new_password: {
                     required,
-                    minLength: minLength(3)
+                    minLength: minLength(3),
                 },
                 new_password_confirmation: {
                     required,
                     minLength: minLength(3),
-                    sameAsPassword: sameAs("new_password")
+                    sameAsPassword: sameAs('new_password'),
                 }
             }
         },
         data: () => ({
             user: {
-                old_password: "",
-                new_password: "",
-                new_password_confirmation: ""
+                old_password: '',
+                new_password: '',
+                new_password_confirmation: '',
             },
             p_show: false,
             p_old_show: false,
             alert: {
                 show: false,
-                error: ""
+                error: "",
             }
         }),
 
@@ -110,27 +109,22 @@
             newPasswordErrors() {
                 const errors = [];
                 if (!this.$v.user.new_password.$dirty) return errors;
-                !this.$v.user.new_password.required &&
-                errors.push("Password is required");
+                !this.$v.user.new_password.required && errors.push("Password is required");
                 !this.$v.user.new_password.minLength && errors.push("Min 3 characters");
                 return errors;
             },
             newPasswordConfirmationErrors() {
                 const errors = [];
                 if (!this.$v.user.new_password_confirmation.$dirty) return errors;
-                !this.$v.user.new_password_confirmation.required &&
-                errors.push("Password confirmation is required");
-                !this.$v.user.new_password_confirmation.minLength &&
-                errors.push("Min 3 characters");
-                !this.$v.user.new_password_confirmation.sameAsPassword &&
-                errors.push("Password and password confirmation mismatch");
+                !this.$v.user.new_password_confirmation.required && errors.push("Password confirmation is required");
+                !this.$v.user.new_password_confirmation.minLength && errors.push("Min 3 characters");
+                !this.$v.user.new_password_confirmation.sameAsPassword && errors.push("Password and password confirmation mismatch");
                 return errors;
             },
             oldPasswordErrors() {
-                const errors = [];
+                const errors =  [];
                 if (!this.$v.user.old_password.$dirty) return errors;
-                !this.$v.user.old_password.required &&
-                errors.push("Old password is required");
+                !this.$v.user.old_password.required && errors.push("Old password is required");
                 return errors;
             }
         },
@@ -139,16 +133,16 @@
             submit() {
                 this.$v.$touch();
                 if (!this.$v.$invalid) {
-                    axios
-                        .put("/api/account/changePassword", this.user)
+                    axios.put('/api/account/changePassword', this.user)
                         .then(response => {
-                            this.$store.commit("setToken", response.data.token);
-                            this.$toasted.success("Password changed successfully", {
-                                position: "top-center",
-                                duration: 3000,
-                                icon: "security"
-                            });
-                            this.$router.push("/account/myprofile");
+                            this.$store.commit('setToken', response.data.token);
+                            this.$toasted.success("Password changed successfully",
+                                {
+                                    position: "top-center",
+                                    duration: 3000,
+                                    icon: "security"
+                                });
+                            this.$router.push('/account/myprofile');
                         })
                         .catch(error => {
                             this.alert.error = error.response.data.message;
@@ -163,7 +157,10 @@
                 this.user.new_password = "";
                 this.user.new_password_confirmation = "";
             }
-        }
-    };
+        },
+    }
 </script>
 
+<style scoped>
+
+</style>

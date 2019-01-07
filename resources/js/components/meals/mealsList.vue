@@ -1,7 +1,9 @@
 <template>
     <div>
         <v-card>
-            <v-card-title class="headline info white--text" primary-title>
+            <v-card-title class="headline info white--text"
+                          primary-title
+            >
                 Meals
                 <v-spacer></v-spacer>
                 <v-btn big flat color="info"
@@ -31,64 +33,26 @@
                         <td>{{ props.item.state }}</td>
                         <td class="text-xs-right">
                             <span v-if="props.item.state === 'Active' && props.item.responsible_waiter === $store.state.user.name">
-                                <v-btn small round color="success" @click.stop="addOrder(props.item.id)">
-                                    <v-icon>add</v-icon>
-                                    &nbsp;Add order
-                                </v-btn>
-                                <v-btn small round color="primary"
-                                    @click.stop="mealInfo(props.item.id)">
-                                        <v-icon>info</v-icon>
-                                        &nbsp;Meal Info
-                                </v-btn>
-                                <v-btn small round color="error"
-                                    @click.stop="checkBeforeTerminateMeal(props.item.id)">
-                                        <v-icon>check</v-icon>
-                                        &nbsp;Terminate meal
-                                </v-btn>
+                                <v-btn small round color="success" @click.stop="addOrder(props.item.id)">Add order</v-btn>
+                                <v-btn small round color="primary" @click.stop="mealInfo(props.item.id)">Meal Info</v-btn>
+                                <v-btn small round color="error" @click.stop="checkBeforeTerminateMeal(props.item.id)">Terminate meal</v-btn>
                             </span>
-                            <!-- <span v-if="props.item.state === 'Active' && props.item.responsible_waiter === $store.state.user.name">
-                                <v-btn small round color="primary"
-                                    :loading="loadingMealInfo"
-                                    :disabled="loadingMealInfo"
-                                    @click.stop="mealInfo(props.item.id)">
-                                        <v-icon>info</v-icon>
-                                        &nbsp;Meal Info
-                                </v-btn>
-                            </span>
-                            <span v-if="props.item.state === 'Active' && props.item.responsible_waiter === $store.state.user.name">
-                                <v-btn small round color="error" @click.stop="checkBeforeTerminateMeal(props.item.id)">
-                                    <v-icon>check</v-icon>
-                                    &nbsp;Terminate meal
-                                </v-btn>
-                            </span> -->
                         </td>
                     </tr>
                 </template>
             </v-data-table>
         </v-card>
-
-        <add-meal
-            :visible="showAddMeal"
-            @update="updateLists"
-            @close="showAddMeal = false">
+        <add-meal :visible="showAddMeal"
+                  @update="updateLists"
+                  @close="showAddMeal = false">
         </add-meal>
-        <add-order
-            :visible="showAddOrder"
-            :selectedMeal="selectedMeal"
-            @close="showAddOrder = false"
-            @update="updateLists">
-        </add-order>
-        <meal-info
-            :visible="showMealInfo"
-            :mealInfo="selectedMealInfo"
-            @close="showMealInfo = false">
-        </meal-info>
-        <terminate-meal-modal
-            :visible="showTerminateMealConfirmation"
-            :numberOfOrders="numberOfOrdersPending"
-            @close="showTerminateMealConfirmation = false"
-            @continue="terminateMeal(selectedMeal)">
-        </terminate-meal-modal>
+        <add-order :visible="showAddOrder" :selectedMeal="selectedMeal" @close="showAddOrder = false"></add-order>
+        <meal-info :visible="showMealInfo" :mealInfo="selectedMealInfo" @close="showMealInfo = false"></meal-info>
+        <terminate-meal-modal :visible="showTerminateMealConfirmation"
+                              :numberOfOrders="numberOfOrdersPending"
+                              @close="showTerminateMealConfirmation = false"
+                              @continue="terminateMeal(selectedMeal)"
+        ></terminate-meal-modal>
     </div>
 </template>
 
@@ -96,10 +60,10 @@
     import AddMeal from './addMeal';
     import AddOrder from './addOrder';
     import MealInfo from './mealInfo';
-    import TerminateMealModal from './terminateMealModal';
+    import TerminateMealModal from "./terminateMealModal";
 
     export default {
-        name: 'meal-list',
+        name: "meal-list",
         data() {
             return {
                 totalMeals: 0,
@@ -117,24 +81,24 @@
                     loading: true,
                     pagination: {},
                     headers: [
-                        {text: 'Meal ID', value: 'id', align: 'left', sortable: false, width: '60px'},
-                        {text: 'Table Number', value: 'table_number', width: '60px'},
-                        {text: 'Responsible Waiter', value: 'waiter'},
-                        {text: 'Total Price', value: 'price', width: '200px'},
-                        {text: 'Start date', value: 'date'},
-                        {text: 'State', value: 'state'},
-                        {text: '', sortable: false},
+                        {text: "Meal ID", value: "id", align: "left", sortable: false, width: "60px"},
+                        {text: "Table Number", value: "table_number", width: '60px'},
+                        {text: "Responsible Waiter", value: "waiter"},
+                        {text: "Total Price", value: "price", width: "200px"},
+                        {text: "Start date", value: "date"},
+                        {text: "State", value: "state"},
+                        {text: "", sortable: false},
                     ],
                 },
             }
         },
         watch: {
-            'table.pagination': {
+            "table.pagination": {
                 handler() {
                     this.getDataFromApi();
                 },
                 deep: true
-            }
+            },
         },
         methods: {
             getDataFromApi() {
@@ -151,7 +115,7 @@
                     }
                 }).catch((error) => {
                     console.log(error);
-                    this.$toasted.error('An error occurred, please try again later!');
+                    this.$toasted.error("An error occurred, please try again later!");
                 }).finally(() => {
                     this.table.loading = false;
                 });
@@ -210,8 +174,10 @@
             AddMeal,
             AddOrder,
             MealInfo
-        }
+        },
     };
 </script>
 
+<style scoped>
 
+</style>

@@ -8,12 +8,12 @@
                         <v-icon dark>arrow_drop_down</v-icon>
                     </v-toolbar-title>
                     <v-list>
-                        <v-list-tile @click="$router.push('home')">Home</v-list-tile>
-                        <v-list-tile @click="$router.push({path: '/menu'})">Menu</v-list-tile>
-                        <v-list-tile v-if="checkDisplay('users')" @click="$router.push({path: '/users'})">Users</v-list-tile>
-                        <v-list-tile v-if="checkDisplay('orders')" @click="$router.push({path: '/orders'})">Orders</v-list-tile>
-                        <v-list-tile v-if="checkDisplay('meals')" @click="$router.push({path: '/meals'})">Meals</v-list-tile>
-                        <v-list-tile v-if="checkDisplay('tables')" @click="$router.push('/management/tables')">Tables</v-list-tile>
+                        <v-list-tile :to="{name: 'home'}">Home</v-list-tile>
+                        <v-list-tile to="/menu"">Menu</v-list-tile>
+                        <v-list-tile v-if="checkDisplay('users')" to="/users"">Users</v-list-tile>
+                        <v-list-tile v-if="checkDisplay('orders')" to="/orders">Orders</v-list-tile>
+                        <v-list-tile v-if="checkDisplay('meals')" to="/meals">Meals</v-list-tile>
+                        <v-list-tile v-if="checkDisplay('tables')" to="/management/tables">Tables</v-list-tile>
                     </v-list>
                 </v-menu>
                 <v-spacer></v-spacer>
@@ -21,7 +21,7 @@
                     this.$store.state.user.last_shift_start + ' (' + timePassed + ')'}}
                 </v-btn>
                 <notifications v-if="this.$store.state.token"
-                               :notifications="currentNotifications"></notifications>
+                               :notifications="notifications"></notifications>
                 <v-btn v-if="this.$store.state.token && !working" round color="error">{{'NOT WORKING since ' +
                     this.$store.state.user.last_shift_end + ' (' + duration + ')'}}
                 </v-btn>
@@ -75,7 +75,7 @@
             },
             addNotification: function (notification) {
                 console.log("added");
-                this.currentNotifications.push(notification);
+                this.notifications.push(notification);
             }
         },
         computed: {
@@ -93,9 +93,6 @@
                     return true;
                 }
             },
-            currentNotifications() {
-                return this.notifications;
-            }
         }
     }
 </script>

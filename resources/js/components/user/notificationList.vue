@@ -37,7 +37,8 @@
             return {
                 fab: false,
             }
-        },methods: {
+        },
+        methods: {
             goto(where){
                 console.log(where);
                 this.$router.push({path: where});

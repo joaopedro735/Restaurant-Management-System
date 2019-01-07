@@ -39,19 +39,15 @@
                                     </td>
                                     <td class="text-xs-right">
                                         <span>
-                                            <v-btn small round color="primary"
-                                                v-if="showManagerOptions"
-                                                @click="updateItem(props.index, props.item), props.expanded=!props.expanded">
-                                                    <v-icon>edit</v-icon>
-                                                    &nbsp; Update
+                                            <v-btn small round color="primary" v-if="showManagerOptions" @click="updateItem(props.index, props.item), props.expanded=!props.expanded">
+                                                <v-icon>edit</v-icon>
+                                                Update
                                             </v-btn>
                                         </span>
                                         <span>
-                                            <v-btn small round color="error"
-                                                v-if="showManagerOptions"
-                                                @click="deleteItem(props.index, props.item), props.expanded=!props.expanded">
-                                                    <v-icon>delete</v-icon>
-                                                    &nbsp; Delete
+                                            <v-btn small round color="error" v-if="showManagerOptions" @click="deleteItem(props.index, props.item), props.expanded=!props.expanded">
+                                                <v-icon>delete</v-icon>
+                                                Delete
                                             </v-btn>
                                         </span>
                                     </td>
@@ -104,19 +100,15 @@
                                     </td>
                                     <td class="text-xs-right">
                                         <span>
-                                            <v-btn small round color="primary" slot="activator"
-                                                v-if="showManagerOptions"
-                                                @click="updateItem(props.index, props.item), props.expanded=!props.expanded">
-                                                    <v-icon>edit</v-icon>
-                                                    &nbsp; Update
+                                            <v-btn small round color="primary" slot="activator" v-if="showManagerOptions" @click="updateItem(props.index, props.item), props.expanded=!props.expanded">
+                                                <v-icon>edit</v-icon>
+                                                &nbsp; Update
                                             </v-btn>
                                         </span>
                                         <span>
-                                            <v-btn small round color="error"
-                                                v-if="showManagerOptions"
-                                                @click="deleteItem(props.index, props.item), props.expanded=!props.expanded">
-                                                    <v-icon>delete</v-icon>
-                                                    &nbsp; Delete
+                                            <v-btn small round color="error" v-if="showManagerOptions" @click="deleteItem(props.index, props.item), props.expanded=!props.expanded">
+                                                <v-icon>delete</v-icon>
+                                                &nbsp; Delete
                                             </v-btn>
                                         </span>
                                     </td>
@@ -298,13 +290,13 @@
                             duration: 5000
                         }
                     ); */
-                
+
             }
         },
         mounted() {
             this.getInformationFromLoggedUser();
             this.isUserAWorker(this.user);
-            
+
         },
         components: {
             'create-item': CreateItem,

@@ -83,14 +83,9 @@
                     .catch(error => {
 
                     });
-            }, endShift() {
-                let config = {
-                    headers: {
-                        'Authorization': 'Bearer ' + this.$store.state.token,
-                        'Accept': 'application/json'
-                    }
-                };
-                axios.put('api/users/me/end', config)
+            },
+            endShift() {
+                axios.put('api/users/me/end')
                     .then(response => {
                         this.$store.commit('setUser', response.data.data);
                         this.$socket.emit('shift-end', this.worker);
@@ -101,16 +96,20 @@
                     .catch(error => {
 
                     });
-            }, notifyManagers(userProblem) {
+            },
+            notifyManagers(userProblem) {
                 this.dialog = false;
                 this.$socket.emit('problems_Management', userProblem, this.worker, 'home');
-            }, resetTime() {
+            },
+            resetTime() {
                 this.duration = 0;
                 //clearInterval();
-            }, updateTime() {
+            },
+            updateTime() {
                 //TODO: TODO DURATION
                 this.$store.commit('setDuration', this.duration);
-            }, something() {
+            },
+            something() {
                 axios.get('api/meals/' + this.worker.id + '/average')
                     .then(response => {
                         console.log(response.data);
@@ -119,11 +118,6 @@
                         console.log(error.data);
                     })
             }
-        }, created() {
-            this.$store.commit('loadTokenAndUserFromSession');
-        },
-        mounted(){
-            this.$store.commit('loadTokenAndUserFromSession');
         }
     }
 </script>

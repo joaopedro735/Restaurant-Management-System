@@ -10,19 +10,17 @@ require("./bootstrap");
 
 window.Vue = require("vue");
 
-import VueRouter from "vue-router";
-import store from "./stores/global-store";
-import Vuetify from "vuetify";
-import Toasted from "vue-toasted";
-import Vuelidate from "vuelidate";
-import VueSocketIO from "vue-socket.io";
+import VueRouter from 'vue-router';
+import store from './stores/global-store';
+import Vuetify from 'vuetify';
+import Toasted from 'vue-toasted';
 import moment from "moment";
-
+import Vuelidate from 'vuelidate';
+import VueSocketIO from 'vue-socket.io';
 
 Vue.config.productionTip = false;
 
 Vue.prototype.$moment = moment;
-
 Vue.use(VueRouter);
 Vue.use(store);
 Vue.use(Vuetify);
@@ -51,7 +49,9 @@ const loginModal = Vue.component('login-modal', () =>
 const logout = Vue.component('logout-component', () =>
     import('./components/logout.vue')
 );
-const footer = Vue.component('footer-component', () => import(/* webpackChunkName: "footer" */'./components/footer'));
+const footer = Vue.component('footer-component', () =>
+    import('./components/footer.vue')
+);
 
 const home = () => import('./components/home');
 
@@ -147,24 +147,17 @@ const toastedOptions = {
 Vue.use(Toasted, toastedOptions);
 
 router.beforeEach((to, from, next) => {
-    if (
-        to.name === "profile" ||
-        to.name === "logout" ||
-        to.name === "orders" ||
-        to.name === "tables" ||
-        to.name === "logout" ||
-        to.name === "invoices"
-    ) {
+    if ((to.name === 'profile') || (to.name === 'logout') || (to.name === 'orders') || (to.name === 'tables') || (to.name === 'logout') || (to.name === 'invoices')) {
         if (!store.state.user) {
-            next("/login");
+            next('/login');
             return;
         }
     }
     next();
 });
 
-Vue.filter("capitalize", function (value) {
-    if (!value) return "";
+Vue.filter('capitalize', function (value) {
+    if (!value) return '';
     value = value.toString();
     return value.charAt(0).toUpperCase() + value.slice(1);
 });
@@ -182,11 +175,11 @@ const app = new Vue({
     methods: {
         getInformationFromLoggedUser() {
             //todo
-            this.user = this.$store.state.user; //
+            this.user = this.$store.state.user;//
             if (this.user === null) {
                 axios.get("api/users");
             }
-        }
+        },
     },
     created() {
         store.commit('loadTokenAndUserFromSession');
@@ -207,7 +200,7 @@ const app = new Vue({
 
             /* if (store.state.user) {
                 this.$socket.emit('user_enter', this.$store.state.user);
-            }  */        
+            }  */
         },
         shift_started(dataFromServer) {
             console.log("start");
@@ -224,18 +217,22 @@ const app = new Vue({
             this.notifications.push(dataFromServer);
         },
         user_blocked(message) {
-            this.$toasted.error(message, {
-                icon: "error"
-            });
+            this.$toasted.error(message,
+                {
+                    icon: 'error'
+                }
+            );
 
             store.commit('setBlock', true);
 
             this.$router.push('/menu');
         },
         user_unblocked(message) {
-            this.$toasted.info(message, {
-                icon: "info"
-            });
+            this.$toasted.info(message,
+                {
+                    icon: 'info'
+                }
+            );
 
             store.commit('setBlock', false);
 
@@ -246,24 +243,26 @@ const app = new Vue({
              * Show toast only to cooks (all)
              * Show link to orders (possibly highlighting order)
              */
-            this.$toasted.info(message, {
-                icon: "info",
-                action: [
-                    {
-                        text: "OK",
-                        onClick: (e, toastObject) => {
-                            toastObject.goAway(0);
+            this.$toasted.info(message,
+                {
+                    icon: 'info',
+                    action : [
+                        {
+                            text : 'OK',
+                            onClick : (e, toastObject) => {
+                                toastObject.goAway(0);
+                            }
+                        },
+                        {
+                            text : 'View orders',
+                            push : {
+                                name : 'orders',
+                                dontClose : true
+                             }
                         }
-                    },
-                    {
-                        text: "View orders",
-                        push: {
-                            name: "orders",
-                            dontClose: true
-                        }
-                    }
-                ]
-            });
+                    ]
+                },
+            );
         },
         order_prepared(data) {
             /**
@@ -289,17 +288,19 @@ const app = new Vue({
              * Show link to meal invoice (possibly highlighting order)
              */
             this.$toasted.info(message, {
-                icon: "info"
-            });
+                    icon: 'info'
+                }
+            );
         },
         message_to_managers(message, from) {
             /**
              * Show toast only to cashiers (all)
              * Show link to meal invoice (possibly highlighting order)
              */
-            this.$toasted.info("Message from: " + from.name + " - " + message, {
-                icon: "info"
-            });
+            this.$toasted.info('Message from: ' + from.name + ' - ' + message, {
+                    icon: 'info'
+                }
+            );
         },
         problems(dataFromServer) {
             this.$toasted.error(dataFromServer.name + ": " + dataFromServer.msg, {
@@ -326,7 +327,7 @@ const app = new Vue({
         if (this.$store.state.user && this.$store.state.user.shift_active === 1) {
             this.$socket.emit('user_enter', this.$store.state.user);
         }
-    }
+    },
 });
 
 axios.interceptors.response.use(

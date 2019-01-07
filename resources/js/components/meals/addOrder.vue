@@ -1,9 +1,8 @@
 <template>
     <v-dialog persistent v-model="show" @click.stop="close" max-width="600px">
         <v-card>
-            <v-card-title
-                    class="headline blue darken-4 white--text"
-            >Add order to meal #{{ this.selectedMeal }}
+            <v-card-title class="headline blue darken-4 white--text">
+                Add order to meal #{{ this.selectedMeal }}
             </v-card-title>
 
             <v-card-text>
@@ -40,7 +39,7 @@
         name: "add-order",
         props: {
             visible: Boolean,
-            selectedMeal: Number
+            selectedMeal: Number,
         },
         data() {
             return {
@@ -62,8 +61,8 @@
                             duration: 5000,
                             action: [
                                 {
-                                    text: "Cancel",
-                                    onClick: (e, toastObject) => {
+                                    text : 'Cancel',
+                                    onClick : (e, toastObject) => {
                                         toastObject.goAway(0);
                                         this.cancelOrder();
                                     }
@@ -78,7 +77,7 @@
                     .catch((error) => {
                         console.log(error);
                         this.$toasted.error("An error occurred, please try again later!");
-                    });
+                    })
             },
             confirmOrder() {
                 // Confirm order(s) in DB
@@ -89,7 +88,7 @@
                     })
                     .catch((error) => {
                         console.log(error);
-                        this.$toasted.error('An error occurred, please try again later!');
+                        this.$toasted.error("An error occurred, please try again later!");
                     })
             },
             cancelOrder() {
@@ -100,13 +99,13 @@
 
                 this.orders.forEach(order => {
                     axios.delete('/api/orders/delete/' + order)
-                    .then((response) => {
-                        message = response.data.message;
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        this.$toasted.error("An error occurred, please try again later!");
-                    })
+                        .then((response) => {
+                            message = response.data.message;
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                            this.$toasted.error("An error occurred, please try again later!");
+                        })
                 });
 
                 this.$toasted.info(this.orders.length > 1 ? 'Orders canceled' : 'Order canceled');
@@ -131,14 +130,14 @@
                 this.$socket.emit('new_order', message, this.$store.state.user);
             },
             getItems() {
-                axios.get("/api/menu/")
-                    .then(response => {
+                axios.get('/api/menu/')
+                    .then((response) => {
                         console.log(response);
                         this.items = response.data.data;
                     })
                     .catch((error) => {
                         console.log(error);
-                    });
+                    })
             },
             reset() {
                 this.selected = [];
@@ -146,7 +145,7 @@
             close() {
                 this.reset();
                 this.show = false;
-                this.$emit("close");
+                this.$emit('close');
             }
         },
         computed: {
@@ -159,11 +158,14 @@
                         this.$emit("close");
                     }
                 }
-            }
+            },
         },
         mounted() {
             this.getItems();
         }
-    };
+    }
 </script>
 
+<style scoped>
+
+</style>

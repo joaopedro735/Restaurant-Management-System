@@ -97,7 +97,7 @@
                 axios.post('/api/tables/', this.table)
                     .then(response => {
                         var table = response.data.data;
-                        
+
                         if (table.table_number == 0) {
                             table.table_number = this.table.table_number;
                         }
@@ -121,7 +121,7 @@
                         this.form.loading = false;
                     });
 
-                
+
             }
         },
         computed: {
@@ -141,5 +141,5 @@
 </script>
 
 <style scoped>
-    
+
 </style>

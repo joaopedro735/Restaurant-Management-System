@@ -54,16 +54,14 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn small round color="primary"
-                        :disabled="!form.valid"
-                        :loading="form.loading"
-                        @click="submit">
-                            Submit
+                            :disabled="!form.valid"
+                            :loading="form.loading"
+                            @click="submit"
+                    >
+                        Submit
                     </v-btn>
-                    <v-btn
-                        small round
-                        @click="clear">
-                            Clear
-                    </v-btn>
+                    <v-btn small round
+                            @click="clear">Clear</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -125,16 +123,9 @@
                 this.$refs.form.reset();
             },
             register() {
-                const config = {
-                    headers: {
-                        "Authorization": "Bearer " + this.$store.state.token,
-                        "Accept": "application/json"
-                    }
-                };
-
                 this.form.loading = true;
 
-                axios.post("/api/account/create", this.user, config)
+                axios.post("/api/account/create", this.user)
                     .then(response => {
                         this.$toasted.success("User created successfully");
                     })

@@ -1,13 +1,10 @@
 <template>
     <v-dialog persistent v-model="show" @click.stop="show = false" max-width="600px">
         <v-card>
-            <v-card-title class="headline warning">
-                <v-icon >warning</v-icon> &nbsp;Meal has orders not delivered
-            </v-card-title>
-            <v-card-text>
-                This meal still has <span class="font-weight-bold">{{ numberOfOrders }} orders </span>  that were not delivered.<p>
-                Are you sure you want to terminate this meal?</p>
-            </v-card-text>
+            <v-card-title class="headline warning"><v-icon >warning</v-icon>Meal has orders not delivered</v-card-title>
+            <v-card-text>This meal still has <span class="font-weight-bold">{{ numberOfOrders }} orders </span>  that were not delivered.<p>
+                Are you sure you want to terminate this meal?
+            </p></v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn small round flat color="primary" @click="show = false">

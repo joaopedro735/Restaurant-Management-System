@@ -37,7 +37,7 @@
                             prepend-icon="description"
                             required>
                         </v-text-field>
-                        
+
                         <v-text-field
                             label="Item Photo"
                             @click='pickFile'
@@ -88,8 +88,8 @@
                 show: false,
                 error: ''
             },
-            imageUrl: '',
-            imageFile: '',
+            imageUrl: "",
+            imageFile: "",
             form: {
                 valid: true,
                 loading: false,
@@ -97,7 +97,7 @@
                 nameDescriptionRules: [
                     v => !!v || 'Required',
                     v => (v && v.length >= 3) || 'Must be at least than 3 characters',
-                    v => (v && v.length <= 255) || 'Must be shorter than 255 characters' 
+                    v => (v && v.length <= 255) || 'Must be shorter than 255 characters'
                 ],
                 typeRules: [
                     v => !!v || 'Required',
@@ -184,7 +184,7 @@
             },
             uploadImageAndUpdateItem() {
                 const formData = new FormData();
-                
+
                 formData.append('file', this.imageFile);
 
                 axios.post('/api/menu/image', formData)
@@ -192,7 +192,7 @@
                         if (!Number.isInteger(this.item.price)) {
                             this.item.price = this.item.price + '.00';
                         }
-                        
+
                         this.item.photo_url = response.data.hashName;
 
                         axios.put('/api/menu/' + this.item.id, this.item)
@@ -223,7 +223,7 @@
                             {
                                 icon: 'error',
                             });
-                            
+
                         this.item.photo_url ='placeholder.png';
                     })
                     .finally(() => {

@@ -21,7 +21,7 @@
                     <v-avatar size="56px">
                         <img v-bind:src=props.item.photo_url alt="avatar">
                     </v-avatar>
-                </td> 
+                </td>
                 <td>{{ props.item.name }}</td>
                 <td>{{ props.item.username }}</td>
                 <td>{{ props.item.type }}</td>
@@ -123,7 +123,7 @@
             isUserAWorker(user) {
                 if (user.type === 'manager' && !user.blocked) {
                     this.showManagerOptions = true;
-                } 
+                }
             },
             blockUser(index, user) {
                 this.loading = true;
