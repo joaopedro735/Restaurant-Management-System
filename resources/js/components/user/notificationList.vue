@@ -1,5 +1,4 @@
 <template>
-    <v-chip>
         <v-menu open-on-hover bottom offset-y>
             <v-btn slot="activator" icon>
                 <v-icon>notifications_active</v-icon>
@@ -26,7 +25,6 @@
                 </v-list-tile>
             </v-list>
         </v-menu>
-    </v-chip>
 </template>
 
 <script>

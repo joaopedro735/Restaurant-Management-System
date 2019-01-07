@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,12 +12,12 @@ use Illuminate\Http\Request;
 */
 Route::group([
     'middleware' => 'auth:api'
-], function() {
+], function () {
     Route::post('logout', 'LoginControllerAPI@logout');
 
     Route::group([
         'prefix' => 'users'
-    ], function() {
+    ], function () {
         Route::get('/', 'UserControllerAPI@index');
         Route::get('/me', 'UserControllerAPI@myProfile');
         Route::put('/me', 'UserControllerAPI@save');
@@ -33,17 +31,16 @@ Route::group([
 
     Route::group([
         'prefix' => 'account'
-    ], function() {
+    ], function () {
         Route::post('/create', 'UserControllerAPI@create');
         Route::put('/changePassword', 'UserControllerAPI@changePassword');
     });
 
     Route::group([
-        'prefix' => 'orders'
-    ], function() {
+        'prefix' => 'orders',
+        'middleware' => ['cook.waiter']
+    ], function () {
         Route::get('/', 'OrderControllerAPI@index');
-        Route::get('/my/active', 'OrderControllerAPI@waiterActive');
-        Route::get('/my/prepared', 'OrderControllerAPI@waiterPrepared');
         Route::patch('/deliver/{id}', 'OrderControllerAPI@deliverOrder');
         Route::put('/{id}', 'OrderControllerAPI@update');
         Route::patch('/confirm', 'OrderControllerAPI@confirm');
@@ -51,8 +48,17 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => 'tables'
-    ], function() {
+        'prefix' => 'orders',
+        'middleware' => 'cook.waiter'
+    ], function () {
+        Route::get('/my/active', 'OrderControllerAPI@waiterActive');
+        Route::get('/my/prepared', 'OrderControllerAPI@waiterPrepared');
+    });
+
+    Route::group([
+        'prefix' => 'tables',
+        'middleware' => 'waiter'
+    ], function () {
         Route::get('/', 'TableControllerAPI@index');
         Route::post('/', 'TableControllerAPI@store');
         Route::get('/available', 'TableControllerAPI@available');
@@ -70,7 +76,8 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => 'meals'
+        'prefix' => 'meals',
+        'middleware' => 'waiter'
     ], function () {
         Route::get('/', 'MealControllerAPI@index');
         Route::post('/', 'MealControllerAPI@store');
