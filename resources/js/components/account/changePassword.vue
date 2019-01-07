@@ -1,139 +1,179 @@
 <template>
-    <!-- <div class="container">
-            <div class="row">
-            <h1 class="text-center">Alterar palavra passe</h1>
-            </div>
+    <v-container fluid grid-list-xl text-xs-center>
+        <v-layout row wrap>
+            <v-flex xs6 offset-xs3>
+                <v-card>
+                    <v-card-title
+                        class="headline info white--text"
+                        primary-title
+                        color="purple">
+                            Change Password
+                    </v-card-title>
 
-            <hr>
+                    <v-divider light></v-divider>
 
-            <form>
-                <div class="form-group">
-                    <label for="inputPassword">Palavra passe antiga</label>
-                    <input type="password" class="form-control" id="inputPasswordOld" v-model="password.passwordOld" placeholder="Palavra passe antiga">
-                </div>
-                <div class="form-group">
-                    <label for="inputPassword">Nova palavra passe</label>
-                    <input type="password" class="form-control" id="inputPasswordOne" v-model="password.passwordOne" placeholder="Nova palavra passe">
-                </div>
-                <div class="form-group">
-                    <label for="inputPassword">Repita a palavra passe</label>
-                    <input type="password" class="form-control" id="inputPasswordTwo" v-model="password.passwordTwo" placeholder="Repita a nova palavra passe">
-                </div>
-                <button @click.prevent="changePassword()" class="btn btn-primary">Continuar</button>
-            </form>
+                    <v-alert 
+                        v-model="alert.show"
+                        :value="alert.show"
+                        type="error"
+                        transition="scale-transition"
+                        dismissible
+                        outline>
+                            {{ alert.error }}
+                     </v-alert>
 
-            <br v-if="hasErrors">
-            <div v-if="hasErrors" class="alert alert-danger">
-                <strong>Erro!</strong> {{ errorMessage }}
-                <button type="button" class="close-btn" @click="hasErrors = false;">&times;</button>
-            </div>
-
-            <br>
-            <br>
-            <br>
-            <div class="panel-group">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">US 4</div>
-                    <div class="panel-body">
-                        As a worker of the restaurant, after confirming the account, I want to <strong>be able to change my password</strong> at any time.
-                    </div>
-                </div>
-            </div>
-        </div> -->
-    <div v-if="seguranca" class="col-md-9">
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <form>
-                            <!-- PALAVRA PASSE ANTIGA -->
-                            <div class="form-group row">
-                                <label for="inputPassword" class="col-4 col-form-label">Palavra passe antiga</label>
-                                <div class="col-8">
-                                    <input type="password" class="form-control here" id="inputPasswordOld" v-model="password.passwordOld" placeholder="Palavra passe antiga">
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="inputPassword" class="col-4 col-form-label">Nova palavra passe</label>
-                                <div class="col-8">
-                                    <input type="password" class="form-control here" id="inputPasswordOne" v-model="password.passwordOne" placeholder="Nova palavra passe">
-                                </div>
-                            </div>
-
-                            <!-- PALAVRA PASSE NOVA -->
-                            <div class="form-group row">
-                                <label for="inputPassword" class="col-4 col-form-label">Repita a palavra passe</label>
-                                <div class="col-8">
-                                    <input type="password" class="form-control here" id="inputPasswordTwo" v-model="password.passwordTwo" placeholder="Repita a nova palavra passe">
-                                </div>
-                            </div>
-
-                            <!-- PALAVRA PASSE NOVA REP -->
-                            <div class="form-group row">
-                                <div class="offset-4 col-8">
-                                    <button @click.prevent="changePassword()" class="btn btn-primary">Continuar</button>
-                                </div>
-                            </div>
+                    <v-card-text>
+                        <form ref="form">
+                            <v-text-field
+                                v-model="user.old_password"
+                                :error-messages="oldPasswordErrors"
+                                :append-icon="p_old_show ? 'visibility_off' : 'visibility'"
+                                :type="p_old_show ? 'text' : 'password'"
+                                label="Old password"
+                                @click:append="p_old_show = !p_old_show"
+                                @input="$v.user.old_password.$touch()"
+                                @blur="$v.user.old_password.$touch()"
+                            ></v-text-field>
+                            <v-text-field
+                                v-model="user.new_password"
+                                :error-messages="newPasswordErrors"
+                                :append-icon="p_show ? 'visibility_off' : 'visibility'"
+                                :type="p_show ? 'text' : 'password'"
+                                label="Password"
+                                counter
+                                @click:append="p_show = !p_show"
+                                @input="$v.user.new_password.$touch()"
+                                @blur="$v.user.new_password.$touch()">
+                            </v-text-field>
+                            <v-text-field
+                                v-model="user.new_password_confirmation"
+                                :error-messages="newPasswordConfirmationErrors"
+                                :append-icon="p_show ? 'visibility_off' : 'visibility'"
+                                :type="p_show ? 'text' : 'password'"
+                                label="Password Confirmation"
+                                counter
+                                @click:append="p_show = !p_show"
+                                @input="$v.user.new_password_confirmation.$touch()"
+                                @blur="$v.user.new_password_confirmation.$touch()">
+                            </v-text-field>
                         </form>
 
-                        <br v-if="hasErrors">
-                        <div v-if="hasErrors" class="alert alert-danger">
-                            <strong>Erro!</strong> {{ errorMessage }}
-                            <button type="button" class="close-btn" @click="hasErrors = false;">&times;</button>
-                        </div>
+                    </v-card-text>
 
-                        <br>
-                        <br>
-                        <br>
-                        <div class="panel-group">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">US 4</div>
-                                <div class="panel-body">
-                                    As a worker of the restaurant, after confirming the account, I want to <strong>be able to change my password</strong> at any time.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                    <v-divider></v-divider>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn small round color="primary"
+                        :loading="loading"
+                        :disabled="loading"
+                            @click="submit">
+                                Save
+                        </v-btn>
+                        <v-btn small round
+                            :disabled="loading"
+                            @click="clear">
+                                Clear
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-flex>
+        </v-layout>
+    </v-container>
 </template>
 
 <script>
-    /** US 4. As a worker of the restaurant, after confirming the account, I want to be able to change my password at any time. */
-    module.exports = {
-        props: ['user', 'seguranca'],
-        data: function() {
-            return {
-                title: 'Alterar palavra passe',
-                password: {
-                    passwordOld: '',
-                    passwordOne: '',
-                    passwordTwo: ''
+    import {required, minLength, sameAs} from 'vuelidate/lib/validators'
+
+    export default {
+        validations: {
+            user: {
+                old_password: {
+                    required,
                 },
-                hasErrors: false,
-                passwordCheckBool: true,
-                errorMessage: ''
-            };
-        },
-        methods: {
-            changePassword: function() {
-                this.hasErrors = false;
-
-                if (this.password.passwordOne !== this.password.passwordTwo) {
-                    this.hasErrors = true;
-                    this.errorMessage = 'As palavras passe não coincidem.';
-
-                    return;
+                new_password: {
+                    required,
+                    minLength: minLength(3),
+                },
+                new_password_confirmation: {
+                    required,
+                    minLength: minLength(3),
+                    sameAsPassword: sameAs('new_password'),
                 }
-
-                // TODO: Criar endpoint para alterar a palavra passe do user
             }
         },
-        mounted() {
+        data: () => ({
+            user: {
+                old_password: '',
+                new_password: '',
+                new_password_confirmation: '',
+            },
+            loading: false,
+            p_show: false,
+            p_old_show: false,
+            alert: {
+                show: false,
+                error: "",
+            }
+        }),
 
+        computed: {
+            newPasswordErrors() {
+                const errors = [];
+                if (!this.$v.user.new_password.$dirty) return errors;
+                !this.$v.user.new_password.required && errors.push("Password is required");
+                !this.$v.user.new_password.minLength && errors.push("Min 3 characters");
+                return errors;
+            },
+            newPasswordConfirmationErrors() {
+                const errors = [];
+                if (!this.$v.user.new_password_confirmation.$dirty) return errors;
+                !this.$v.user.new_password_confirmation.required && errors.push("Password confirmation is required");
+                !this.$v.user.new_password_confirmation.minLength && errors.push("Min 3 characters");
+                !this.$v.user.new_password_confirmation.sameAsPassword && errors.push("Password and password confirmation mismatch");
+                return errors;
+            },
+            oldPasswordErrors() {
+                const errors =  [];
+                if (!this.$v.user.old_password.$dirty) return errors;
+                !this.$v.user.old_password.required && errors.push("Old password is required");
+                return errors;
+            }
+        },
+
+        methods: {
+            submit() {
+                this.loading = true;
+
+                this.$v.$touch();
+                if (!this.$v.$invalid) {
+                    axios.put('/api/account/changePassword', this.user)
+                        .then(response => {
+                            this.$store.commit('setToken', response.data.token);
+                            this.$toasted.success("Password changed successfully",
+                                {
+                                    position: "top-center",
+                                    duration: 3000,
+                                    icon: "security"
+                                });
+                            this.$router.push('/account/myprofile');
+                        })
+                        .catch(error => {
+                            this.alert.error = error.response.data.message;
+                            this.alert.show = true;
+                            console.dir(error);
+                        })
+                        .finally(() => {
+                            this.loading = false;
+                        });
+                }
+            },
+            clear() {
+                this.$v.$reset();
+                this.user.old_password = "";
+                this.user.new_password = "";
+                this.user.new_password_confirmation = "";
+            }
         },
     }
 </script>

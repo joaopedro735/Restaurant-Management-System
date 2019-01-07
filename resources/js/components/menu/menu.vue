@@ -134,8 +134,16 @@
                 </v-flex>
             </v-layout>
         </v-container>
-        <create-item :visible="showCreateItem" @close="showCreateItem = false" @update="update"></create-item>
-        <update-item :visible="showUpdateItem" @close="showUpdateItem = false" @update="update" :item="currentItem"></update-item>
+        <create-item
+            :visible="showCreateItem"
+            @close="showCreateItem = false"
+            @update="update">
+        </create-item>
+        <update-item
+        :visible="showUpdateItem"
+        :item="currentItem"
+        @close="showUpdateItem = false"
+        @update="update"></update-item>
     </v-card>
 </template>
 

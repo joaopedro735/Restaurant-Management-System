@@ -4,23 +4,17 @@
             <v-layout
                     column
                     align-center
-                    v-if="isLogged === true"
-            >
+                    v-if="isLogged === true">
 
-                <shift-options v-on:shift-start='working = true'
-                               v-on:shift-end='working = false'
-                               v-if="isLogged === true && worker === true" :user="user"
-                               :working="working"></shift-options>
+                <shift-options v-if="isLogged === true && worker === true"></shift-options>
 
             </v-layout>
 
             <v-layout
-                    column
-                    align-center
-                    v-if="isLogged === false || worker === false"
-            >
+                column
+                align-center
+                v-if="isLogged === false || worker === false">
                 <h1>Sup y'all</h1>
-
             </v-layout>
         </section>
     </div>
@@ -28,22 +22,10 @@
 
 <script>
     export default {
-        data: function () {
-            return {
-                user: [],
-                working: false,
-            }
-        },
         methods: {
-            getInformationFromLoggedUser() {
-                this.user = this.$store.state.user;
-            },
             addNotification() {
                 console.log("parent")
             }
-        },
-        created() {
-            this.getInformationFromLoggedUser();
         },
         computed: {
             isLogged() {
@@ -51,11 +33,10 @@
             },
             worker() {
                 if (this.$store.state.user.type === "manager" || this.$store.state.user.type === "cashier" || this.$store.state.user.type === "waiter" || this.$store.state.user.type === "cook") {
-                    console.log("worker= true")
-                    this.working = this.$store.state.user.shift_active === 1;
+                    console.log("worker= true");
                     return true;
                 }
-                console.log("worker=false")
+                console.log("worker=false");
                 return false;
             }
         }

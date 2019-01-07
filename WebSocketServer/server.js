@@ -84,6 +84,10 @@ io.on('connection', function (socket) {
         }
     });
 
+    socket.on('meal_terminated_with_unfinished_orders', (message) => {
+        io.to('cooks').emit('remove_unfinished_orders', message);
+    });
+
     socket.on('meal_terminated', ( user, mealId) => {
         io.to('cashiers').emit('new_invoice', {name: user.name, msg: 'Meal#' + mealId + ' finished. A new invoice was generated', where: '/invoices' });
     });
@@ -91,7 +95,7 @@ io.on('connection', function (socket) {
     // CHANNELS
     // JOIN
     socket.on('user_enter', user => {
-        // JOIN WHEN SHIFT STARTS
+        // JOIN WHEN SHIFT STARTS OR AT LOGIN IF ON SHIFT
         if (user) {
             // All users join the global 'channel' to receive notifications in case the account gets blocked/unblocked
             socket.join('global');
@@ -120,7 +124,7 @@ io.on('connection', function (socket) {
 
     // LEAVE
     socket.on('user_exit', user => {
-        // LEAVE ALL WHEN SHIFT ENDS
+        // LEAVE ALL WHEN SHIFT ENDS OR LOGOUT FROM APP
         if (user) {
             socket.leave('global');
 
@@ -161,8 +165,13 @@ io.on('connection', function (socket) {
         }
     });
 
-    socket.on('problems_Management', (msg, user, where) => {
-        console.log("yo");
+    socket.on('problems_Management', (msg, where) => {
+        const user = loggedUsers.userInfoBySocketID(socket.id).user;
         io.sockets.to('problems').emit('problems', { msg: msg, name: user.name, where: where});
+    });
+
+    socket.on('disconnect', function () {
+        console.log("disconnected");
+        const user = loggedUsers.removeUserInfoBySocketID(socket.id);
     });
 });

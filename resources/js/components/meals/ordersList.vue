@@ -24,10 +24,17 @@
                         <td>{{ props.item.price }}€</td>
                         <td>{{ props.item.state }}</td>
                         <td class="text-xs-right">
-                            <span v-if="props.item.state.toLowerCase() === 'prepared'">
+                            <span>
                                 <v-btn small round color="success"
-                                       @click.stop="deliverOrder(props.item.id)">
-                                    Deliver order
+                                    v-if="props.item.state.toLowerCase() === 'prepared'"
+                                    @click.stop="deliverOrder(props.item.id)">
+                                        Deliver order
+                                </v-btn>
+                                <v-btn small round color="error"
+                                :disabled="table.loading"
+                                    v-if="props.item.state.toLowerCase() === 'pending'"
+                                    @click.stop="cancelOrder(props.item.id)">
+                                        Cancel order
                                 </v-btn>
                             </span>
                         </td>
@@ -124,6 +131,21 @@
                         console.log(error);
                         this.$toasted.error("An error occurred, please try again later!");
                     });
+            },
+            cancelOrder(orderID) {
+                let message = '';
+
+                axios.delete('/api/orders/delete/' + orderID)
+                    .then((response) => {
+                        message = response.data.message;
+                        this.$bus.$emit('update-pending');
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        this.$toasted.error("An error occurred, please try again later!");
+                    });
+
+                this.$toasted.info(this.orders.length > 1 ? 'Orders canceled' : 'Order canceled');
             }
         },
         computed: {
@@ -138,7 +160,15 @@
             order_prepared() {
                 this.updateData();
             }
-        }
+        },
+        created() {
+            // Escutar o evento
+            this.$bus.$on('update-pending', this.updateData);
+            
+        },
+        beforeDestroy() {
+            this.$eventHub.$off('update-pending');
+        },
     }
 
 </script>

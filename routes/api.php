@@ -59,10 +59,17 @@ Route::group([
         'prefix' => 'tables',
         'middleware' => 'waiter'
     ], function () {
+        Route::get('/available', 'TableControllerAPI@available');
+    });
+
+    Route::group([
+        'prefix' => 'tables',
+        'middleware' => 'manager'
+    ], function () {
         Route::get('/', 'TableControllerAPI@index');
         Route::post('/', 'TableControllerAPI@store');
-        Route::get('/available', 'TableControllerAPI@available');
         Route::delete('/{id}', 'TableControllerAPI@destroy');
+        Route::patch('/{id}', 'TableControllerAPI@update');
     });
 
     Route::group([

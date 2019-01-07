@@ -2,8 +2,8 @@
     <div class="text-xs-center">
         <v-dialog width="500" v-model="show" @click.stop="show = false">
             <v-card>
-                <v-card-title class="headline blue darken-4 white--text" primary-title>
-                    Create table
+                <v-card-title class="headline blue darken-4 white--text" primary-title color="purple">
+                    Update Table {{tableNumber}}
                 </v-card-title>
 
                 <v-divider light></v-divider>
@@ -31,26 +31,29 @@
                         :disabled="!form.valid"
                         :loading="form.loading"
                         @click="submit">
-                            Create
+                            Update
                     </v-btn>
-                    <v-btn small round @click="close()">Cancel</v-btn>
+                    <v-btn small round
+                        @click="close()">
+                            Cancel
+                    </v-btn>
                 </v-card-actions>
+                <v-spacer></v-spacer>
             </v-card>
         </v-dialog>
     </div>
 </template>
 
 <script>
-
     function initialState() {
         return {
-            title: 'Create table',
-            table: {
-                table_number: ''
-            },
+            title: 'Update table',
             alert: {
                 show: false,
                 error: ''
+            },
+            currentTable: {
+                table_number: ''
             },
             form: {
                 valid: true,
@@ -58,8 +61,8 @@
                 p_show: false,
                 tableNumberRules: [
                     v => !!v || 'Required',
-                    v=> (v && v.length >= 1) || 'Miust have at least 1 character',
-                    v=> (v && v.length <= 11) || 'Must be shorter than 12 characters',
+                    v => (v && v.length >= 1) || 'Must have at least 1 character',
+                    v => (v && v.length <= 11) || 'Must be shorter than 12 characters',
                     value => {
                         const pattern = /^\d{1,11}?$/;
                         return pattern.test(value) || "Invalid table number";
@@ -70,17 +73,21 @@
     }
 
     export default {
-        name: "createTable",
+        name: "updateTable",
         props: {
-            visible: Boolean
+            visible: Boolean,
+            table: Object,
+            tableNumber: Number
         },
         data: () => {
             return initialState();
         },
         methods: {
             submit() {
+                this.form.loading = true;
+
                 if (this.$refs.form.validate()) {
-                    this.create();
+                    this.updateTable();
                 }
             },
             clear() {
@@ -90,38 +97,32 @@
                 this.clear();
                 this.$emit('close');
             },
-            create() {
+            updateTable() {
                 this.form.loading = true;
 
-                axios.post('/api/tables/', this.table)
+                console.log(this.table);
+                
+                axios.patch('/api/tables/' + this.tableNumber, { table_number : this.table.table_number })
                     .then(response => {
-                        var table = response.data.data;
-
-                        if (table.table_number == 0) {
-                            table.table_number = this.table.table_number;
-                        }
-
                         this.$emit('update');
-                        this.close();
+                        this.$emit('close');
 
-                        this.$toasted.success('Table added',
+                        this.$toasted.success(response.data.message,
                             {
                                 icon: 'info',
                             }
                         );
                     })
                     .catch(error => {
-                        this.$toasted.error(error.response.data.table_number[0],
-                        {
-                            icon: 'error',
-                        });
+                        this.$toasted.error(error.message,
+                            {
+                                icon: 'error',
+                            });
                     })
                     .finally(() => {
                         this.form.loading = false;
                     });
-
-
-            }
+            },
         },
         computed: {
             show: {
@@ -130,11 +131,13 @@
                 },
                 set(value) {
                     if (!value) {
-                        this.clear();
                         this.$emit('close');
                     }
                 }
             }
+        },
+        beforeUpdate() {
+            this.currentTable = _.cloneDeep(this.table);
         }
     }
 </script>

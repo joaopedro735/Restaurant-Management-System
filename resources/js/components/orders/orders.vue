@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-card>
-            <v-card-title class="headline info white--text " primary-title>
+            <v-card-title class="headline info white--text" primary-title>
                 Orders
                 <v-spacer></v-spacer>
                 <v-text-field @keypress.enter="filterOrders()" v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
@@ -136,23 +136,28 @@
                             <v-list>
                                 <v-list-tile>
                                     <v-list-tile-content>
-                                        <v-tooltip bottom>
-                                            <div slot="activator">
-                                                <v-list-tile-title>Item</v-list-tile-title>
-                                                <v-list-tile-sub-title>{{ props.item.item }}</v-list-tile-sub-title>
-                                            </div>
-                                        </v-tooltip>
+                                        <div slot="activator">
+                                            <v-list-tile-title>Order ID</v-list-tile-title>
+                                            <v-list-tile-sub-title>{{ props.item.id }}</v-list-tile-sub-title>
+                                        </div>
                                     </v-list-tile-content>
                                 </v-list-tile>
 
                                 <v-list-tile>
                                     <v-list-tile-content>
-                                        <v-tooltip bottom>
-                                            <div slot="activator">
-                                                <v-list-tile-title><Table>Table</Table></v-list-tile-title>
-                                                <v-list-tile-sub-title>{{ props.item.table_number }}</v-list-tile-sub-title>
-                                            </div>
-                                        </v-tooltip>
+                                        <div slot="activator">
+                                            <v-avatar size="56px">
+                                                <img v-bind:src=props.item.photo_url alt="avatar">
+                                            </v-avatar>
+                                        </div>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+
+                                <v-list-tile>
+                                    <v-list-tile-content>
+                                        <div slot="activator">
+                                            <v-list-tile-sub-title>{{ props.item.item }}</v-list-tile-sub-title>
+                                        </div>
                                     </v-list-tile-content>
                                 </v-list-tile>
                             </v-list>
@@ -234,7 +239,7 @@
                     }
                 );
             },
-            changeOrderState: function (index, order, state) {
+            changeOrderState(index, order, state) {
                 this.currentOrder = Object.assign({}, order);
 
                 const orderToUpdate = this.currentOrder;
@@ -243,14 +248,16 @@
                 if (order.responsible_cook_id !== 0) {
                     axios.put('/api/orders/' + orderToUpdate.id + '?state=' + state)
                     .then(response => {
+                        this.getDataFromApi();
+
                         this.$toasted.info(response.data.message,
                             {
                                 icon: 'info',
                             }
                         );
 
-                        if (state === 'prepared') {
-                            this.notifyWaiter(order);
+                        if (state === 'prepared' || state === 'confirmed' || state === 'in preparation') {
+                            this.notifyWaiter(order, state);
                         }
                     })
                     .catch((error) => {
@@ -264,6 +271,7 @@
                 else { // Order doesn't have a cook
                     axios.put('/api/orders/' + orderToUpdate.id + '?state=' + state + '&responsible_cook_id=' + this.userID)
                     .then(response => {
+                        this.getDataFromApi();
 
                         this.$toasted.info(response.data.message,
                             {
@@ -271,8 +279,8 @@
                             }
                         );
 
-                        if (state === 'prepared') {
-                            this.notifyWaiter(order);
+                        if (state === 'prepared' || state === 'confirmed' || state === 'in preparation') {
+                            this.notifyWaiter(order, state);
                         }
                     })
                     .catch((error) => {
@@ -283,11 +291,8 @@
                         );
                     })
                 }
-
-                this.getDataFromApi();
             },
-            notifyWaiter(order) {
-                console.log(order.responsible_cook_id);
+            notifyWaiter(order, state) {
                 if (order.responsible_cook_id == 0) {
                     order.responsible_cook_id = this.userID
                 }
@@ -295,6 +300,14 @@
                 console.log(order.responsible_cook_id);
 
                 let message = 'Order prepared';
+                if (state === 'prepared') {
+                    message = 'Order prepared';
+                } else if (state == 'confirmed') {
+                    message = 'Cook assigned to order';
+                } else {
+                    message = 'Order in preparation'
+                }
+
                 this.$socket.emit('order_prepared', this.user, order);
             },
             changeSort (column) {
@@ -345,6 +358,9 @@
         },
         sockets: {
             new_order() {
+                this.getDataFromApi();
+            },
+            remove_unfinished_orders() {
                 this.getDataFromApi();
             }
         }

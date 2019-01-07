@@ -8,7 +8,7 @@
                 <v-spacer></v-spacer>
                 <v-btn big flat color="info"
                     :loading="loadingMealInfo"
-                    :disabled="loadingMealInfo">
+                    disabled>
                 </v-btn>
                 <v-btn fab dark @click="showAddMeal = true" slot="activator" class="mb-2">
                     <v-icon>add</v-icon>
@@ -33,25 +33,48 @@
                         <td>{{ props.item.state }}</td>
                         <td class="text-xs-right">
                             <span v-if="props.item.state === 'Active' && props.item.responsible_waiter === $store.state.user.name">
-                                <v-btn small round color="success" @click.stop="addOrder(props.item.id)">Add order</v-btn>
-                                <v-btn small round color="primary" @click.stop="mealInfo(props.item.id)">Meal Info</v-btn>
-                                <v-btn small round color="error" @click.stop="checkBeforeTerminateMeal(props.item.id)">Terminate meal</v-btn>
+                                <v-btn small round color="success"
+                                    :disbled="loadingMealInfo"
+                                    @click.stop="addOrder(props.item.id)">
+                                        Add order
+                                </v-btn>
+                                <v-btn small round color="primary"
+                                    :disbled="loadingMealInfo"
+                                    @click.stop="mealInfo(props.item.id)">
+                                        Meal Info
+                                </v-btn>
+                                <v-btn small round color="error"
+                                    :disbled="loadingMealInfo"
+                                    @click.stop="checkBeforeTerminateMeal(props.item.id)">
+                                        Terminate meal
+                                </v-btn>
                             </span>
                         </td>
                     </tr>
                 </template>
             </v-data-table>
         </v-card>
-        <add-meal :visible="showAddMeal"
-                  @update="updateLists"
-                  @close="showAddMeal = false">
+        <add-meal
+            :visible="showAddMeal"
+            @update="updateLists"
+            @close="showAddMeal = false">
         </add-meal>
-        <add-order :visible="showAddOrder" :selectedMeal="selectedMeal" @close="showAddOrder = false"></add-order>
-        <meal-info :visible="showMealInfo" :mealInfo="selectedMealInfo" @close="showMealInfo = false"></meal-info>
-        <terminate-meal-modal :visible="showTerminateMealConfirmation"
-                              :numberOfOrders="numberOfOrdersPending"
-                              @close="showTerminateMealConfirmation = false"
-                              @continue="terminateMeal(selectedMeal)"
+        <add-order
+            :visible="showAddOrder"
+            :selectedMeal="selectedMeal"
+            @close="showAddOrder = false"
+            @update="updateLists">
+        </add-order>
+        <meal-info
+            :visible="showMealInfo"
+            :mealInfo="selectedMealInfo"
+            @close="showMealInfo = false">
+        </meal-info>
+        <terminate-meal-modal
+            :visible="showTerminateMealConfirmation"
+            :numberOfOrders="numberOfOrdersPending"
+            @close="showTerminateMealConfirmation = false"
+            @continue="terminateMeal(selectedMeal)"
         ></terminate-meal-modal>
     </div>
 </template>
@@ -103,6 +126,7 @@
         methods: {
             getDataFromApi() {
                 this.table.loading = true;
+
                 axios.get('/api/meals/my/active', {
                     params: {
                         page: this.table.pagination.page,
@@ -117,6 +141,7 @@
                     console.log(error);
                     this.$toasted.error("An error occurred, please try again later!");
                 }).finally(() => {
+
                     this.table.loading = false;
                 });
             },
@@ -126,6 +151,7 @@
             },
             mealInfo($mealID) {
                 this.loadingMealInfo = true;
+
                 axios.get('/api/meals/' + $mealID)
                     .then((response) => {
                         this.selectedMealInfo = response.data.data;
@@ -155,6 +181,7 @@
                     });
             },
             terminateMeal($mealID) {
+                this.table.loading = true;
 
                 axios.patch('/api/meals/terminate/' + $mealID)
                     .then((response) => {
@@ -164,6 +191,9 @@
                     })
                     .catch((error) => {
                         console.log(error);
+                    })
+                    .finally(() => {
+                        this.table.loading = false;
                     })
             },
             updateLists() {

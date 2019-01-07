@@ -76,8 +76,17 @@
             </v-card>
         </v-dialog>
 
-        <invoices-info :visible="showInvoiceInfoModal" :invoiceInfo="selectedInvoice" @close="showInvoiceInfoModal = false"></invoices-info>
-        <close-invoice :visible="showCloseInvoiceModal" :invoiceID="selectedInvoiceID" @close="showCloseInvoiceModal = false"></close-invoice>
+        <invoices-info
+            :visible="showInvoiceInfoModal"
+            :invoiceInfo="selectedInvoice"
+            @close="showInvoiceInfoModal = false">
+        </invoices-info>
+        <close-invoice
+            :visible="showCloseInvoiceModal"
+            :invoiceID="selectedInvoiceID"
+            @close="showCloseInvoiceModal = false"
+            @update="updateList">
+        </close-invoice>
     </div>
 </template>
 
@@ -131,6 +140,7 @@
         methods: {
             getDataFromApi() {
                 this.table.loading = true;
+
                 axios.get(this.invoicesUrl, {
                         params: {
                             page: this.table.pagination.page,
@@ -168,6 +178,7 @@
             closeInvoice($id) {
                 this.selectedInvoiceID = $id;
                 this.showCloseInvoiceModal = true;
+                this.getDataFromApi();
             },
             downloadInvoice($id) {
                 axios.get('/api/invoices/download/' + $id, { responseType: 'blob'})
@@ -185,6 +196,9 @@
                     .catch((error) => {
                         console.log(error);
                     })
+            },
+            updateList() {
+                this.getDataFromApi();
             }
         },
         computed: {

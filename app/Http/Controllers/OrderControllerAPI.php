@@ -7,6 +7,7 @@ use App\Http\Resources\OrderResourceMeal;
 use App\Meal;
 use App\Order;
 use App\User;
+use App\Item;
 use Auth;
 use Illuminate\Http\Request;
 use Debugbar;
@@ -110,14 +111,21 @@ class OrderControllerAPI extends Controller
 
     public function confirm(Request $request)
     {
+        // Order ID
+        $orderID = $request->input('orders');       
+
+        $priceSum = 0.0;
+        $mealID = null;
         foreach ($request->input('orders') as $order) {
-            $order = Order::findOrFail($order);
-            Debugbar::info($order);
-            Debugbar::info('Found order');
-            
-            $order->state = "confirmed";
+            $order = Order::findOrFail($order);         
+            $order->state = 'confirmed';
             $order->save();
+            $mealID = $order->meal_id;
+            $item = Item::find($order->item_id);
+            $priceSum += $item->price;
         }
+
+        MealControllerAPI::updateMealPrice($mealID, $priceSum);
 
         return response()->json([
             'message' => count($request->input('orders')) > 1 ? 'Orders confirmed' : 'Order confirmed'

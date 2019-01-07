@@ -1,8 +1,11 @@
 <template>
         <v-menu open-on-hover bottom offset-y>
-            <v-btn slot="activator" icon>
+            <v-chip slot="activator" icon>
+                <v-avatar class="red" v-if="notifications.length > 0">
+                    <strong>{{ notifications.length }}</strong>
+                </v-avatar>
                 <v-icon>notifications_active</v-icon>
-            </v-btn>
+            </v-chip>
 
             <v-list v-if="notifications.length !== 0" two-line subheader>
                 <v-list-tile

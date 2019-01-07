@@ -13,13 +13,15 @@
                 :rules="usernameRules"
                 label="Username"
         ></v-text-field>
-        <v-btn
-                :disabled="!valid"
-                @click.prevent="submit"
-        >
-            submit
+        <v-btn small round color="primary"
+            :loading="loading"
+            :disabled="!valid"
+            @click.prevent="submit">
+                Save
         </v-btn>
-        <v-btn @click.prevent="clear">Cancel</v-btn>
+        <v-btn small round
+            :disabled="loading"
+            @click.prevent="clear">Cancel</v-btn>
     </v-form>
 </template>
 
@@ -29,6 +31,7 @@
         data: function () {
             return {
                 valid: true,
+                loading: false,
                 editingUser: this.user,
                 file: '',
                 nameRules: [
@@ -42,41 +45,34 @@
         },
         methods: {
             submit() {
+                this.loading = true;
+
                 if (this.$refs.form.validate()) {
                     // Native form submission is not yet supported
                     let formData = new FormData();
                     formData.append('file', this.file);
-                    let config = {
-                        headers: {
-                            'Authorization': 'Bearer ' + this.$store.state.token,
-                            'Accept': 'application/json',
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    };
+
                     //editing user aqui  tem a photo atual
-                    axios.post('/api/users/me/photo', formData, config).then(response => {
+                    axios.post('/api/users/me/photo', formData).then(response => {
                         this.editingUser.photo_url = response.data;
-                        let config = {
-                            headers: {
-                                'Authorization': 'Bearer ' + this.$store.state.token,
-                                'Accept': 'application/json'
-                            }
-                        };
-                        axios.put('/api/users/me', this.editingUser, config).then(response => {
+
+                        axios.put('/api/users/me', this.editingUser).then(response => {
                             this.$toasted.success("Update was successful",
                                 {
-                                    position: "top-center",
-                                    duration: 3000,
+                                    icon: 'info'
                                 });
                             this.$store.commit('setUser', response.data.data);
                             this.$emit('user-saved');
                         }).catch(error => {
                             this.$toasted.error("Something went wrong",
                                 {
-                                    position: "top-center",
-                                    duration: 3000,
-                                });
+                                    icon: 'error'
+                                }
+                            );
                         })
+                    })
+                    .finally(() => {
+                        this.loading = false;
                     });
                 }
             },

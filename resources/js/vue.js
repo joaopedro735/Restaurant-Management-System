@@ -21,6 +21,15 @@ import VueSocketIO from 'vue-socket.io';
 Vue.config.productionTip = false;
 
 Vue.prototype.$moment = moment;
+Vue.use({
+    install(V) {
+        let bus = new Vue();
+        V.prototype.$bus = bus;
+        V.bus = bus;
+    }
+});
+
+
 Vue.use(VueRouter);
 Vue.use(store);
 Vue.use(Vuetify);
@@ -30,6 +39,7 @@ Vue.use(new VueSocketIO({
 }));
 Vue.use(Vuelidate);
 
+// #region Components
 /* Components para users */
 const users = Vue.component('users-component', () =>
     import('./components/users2')
@@ -75,7 +85,7 @@ const activateAccount = Vue.component('activate-account', () =>
     import('./components/activateAccount.vue')
 );
 const changePassword = Vue.component('change-password', () =>
-    import('./components/account/changePassword1.vue')
+    import('./components/account/changePassword.vue')
 );
 
 /* Worker options */
@@ -108,10 +118,10 @@ const invoices = Vue.component('invoices', () =>
 //Meals
 const meals = Vue.component('meals', () => import("./components/meals/meal"));
 
-
 //List of notifications
 const notificationsList = Vue.component('notifications', () => import("./components/user/notificationList"));
 
+// #endregion
 const routes = [
     { path: '/', component: home, name: 'home' },
     { path: '/users', component: users, name: 'users' },
@@ -198,9 +208,9 @@ const app = new Vue({
              */
 
 
-            /* if (store.state.user) {
+            if (store.state.user && store.state.user.shift_active === 1) {
                 this.$socket.emit('user_enter', this.$store.state.user);
-            }  */
+            }
         },
         shift_started(dataFromServer) {
             console.log("start");
@@ -270,9 +280,17 @@ const app = new Vue({
             );
             this.notifications.push(dataFromServer);
         },
-        responsible_waiter_unavailable(message) {
+        meal_terminated_with_unfinished_orders(message) {
             this.$toasted.show(message,
                 {
+                    icon: 'info'
+                }
+            );
+        },
+        remove_unfinished_orders(message) {
+            this.$toasted.info(message,
+                {
+                    duration: 5000,
                     icon: 'info'
                 }
             );
@@ -326,11 +344,6 @@ const app = new Vue({
                 ]
             });
             this.notifications.push(dataFromServer);
-        }
-    },
-    mounted() {
-        if (this.$store.state.user && this.$store.state.user.shift_active === 1) {
-            this.$socket.emit('user_enter', this.$store.state.user);
         }
     },
 });

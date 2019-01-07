@@ -6,7 +6,7 @@
                         v-model="dialog"
                         width="500"
                 >
-                    <v-toolbar-title v-if="worker.type !== 'manager' && this.working === true"
+                    <v-toolbar-title v-if="userNotManagerWorking"
                                      slot="activator">
                         <v-chip color="red" text-color="white">
                             <v-icon left>info</v-icon>
@@ -21,32 +21,30 @@
                             Describe your problem
                         </v-card-title>
 
-                        <v-card-text>
-                            <v-text-field
-                                    label="Your problem"
-                                    v-model='problem'
-                            ></v-text-field>
-                        </v-card-text>
+                    <v-card-text>
+                        <v-text-field
+                                label="Your problem"
+                                v-model='problem'
+                        ></v-text-field>
+                    </v-card-text>
 
-                        <v-divider></v-divider>
+                    <v-divider></v-divider>
 
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn
-                                    color="error"
-                                    flat
-                                    @click="notifyManagers(problem)"
-                            >
-                                Notify management
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
-            </v-toolbar-items>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                                color="error"
+                                flat
+                                @click="notifyManagers(problem)">
+                            Notify management
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
             <v-spacer></v-spacer>
             <v-toolbar-items class="sm-and-down">
-                <v-btn flat v-show="this.working === false" color="success" @click="beginShift">Begin shift</v-btn>
-                <v-btn flat v-show="this.working === true" color="error" @click="endShift">End shift</v-btn>
+                <v-btn flat v-show="!userWorking" color="success" @click="beginShift">Begin shift</v-btn>
+                <v-btn flat v-show="userWorking" color="error" @click="endShift">End shift</v-btn>
             </v-toolbar-items>
         </v-toolbar>
     </v-container>
@@ -54,10 +52,8 @@
 
 <script>
     export default {
-        props: ['user', 'working'],
         data: function () {
             return {
-                worker: this.user,
                 duration: 0,
                 dialog: false,
                 problem: "",
@@ -65,17 +61,10 @@
         },
         methods: {
             beginShift() {
-                let config = {
-                    headers: {
-                        'Authorization': 'Bearer ' + this.$store.state.token,
-                        'Accept': 'application/json'
-                    }
-                };
-                axios.put('api/users/me/start', config)
+                axios.put('api/users/me/start')
                     .then(response => {
                         this.$store.commit('setUser', response.data.data);
                         this.$socket.emit('begin_shift', this.worker);
-                        this.working = true;
 
                         this.$socket.emit('user_enter', this.$store.state.user);
                         //setInterval(this.updateTime,1000);
@@ -89,8 +78,6 @@
                     .then(response => {
                         this.$store.commit('setUser', response.data.data);
                         this.$socket.emit('shift-end', this.worker);
-                        this.working = false;
-
                         this.$socket.emit('user_exit', this.$store.state.user);
                     })
                     .catch(error => {
@@ -99,7 +86,8 @@
             },
             notifyManagers(userProblem) {
                 this.dialog = false;
-                this.$socket.emit('problems_Management', userProblem, this.worker, 'home');
+                this.problem = "";
+                this.$socket.emit('problems_Management', userProblem, '/');
             },
             resetTime() {
                 this.duration = 0;
@@ -109,14 +97,13 @@
                 //TODO: TODO DURATION
                 this.$store.commit('setDuration', this.duration);
             },
-            something() {
-                /*axios.get('api/meals/' + this.worker.id + '/average')
-                    .then(response => {
-                        console.log(response.data);
-                    })
-                    .catch(error => {
-                        console.log(error.data);
-                    })*/
+        },
+        computed: {
+            userNotManagerWorking() {
+                return this.$store.state.user.type !== 'manager' && this.$store.state.user.shift_active === 1;
+            },
+            userWorking() {
+                return this.$store.state.user.shift_active === 1;
             }
         }
     }

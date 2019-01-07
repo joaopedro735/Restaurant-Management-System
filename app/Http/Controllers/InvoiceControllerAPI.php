@@ -23,7 +23,7 @@ class InvoiceControllerAPI extends Controller
     public function index()
     {
         if (request()->has("page")) {
-            return InvoicesResource::collection(Invoice::paginate(request()->input("rowsPerPage", 10)));
+            return InvoicesResource::collection(Invoice::orderBy('created_at', 'desc')->paginate(request()->input("rowsPerPage", 10)));
         }
         return response()->json([
             "message" => "Request needs page parameter",
@@ -33,7 +33,7 @@ class InvoiceControllerAPI extends Controller
     public function pending()
     {
         if (request()->has("page")) {
-            return InvoicesResource::collection(Invoice::where("state", "pending")
+            return InvoicesResource::collection(Invoice::where("state", "pending")->orderBy('updated_at', 'desc')
                 ->paginate(request()->input("rowsPerPage", 10)));
         }
         return response()->json([
