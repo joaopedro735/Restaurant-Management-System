@@ -50,9 +50,7 @@ const loginModal = Vue.component('login-modal', () =>
 const logout = Vue.component('logout-component', () =>
     import('./components/logout.vue')
 );
-const footer = Vue.component('footer-component', () =>
-    import('./components/footer.vue')
-);
+const footer = Vue.component('footer-component', () => import(/* webpackChunkName: "footer" */'./components/footer'));
 
 const home = () => import('./components/home');
 
@@ -324,7 +322,7 @@ const app = new Vue({
         }
     },
     mounted() {
-        if (this.$store.state.user.shift_active == 1) {
+        if (this.$store.state.user && this.$store.state.user.shift_active === 1) {
             this.$socket.emit('user_enter', this.$store.state.user);
         }
     }

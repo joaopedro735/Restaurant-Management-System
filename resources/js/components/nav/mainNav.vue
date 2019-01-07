@@ -13,10 +13,10 @@
                 <notifications :notifications="currentNotifications"></notifications>
 
                 <v-spacer></v-spacer>
-                <v-btn v-if="this.$store.state.token && working" round color="success">{{'WORKING since ' +
+                <v-btn v-if="this.$store.state.user && working" round color="success">{{'WORKING since ' +
                     this.$store.state.user.last_shift_start + ' (' + timePassed + ')'}}
                 </v-btn>
-                <v-btn v-if="this.$store.state.token && !working" round color="error">{{'NOT WORKING since ' +
+                <v-btn v-if="this.$store.state.user && !working" round color="error">{{'NOT WORKING since ' +
                     this.$store.state.user.last_shift_end + ' (' + duration + ')'}}
                 </v-btn>
                 <v-chip outline color="white" v-if="this.$store.state.user != null">
@@ -62,8 +62,10 @@
                 }
             },
             calcTime() {
-                let date = this.$store.state.user.last_shift_start;
-                this.timePassed = this.$moment(date).fromNow();
+                if (this.$store.state.user) {
+                    let date = this.$store.state.user.last_shift_start;
+                    this.timePassed = this.$moment(date).fromNow();
+                }
             },
             addNotification: function (notification) {
                 console.log("added");
@@ -72,11 +74,11 @@
         },
         computed: {
             working: function () {
-                if (this.$store.state.user.shift_active === 0) {
+                if (this.$store.state.user && this.$store.state.user.shift_active === 0) {
                     clearInterval();
-                    var x = new moment(this.$store.state.user.last_shift_start);
-                    var y = new moment(this.$store.state.user.last_shift_end);
-                    this.duration = moment.duration(x.diff(y)).humanize();
+                    var x = this.$moment(this.$store.state.user.last_shift_start);
+                    var y = this.$moment(this.$store.state.user.last_shift_end);
+                    this.duration = this.$moment.duration(x.diff(y)).humanize();
                     return false;
                 } else {
                     clearInterval();
