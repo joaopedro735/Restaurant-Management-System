@@ -205,7 +205,7 @@
 
                     let message = 'Invoice closed';
 
-                    this.$socket.emit('invoice_closed', message, this.user);
+                    this.$socket.emit('update_invoices');
 
                     this.$toasted.success("Invoice closed successfully",
                         {
@@ -263,7 +263,7 @@
             new_invoice() {
                 this.getDataFromApi();
             },
-            invoice_close() {
+            invoice_closed() {
                 this.getDataFromApi();
             }
         }
