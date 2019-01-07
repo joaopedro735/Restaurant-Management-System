@@ -96,8 +96,12 @@ const changePassword = Vue.component('change-password', () =>
 const shiftOptions = Vue.component('shift-options', () =>
     import('./components/worker/shiftOptions.vue')
 );
-const tables = Vue.component('manage', () =>
+const tables = Vue.component('tables', () =>
     import('./components/manage/tables.vue')
+);
+
+const dashboard = Vue.component('dashboard', () =>
+    import('./components/manage/dashboard.vue')
 );
 
 // Orders
@@ -138,7 +142,8 @@ const routes = [
     { path: '/account/changePassword', component: changePassword },
     { path: '/management/tables', component: tables, name: 'tables' },
     { path: '/invoices', component: invoices, name: 'invoices'},
-    { path: "/meals", component: meals }
+    { path: "/meals", component: meals },
+    { path: "/management/dashboard", component: dashboard }
 ];
 
 const router = new VueRouter({
@@ -254,42 +259,37 @@ const app = new Vue({
 
             this.$router.push('/menu');
         },
-        new_order(message) {
+        new_order(dataFromServer) {
             /**
              * Show toast only to cooks (all)
              * Show link to orders (possibly highlighting order)
              */
-            this.$toasted.info(message,
+            this.$toasted.info(dataFromServer.msg,
                 {
                     icon: 'info',
                     action : [
                         {
-                            text : 'OK',
+                            text : 'Go to',
                             onClick : (e, toastObject) => {
                                 toastObject.goAway(0);
+                                router.push(dataFromServer.where)
                             }
                         },
-                        {
-                            text : 'View orders',
-                            push : {
-                                name : 'orders',
-                                dontClose : true
-                             }
-                        }
                     ]
                 },
             );
+            this.notifications.push(dataFromServer);
         },
-        order_prepared(data) {
+        order_prepared(dataFromServer) {
             /**
              * Show toast only to responsible waiter
              * Show link to orders (possibly highlighting order)
              */
-            let message = data.message + ': ' + data.order.item + ' for table ' + data.order.table_number;
-            this.$toasted.info(message , {
+            this.$toasted.info(dataFromServer.msg , {
                     icon: 'info'
                 }
             );
+            this.notifications.push(dataFromServer);
         },
         meal_terminated_with_unfinished_orders(message) {
             this.$toasted.show(message,
@@ -341,10 +341,20 @@ const app = new Vue({
             console.log("emitted");
             this.notifications.push(dataFromServer);
         },
-        new_invoice() {
-            this.$toasted.info("Meal finished. A new invoice was generated", {
-                icon: "info"
+        new_invoice(dataFromServer) {
+            this.$toasted.info(dataFromServer.name, {
+                icon: "info",
+                action:[
+                    {
+                        text: 'Go to',
+                        onClick: (e, toastObject) => {
+                            toastObject.goAway(0);
+                            router.push(dataFromServer.where);
+                        }
+                    }
+                ]
             });
+            this.notifications.push(dataFromServer);
         }
     },
 });
