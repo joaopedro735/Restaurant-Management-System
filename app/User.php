@@ -50,4 +50,17 @@ class User extends Authenticatable
     public function orders() {
         return $this->hasMany('App\Order', 'responsible_cook_id', 'id');
     }
+
+    public function isManager(){
+        return $this->type === "manager";
+    }
+    public function isCook(){
+        return $this->type === "cook";
+    }
+    public function isCashier(){
+        return $this->type === "cashier";
+    }
+    public function isWaiter(){
+        return $this->type === "waiter";
+    }
 }

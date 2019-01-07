@@ -162,6 +162,7 @@ io.on('connection', function (socket) {
     });
 
     socket.on('problems_Management', (msg, user, where) => {
+        console.log("yo");
         io.sockets.to('problems').emit('problems', { msg: msg, name: user.name, where: where});
     });
 });
