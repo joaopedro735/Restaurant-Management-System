@@ -2,21 +2,27 @@
     <v-layout row wrap>
         <v-flex xs12>
             <v-toolbar class="primary lighten-1">
-                <v-toolbar-title>Restaurantte</v-toolbar-title>
-                <v-btn headline color="white" flat round exact :to="{name: 'home'}">Home</v-btn>
-                <v-btn color="white" flat round to="/menu">Menu</v-btn>
-                <v-btn color="white" flat round v-if="checkDisplay('users')" to="/users" exact>Users</v-btn>
-                <v-btn color="white" flat round v-if="checkDisplay('orders')" to="/orders">Orders</v-btn>
-                <v-btn color="white" flat round v-if="checkDisplay('meals')" to="/meals">Meals</v-btn>
-                <v-btn color="white" flat round v-if="checkDisplay('invoices')" to="/invoices">Invoices</v-btn>
-                <v-btn color="white" flat round v-if="checkDisplay('tables')" to="/management/tables">Tables</v-btn>
-                <notifications :notifications="currentNotifications"></notifications>
-
+                <v-menu :nudge-width="100">
+                    <v-toolbar-title slot="activator">
+                        <span>Restaurantte</span>
+                        <v-icon dark>arrow_drop_down</v-icon>
+                    </v-toolbar-title>
+                    <v-list>
+                        <v-list-tile @click="$router.push('home')">Home</v-list-tile>
+                        <v-list-tile @click="$router.push({path: '/menu'})">Menu</v-list-tile>
+                        <v-list-tile v-if="checkDisplay('users')" @click="$router.push({path: '/users'})">Users</v-list-tile>
+                        <v-list-tile v-if="checkDisplay('orders')" @click="$router.push({path: '/orders'})">Orders</v-list-tile>
+                        <v-list-tile v-if="checkDisplay('meals')" @click="$router.push({path: '/meals'})">Meals</v-list-tile>
+                        <v-list-tile v-if="checkDisplay('tables')" @click="$router.push('/management/tables')">Tables</v-list-tile>
+                    </v-list>
+                </v-menu>
                 <v-spacer></v-spacer>
-                <v-btn v-if="this.$store.state.user && working" round color="success">{{'WORKING since ' +
+                <v-btn v-if="this.$store.state.token && working" round color="success">{{'WORKING since ' +
                     this.$store.state.user.last_shift_start + ' (' + timePassed + ')'}}
                 </v-btn>
-                <v-btn v-if="this.$store.state.user && !working" round color="error">{{'NOT WORKING since ' +
+                <notifications v-if="this.$store.state.token"
+                               :notifications="currentNotifications"></notifications>
+                <v-btn v-if="this.$store.state.token && !working" round color="error">{{'NOT WORKING since ' +
                     this.$store.state.user.last_shift_end + ' (' + duration + ')'}}
                 </v-btn>
                 <v-chip outline color="white" v-if="this.$store.state.user != null">
@@ -32,7 +38,7 @@
 
 <script>
     export default {
-        props:['notifications'],
+        props: ['notifications'],
         data() {
             return {
                 time: "",
@@ -87,9 +93,13 @@
                     return true;
                 }
             },
-            currentNotifications(){
+            currentNotifications() {
                 return this.notifications;
             }
         }
     }
 </script>
+
+<style scoped>
+
+</style>

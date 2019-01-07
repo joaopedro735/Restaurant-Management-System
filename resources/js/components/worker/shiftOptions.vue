@@ -1,12 +1,11 @@
 <template>
     <v-container>
-
         <v-toolbar>
             <v-dialog
                     v-model="dialog"
                     width="500"
             >
-                <v-toolbar-title v-show="this.working === true"
+                <v-toolbar-title v-if="worker.type !== 'manager' && this.working === true"
                                  slot="activator">
                     <v-chip color="red" text-color="white">
                         <v-icon left>info</v-icon>
@@ -111,10 +110,19 @@
             }, updateTime() {
                 //TODO: TODO DURATION
                 this.$store.commit('setDuration', this.duration);
-            }, something(){
-                console.log("something")
+            }, something() {
+                axios.get('api/meals/' + this.worker.id + '/average')
+                    .then(response => {
+                        console.log(response.data);
+                    })
+                    .catch(error => {
+                        console.log(error.data);
+                    })
             }
         }, created() {
+            this.$store.commit('loadTokenAndUserFromSession');
+        },
+        mounted(){
             this.$store.commit('loadTokenAndUserFromSession');
         }
     }
