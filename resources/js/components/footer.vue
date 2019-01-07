@@ -14,4 +14,7 @@ export default {
 </script>
 
 <style>
+    .toasted-css {
+        font-family: Arial, Helvetica, sans-serif;
+    }
 </style>

@@ -17,6 +17,7 @@
     "/js/logout-vue.js": "/js/logout-vue.js",
     "/js/manage-createItem-vue.js": "/js/manage-createItem-vue.js",
     "/js/manage-createTable-vue.js": "/js/manage-createTable-vue.js",
+    "/js/manage-dashboard-vue.js": "/js/manage-dashboard-vue.js",
     "/js/manage-statisticsManagement-vue.js": "/js/manage-statisticsManagement-vue.js",
     "/js/manage-tables-vue.js": "/js/manage-tables-vue.js",
     "/js/manage-updateItem-vue.js": "/js/manage-updateItem-vue.js",

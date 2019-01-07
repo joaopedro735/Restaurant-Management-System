@@ -1,24 +1,23 @@
 <template>
     <v-container>
         <v-toolbar>
-            <v-toolbar-items class="sm-and-down">
-                <v-dialog
-                        v-model="dialog"
-                        width="500"
-                >
-                    <v-toolbar-title v-show="userNotManagerWorking"
-                                     slot="activator">
-                        <v-chip color="red" text-color="white">
-                            <v-icon left>info</v-icon>
-                            Report a problem
-                        </v-chip>
-                    </v-toolbar-title>
-                    <v-card>
-                        <v-card-title
-                                class="headline grey lighten-2"
-                                primary-title>
-                            Describe your problem
-                        </v-card-title>
+            <v-dialog
+                    v-model="dialog"
+                    width="500"
+            >
+                <v-toolbar-title v-show="userNotManagerWorking"
+                                 slot="activator">
+                    <v-chip color="red" text-color="white">
+                        <v-icon left>info</v-icon>
+                        Report a problem
+                    </v-chip>
+                </v-toolbar-title>
+                <v-card>
+                    <v-card-title
+                            class="headline grey lighten-2"
+                            primary-title>
+                        Describe your problem
+                    </v-card-title>
 
                     <v-card-text>
                         <v-text-field
@@ -41,6 +40,7 @@
                 </v-card>
             </v-dialog>
             <v-spacer></v-spacer>
+            <v-toolbar-items class="sm-and-down">
                 <v-btn flat v-show="!userWorking" color="success" @click="beginShift">Begin shift</v-btn>
                 <v-btn flat v-show="userWorking" color="error" @click="endShift">End shift</v-btn>
             </v-toolbar-items>

@@ -342,7 +342,7 @@ const app = new Vue({
             this.notifications.push(dataFromServer);
         },
         new_invoice(dataFromServer) {
-            this.$toasted.info(dataFromServer.name, {
+            this.$toasted.info(dataFromServer.msg, {
                 icon: "info",
                 action:[
                     {
