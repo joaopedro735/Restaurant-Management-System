@@ -74,6 +74,14 @@ io.on('connection', function (socket) {
         }
     });
 
+    // Finished meal - Send to all cashiers
+    socket.on('invoice_closed', (message, user) => {
+        if (user && (user.type === 'cashier' || user.type === 'manager')) {
+            io.sockets.to('cashiers').emit('invoice_closed', {name: user.name, msg: message, where: '/invoices'});
+            io.sockets.to('managers').emit('invoice_closed', {name: user.name, msg: message, where: '/invoices'});
+        }
+    });
+
     // Message to working managers
     socket.on('message_to_managers', (message, from) => {
         const userInfoFrom = loggedUsers.userInfoByID(from.id);
