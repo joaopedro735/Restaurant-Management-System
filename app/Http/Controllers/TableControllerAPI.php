@@ -27,7 +27,7 @@ class TableControllerAPI extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'table_number' => 'required|integer|unique:restaurant_tables|between:0,99999999999',
+            'table_number' => 'required|integer|unique:restaurant_tables|between:0,99999999999'
         ]);
 
         if ($validator->fails()) {
@@ -39,6 +39,24 @@ class TableControllerAPI extends Controller
         $table->save();
 
         return new TableResource($table);
+    }
+
+    public function update(Request $request, $id) {
+        $table = Table::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'table_number' => 'required|integer|unique:restaurant_tables|between:0,99999999999'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $table->update($request->all());
+
+        return response()->json([
+            'message' => 'Table updated'
+        ]);
     }
 
     public function destroy($id) {

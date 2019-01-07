@@ -113,11 +113,6 @@
                         return pattern.test(value) || "Invalid price";
                     }
                 ]
-                /* rules: {
-                    required: v => !!v || "Required.",
-                    min: v => v.length >= 3 || "Min 3 characters",
-                    max: v => v.length <= 255 || "Max 255 characters",
-                } */
             },
             types: [
                 {text: "Drink", value: "drink"},

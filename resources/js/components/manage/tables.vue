@@ -26,7 +26,14 @@
                         <td>{{ props.item.total_meals }}</td>
                         <td class="text-xs-right">
                             <span>
-                                <v-btn small round color="error" @click.native="deleteTable(props.item.table_number, props.index)">
+                                <v-btn small round color="primary"
+                                    :disabled="props.item.total_meals != 0"
+                                    @click.native="updateTable(props.item, props.index)">
+                                    <v-icon>edit</v-icon>
+                                    Update
+                                </v-btn>
+                                <v-btn small round color="error"
+                                    @click.native="deleteTable(props.item.table_number, props.index)">
                                     <v-icon>delete</v-icon>
                                     Delete
                                 </v-btn>
@@ -39,14 +46,25 @@
                     </template>
             </v-data-table>
 
-            <create-table :visible="showCreateTable" @close="showCreateTable = false" @update="updateList">
+            <create-table
+                :visible="showCreateTable"
+                @close="showCreateTable = false"
+                @update="updateList">
             </create-table>
+            <update-table
+                :visible="showUpdateTable"
+                :table="currentTable"
+                :tableNumber="tableNumber"
+                @close="showUpdateTable = false"
+                @update="updateList">
+            </update-table>
         </v-card>
     </div>
 </template>
 
 <script>
     import CreateTable from './createTable';
+    import UpdateTable from './updateTable';
 
     export default {
         data() {
@@ -55,6 +73,12 @@
                 table: {
                     table_number: ''
                 },
+                currentTable: {
+                    table_number: '',
+                },
+                tableNumber: null,
+                currentTableIndex: '',
+                deletingTable: false,
                 showPage: false,
                 totalTables: 0,
                 tables: [],
@@ -68,7 +92,8 @@
                     { text: 'Total meals', value: 'total_meals' },
                     { text: '', value: 'actions' }
                 ],
-                showCreateTable: false
+                showCreateTable: false,
+                showUpdateTable: false
             };
         },
         watch: {
@@ -112,8 +137,6 @@
                                 icon: 'info',
                             }
                         );
-
-                        this.tables.splice(index, 1);
                     }
                 )
                 .catch(error => {
@@ -123,6 +146,12 @@
                         }
                     );
                 });
+            },
+            updateTable(table, index) {
+                this.currentTable = Object.assign({}, table);
+                this.tableNumber = this.currentTable.table_number;
+
+                this.showUpdateTable = true;
             },
             updateList(table) {
                 this.getDataFromApi();
@@ -161,7 +190,8 @@
             this.isUserAWorker(this.user);
         },
         components: {
-            'create-table': CreateTable
+            'create-table': CreateTable,
+            'update-table': UpdateTable
         }
     };
 </script>

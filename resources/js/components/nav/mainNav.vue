@@ -24,14 +24,15 @@
                 <v-btn v-if="this.$store.state.token && !working" round color="error">{{'NOT WORKING since ' +
                     this.$store.state.user.last_shift_end + ' (' + duration + ')'}}
                 </v-btn>
-                <notifications v-if="this.$store.state.token" :notifications="notifications"></notifications>
                 <v-chip outline color="white" v-if="this.$store.state.user != null">
-                    <v-icon v-if="this.$store.state.user.blocked" color="red">block</v-icon>&nbsp;
-                    {{ this.$store.state.user.name }}&nbsp;<strong>({{this.$store.state.user.type}})</strong>
+                    <v-icon v-if="this.$store.state.user.blocked" color="red">block</v-icon>
+                    &nbsp;{{ this.$store.state.user.name }}
+                    &nbsp;<strong>({{this.$store.state.user.type}})</strong>
                 </v-chip>
                 <login-modal v-if="!this.$store.state.token"></login-modal>
-                <notifications v-if="this.$store.state.token"
-                               :notifications="notifications"></notifications>
+                <notifications
+                    v-if="this.$store.state.token"
+                    :notifications="notifications"></notifications>
                 <user-nav v-if="this.$store.state.user"></user-nav>
             </v-toolbar>
         </v-flex>
