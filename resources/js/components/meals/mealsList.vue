@@ -181,6 +181,8 @@
                     });
             },
             terminateMeal($mealID) {
+                this.table.loading = true;
+
                 axios.patch('/api/meals/terminate/' + $mealID)
                     .then((response) => {
                         this.$toasted.show(response.data.message);
@@ -189,6 +191,9 @@
                     })
                     .catch((error) => {
                         console.log(error);
+                    })
+                    .finally(() => {
+                        this.table.loading = false;
                     })
             },
             updateLists() {
