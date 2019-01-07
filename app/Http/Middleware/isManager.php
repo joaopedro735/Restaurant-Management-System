@@ -4,20 +4,21 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class IsWaiter
+class isManager
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
         $user = \Auth::user();
-        if ($user->isWaiter())
+        if ($user->isManager())
             return $next($request);
-        return response("Forbidden action.",403);
+        else
+            return response("Forbidden action.", 403);
     }
 }
