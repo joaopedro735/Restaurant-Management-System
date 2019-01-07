@@ -21,8 +21,11 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn small round color="info" @click.stop="addMeal">
-                    ;Save
+                <v-btn small round color="primary"
+                    :loading="loading"
+                    :disabled="loading"
+                    @click.stop="addMeal">
+                        Save
                 </v-btn>
                 <v-btn small round @click.stop="show = false">
                     Close
@@ -36,14 +39,14 @@
     export default {
         name: "add-meal",
         props: {
-            visible: Boolean,
+            visible: Boolean
         },
-        validations: {},
         data() {
             return {
+                loading: false,
                 tableNumber: null,
-                tables: [],
-            }
+                tables: []
+            };
         },
         methods: {
             getTables() {
@@ -58,20 +61,21 @@
                     });
             },
             clear() {
-                this.$v.$reset();
                 this.tableNumber = "";
             },
             addMeal() {
+                this.loading = true;
+
                 axios.post('/api/meals/', {
                         table_number: this.tableNumber
                     })
                     .then(() => {
-                        this.show = false;
                         this.$toasted.success("Meal created successfully",
                             {
-                                position: "top-center",
-                                duration: 3000,
-                            });
+                                icon: 'info'
+                            }
+                        );
+                        this.$emit('update');
                     })
                     .catch((error) => {
                         console.dir(error);
@@ -79,11 +83,22 @@
                             icon: "error_outline"
                         });
                     })
+                    .finally(() => {
+                        this.loading = false;
+                        this.close();
+                    })
+            },
+            close() {
+                this.clear();
+                this.$emit('close');
             }
         },
         computed: {
             show: {
                 get() {
+                    if (this.visible) {
+                        this.getTables();
+                    }
                     return this.visible;
                 },
                 set(value) {
@@ -91,14 +106,8 @@
                         this.$emit("close");
                     }
                 }
-            },
+            }
         },
-        mounted() {
-            this.getTables();
-        },
-    }
+    };
 </script>
 
-<style scoped>
-
-</style>

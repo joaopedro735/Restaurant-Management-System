@@ -1,9 +1,7 @@
 <template>
     <v-dialog persistent v-model="show" @click.stop="show = false" max-width="600px">
         <v-card>
-            <v-card-title class="headline blue darken-4 white--text">
-                Close Invoice
-            </v-card-title>
+            <v-card-title class="headline blue darken-4 white--text">Close Invoice</v-card-title>
 
             <v-card-text>
                 <v-container grid-list-md>
@@ -40,14 +38,14 @@
 </template>
 
 <script>
-    import {helpers, maxLength, minLength, required} from 'vuelidate/lib/validators'
+    import {helpers, maxLength, minLength, required} from "vuelidate/lib/validators";
 
-    const alpha = helpers.regex('alpha', /^[A-Za-z ]+$/);
+    const alpha = helpers.regex("alpha", /^[A-Za-z ]+$/);
     export default {
         name: "close-invoice",
         props: {
             visible: Boolean,
-            invoiceID: Number,
+            invoiceID: Number
         },
         validations: {
             client: {
@@ -66,25 +64,27 @@
             return {
                 client: {
                     name: "",
-                    nif: null,
-                },
-            }
+                    nif: null
+                }
+            };
         },
         methods: {
             saveInvoice() {
                 this.$v.$touch();
                 if (!this.$v.$invalid) {
-                    axios.patch('/api/invoices/close/' + this.invoiceID, this.client)
+                    axios
+                        .patch("/api/invoices/close/" + this.invoiceID, this.client)
                         .then(() => {
-                            this.$toasted.success("Invoice closed successfully",
-                                {
-                                    position: "top-center",
-                                    duration: 3000,
-                                });
+                            this.$toasted.success("Invoice closed successfully", {
+                                position: "top-center",
+                                duration: 3000
+                            });
                             this.show = false;
                         })
                         .catch(error => {
-                            this.$toasted.error(error.response.data.message, {duration: 5000});
+                            this.$toasted.error(error.response.data.message, {
+                                duration: 5000
+                            });
                             console.log(error);
                         });
                 }
@@ -110,20 +110,19 @@
                 const errors = [];
                 if (!this.$v.client.name.$dirty) return errors;
                 !this.$v.client.name.required && errors.push("Name is required");
-                !this.$v.client.name.alpha && errors.push("Name can only contain letters and spaces");
+                !this.$v.client.name.alpha &&
+                errors.push("Name can only contain letters and spaces");
                 return errors;
             },
             nifErrors() {
                 const errors = [];
                 if (!this.$v.client.nif.$dirty) return errors;
                 !this.$v.client.nif.required && errors.push("NIF is required");
-                !this.$v.client.nif.minLength | !this.$v.client.nif.maxLength && errors.push("NIF must be 9 digits");
+                !this.$v.client.nif.minLength | !this.$v.client.nif.maxLength &&
+                errors.push("NIF must be 9 digits");
                 return errors;
             }
         }
-    }
+    };
 </script>
 
-<style scoped>
-
-</style>

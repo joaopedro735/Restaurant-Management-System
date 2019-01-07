@@ -37,10 +37,6 @@
 </template>
 
 <script>
-    import moment from 'moment'
-
-    Vue.use(moment);
-
     export default {
         props: ['notifications'],
         data() {
@@ -70,21 +66,25 @@
                     case "invoices":
                         return ((this.$store.state.user.type === "manager" || this.$store.state.user.type === "cashier") && !this.$store.state.user.blocked);
                 }
-            }, calcTime() {
-                let date = this.$store.state.user.last_shift_start;
-                this.timePassed = moment(date).fromNow();
-            }, addNotification: function (notification) {
+            },
+            calcTime() {
+                if (this.$store.state.user) {
+                    let date = this.$store.state.user.last_shift_start;
+                    this.timePassed = this.$moment(date).fromNow();
+                }
+            },
+            addNotification: function (notification) {
                 console.log("added");
                 this.currentNotifications.push(notification);
             }
         },
         computed: {
             working: function () {
-                if (this.$store.state.user.shift_active === 0) {
+                if (this.$store.state.user && this.$store.state.user.shift_active === 0) {
                     clearInterval();
-                    var x = new moment(this.$store.state.user.last_shift_start);
-                    var y = new moment(this.$store.state.user.last_shift_end);
-                    this.duration = moment.duration(x.diff(y)).humanize();
+                    var x = this.$moment(this.$store.state.user.last_shift_start);
+                    var y = this.$moment(this.$store.state.user.last_shift_end);
+                    this.duration = this.$moment.duration(x.diff(y)).humanize();
                     return false;
                 } else {
                     clearInterval();

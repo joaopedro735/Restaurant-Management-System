@@ -76,6 +76,8 @@
                         this.$store.commit('setUser', response.data.data);
                         this.$socket.emit('begin_shift', this.worker);
                         this.working = true;
+
+                        this.$socket.emit('user_enter', this.$store.state.user);
                         //setInterval(this.updateTime,1000);
                     })
                     .catch(error => {
@@ -93,6 +95,8 @@
                         this.$store.commit('setUser', response.data.data);
                         this.$socket.emit('shift-end', this.worker);
                         this.working = false;
+
+                        this.$socket.emit('user_exit', this.$store.state.user);
                     })
                     .catch(error => {
 

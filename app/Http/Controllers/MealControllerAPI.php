@@ -104,7 +104,7 @@ class MealControllerAPI extends Controller
             ]);
         }
 
-        return;
+        return true;
     }
 
 
@@ -144,11 +144,11 @@ class MealControllerAPI extends Controller
                 'message' => "Meal isn't active"
             ]);
         }
-
+        
         $orders = array();
 
         $priceSum = 0.0;
-
+        
         foreach ($request->input('items') as $item) {
             $i = Item::select('price')->find($item);
             $order = new Order;
@@ -160,7 +160,7 @@ class MealControllerAPI extends Controller
             array_push($orders, $order->id);
             $priceSum += $i->price;
         }
-
+        
         $meal->total_price_preview += $priceSum;
         $meal->save();
 

@@ -9,11 +9,7 @@
                         </div>
                     </v-card-title>
                     <v-list>
-                        <v-list-tile
-                                v-for="drink in drinks"
-                                :key="drink.name"
-                                avatar
-                                @click="">
+                        <v-list-tile v-for="drink in drinks" :key="drink.name" avatar @click>
                             <v-list-tile-content>
                                 <v-tooltip bottom>
                                     <div slot="activator">
@@ -39,12 +35,7 @@
                         </div>
                     </v-card-title>
                     <v-list>
-                        <v-list-tile
-                                v-for="dish in dishes"
-                                :key="dish.name"
-                                avatar
-                                @click="">
-
+                        <v-list-tile v-for="dish in dishes" :key="dish.name" avatar @click>
                             <v-list-tile-content>
                                 <v-tooltip bottom>
                                     <div slot="activator">
@@ -70,35 +61,35 @@
     module.exports = {
         data: function () {
             return {
-                title: 'Menu',
+                title: "Menu",
                 menu: [],
                 dishes: [],
                 drinks: [],
                 showDishes: true,
                 showDrinks: true,
                 showAll: true,
-                showProfile: true,
+                showProfile: true
             };
         },
         methods: {},
         mounted() {
-            axios.get('/api/menu').then(response => {
-                this.menu = response.data.data;
+            axios
+                .get("/api/menu")
+                .then(response => {
+                    this.menu = response.data.data;
 
-                this.drinks = this.menu.filter(function (elem) {
-                    return elem.type == 'drink';
-                });
+                    this.drinks = this.menu.filter(function (elem) {
+                        return elem.type == "drink";
+                    });
 
-                this.dishes = this.menu.filter(function (elem) {
-                    return elem.type == 'dish';
+                    this.dishes = this.menu.filter(function (elem) {
+                        return elem.type == "dish";
+                    });
+                })
+                .catch(error => {
+                    console.dir(error);
                 });
-            })
-            .catch((error) => {
-                console.dir(error);
-            })
         }
-    }
+    };
 </script>
 
-<style scoped>
-</style>

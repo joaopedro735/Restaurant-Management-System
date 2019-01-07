@@ -13,7 +13,7 @@ app.listen(8080, function(){
 // Estrutura dados - server
 // ------------------------
 
-// loggedUsers = the list (map) of logged users. 
+// loggedUsers = the list (map) of logged users.
 // Each list element has the information about the user and the socket id
 // Check loggedusers.js file
 
@@ -84,6 +84,11 @@ io.on('connection', function (socket) {
         }
     });
 
+    socket.on('meal_terminated', () => {
+        console.log("meal");
+        io.to('cashiers').emit('new_invoice');
+    });
+
     // CHANNELS
     // JOIN
     socket.on('user_enter', user => {
@@ -94,21 +99,21 @@ io.on('connection', function (socket) {
             loggedUsers.addUserInfo(user, socket.id);
 
             if (user.type === 'cashier') {
-                console.log("Connected to cashiers ");
+                console.log(user.username + ' started shift (joined cashiers channel)');
                 socket.join('cashiers');
             }
-            
+
             if (user.type === 'cook') {
-                console.log("Connected to cooks");
+                console.log(user.username + ' started shift (joined cooks channel)');
                 socket.join('cooks');
             }
             if (user.type === 'manager') {
-                console.log("Connected to managers");
+                console.log(user.username + ' started shift (joined managers channel)');
                 socket.join('managers');
                 socket.join('problems');
             }
             if (user.type === 'waiter') {
-                console.log("Connected to waiters");
+                console.log(user.username + ' started shift (joined waiters channel)');
                 socket.join('waiters');
             }
         }
@@ -121,18 +126,22 @@ io.on('connection', function (socket) {
             socket.leave('global');
 
             if(user.type === 'cashier') {
-                socket.leave('cashier');
+                console.log(user.username + ' ended shift (left cashiers channel)');
+                socket.leave('cashiers');
             }
-            
+
             if(user.type === 'cook') {
+                console.log(user.username + ' ended shift (left cooks channel)');
                 socket.leave('cooks');
             }
-            
+
             if(user.type === 'manager') {
+                console.log(user.username + ' ended shift (left managers channel)');
                 socket.leave('managers');
             }
-            
+
             if(user.type === 'waiter') {
+                console.log(user.username + ' ended shift (left waiters channel)');
                 socket.leave('waiters');
             }
         }

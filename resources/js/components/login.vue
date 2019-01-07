@@ -41,7 +41,7 @@
 
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn small round color="info" :disabled="!form.valid" :loading="form.loading" @click="submit">Login</v-btn>
+                <v-btn small round color="primary" :disabled="!form.valid" :loading="form.loading" @click="submit">Login</v-btn>
                 <v-btn small round @click="clear">Clear</v-btn>
             </v-card-actions>
         </v-card>
@@ -99,6 +99,11 @@
                         this.$toasted.success("Login successful", {
                             icon: "fingerprint"
                         });
+
+                        if (this.$store.state.user.shift_active === 1) {
+                            this.$socket.emit('user_enter', this.$store.state.user);
+                        }
+
                         Object.assign(this.$data, initialState());
                     })
                     .catch(error => {
@@ -108,7 +113,7 @@
                     })
                     .finally(() => {
                         this.form.loading = false;
-                        //router.push({ path: 'home' });
+                        /*this.$router.push({ path: 'home' });*/
                     });
             },
             clear() {

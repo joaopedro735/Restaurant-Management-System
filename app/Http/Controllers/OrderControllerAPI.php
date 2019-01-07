@@ -37,7 +37,6 @@ class OrderControllerAPI extends Controller
             );*/
             return OrderResource::collection(Order::where('responsible_cook_id', $id)
                 ->WhereIn('state', ['in preparation', 'confirmed'])
-                ->orWhere('state', 'confirmed')
                 ->orWhereNull('responsible_cook_id')
                 ->where('state', 'confirmed')
                 ->orderByRaw('FIELD(responsible_cook_id, ?) desc', $id)

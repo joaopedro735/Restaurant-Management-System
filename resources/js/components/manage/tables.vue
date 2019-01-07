@@ -35,7 +35,7 @@
                     </tr>
                 </template>
                     <template slot="no-data">
-                        <v-alert :value="true" color="info" icon="info">No tables available</v-alert>
+                        <v-alert :value="true" color="primary" icon="info">No tables available</v-alert>
                     </template>
             </v-data-table>
 
@@ -74,12 +74,7 @@
         watch: {
             pagination: {
                 handler() {
-                    if (this.showPage) {
-                        this.getDataFromApi().then(data => {
-                            this.tables = data.data.tables;
-                            this.totalTables = data.data.totalTables;
-                        });
-                    }
+                    this.getDataFromApi()
                 },
                 deep: true
             }
@@ -88,49 +83,32 @@
             getDataFromApi() {
                 this.loading = true;
 
-                var config = {
-                    headers: {
-                    Authorization: 'Bearer ' + this.$store.state.token,
-                    Accept: 'application/json'
-                    }
-                };
-
-                return axios.all([
-                    axios.get('/api/tables', {
+                axios.get('/api/tables', {
                         params: {
                             page: this.pagination.page, rowsPerPage: this.pagination.rowsPerPage
-                        },
-                        config
-                    })
-                ]).then(axios.spread(tablesRes => {
-                        this.loading = false;
+                        }
+                })
+                .then((tablesRes) => {
+                    this.loading = false;
 
-                        return {
-                            data: {
-                                tables: tablesRes.data.data,
-                                totalTables: tablesRes.data.meta.total
-                            }
-                        };
-                    })
-                );
+                    this.tables = tablesRes.data.data;
+                    this.totalTables = tablesRes.data.meta.total;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+
+                
             },
             deleteTable(table_number, index) {                
                 this.table.table_number = table_number;
-                
-                let config = {
-                    headers: {
-                        Authorization: 'Bearer ' + this.$store.state.token,
-                        Accept: 'application/json'
-                    }
-                };
 
-                axios.delete('/api/tables/' + this.table.table_number, config)
+                axios.delete('/api/tables/' + this.table.table_number)
                     .then(response => {
-                        this.totalTables--;
+                        this.getDataFromApi();
 
                         this.$toasted.success('Table deleted',
                             {
-
                                 icon: 'info',
                             }
                         );
@@ -147,12 +125,7 @@
                 });
             },
             updateList(table) {
-                this.totalTables++;
-
-                if (this.tables.length < this.pagination.rowsPerPage) {
-                    Vue.set(this.tables, this.tables.length, table);
-                    this.tables.sort((a, b) => a.table_number - b.table_number);
-                }
+                this.getDataFromApi();
             },
             getInformationFromLoggedUser() {
                 this.user = this.$store.state.user;

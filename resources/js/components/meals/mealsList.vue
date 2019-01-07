@@ -1,11 +1,13 @@
 <template>
     <div>
         <v-card>
-            <v-card-title class="headline info white--text"
-                          primary-title
-            >
+            <v-card-title class="headline info white--text" primary-title>
                 Meals
                 <v-spacer></v-spacer>
+                <v-btn big flat color="info"
+                    :loading="loadingMealInfo"
+                    :disabled="loadingMealInfo">
+                </v-btn>
                 <v-btn fab dark @click="showAddMeal = true" slot="activator" class="mb-2">
                     <v-icon>add</v-icon>
                 </v-btn>
@@ -18,14 +20,13 @@
                     :total-items="totalMeals"
                     :loading="table.loading"
                     :rows-per-page-items="table.rowsPerPageItems"
-                    class="elevation-1"
-            >
+                    class="elevation-1">
                 <template slot="items" slot-scope="props">
                     <tr>
                         <td>{{ props.item.id}}</td>
                         <td>{{ props.item.table_number }}</td>
                         <td>{{ props.item.responsible_waiter }}</td>
-                        <td>€{{ props.item.total_price_preview }}</td>
+                        <td>{{ props.item.total_price_preview }}€</td>
                         <td>{{ props.item.start }}</td>
                         <td>{{ props.item.state }}</td>
                         <td class="text-xs-right">
@@ -34,11 +35,24 @@
                                     <v-icon>add</v-icon>
                                     &nbsp;Add order
                                 </v-btn>
+                                <v-btn small round color="primary"
+                                    @click.stop="mealInfo(props.item.id)">
+                                        <v-icon>info</v-icon>
+                                        &nbsp;Meal Info
+                                </v-btn>
+                                <v-btn small round color="error"
+                                    @click.stop="checkBeforeTerminateMeal(props.item.id)">
+                                        <v-icon>check</v-icon>
+                                        &nbsp;Terminate meal
+                                </v-btn>
                             </span>
-                            <span v-if="props.item.state === 'Active' && props.item.responsible_waiter === $store.state.user.name">
-                                <v-btn small round color="primary" @click.stop="mealInfo(props.item.id)">
-                                    <v-icon>info</v-icon>
-                                    &nbsp;Meal Info
+                            <!-- <span v-if="props.item.state === 'Active' && props.item.responsible_waiter === $store.state.user.name">
+                                <v-btn small round color="primary"
+                                    :loading="loadingMealInfo"
+                                    :disabled="loadingMealInfo"
+                                    @click.stop="mealInfo(props.item.id)">
+                                        <v-icon>info</v-icon>
+                                        &nbsp;Meal Info
                                 </v-btn>
                             </span>
                             <span v-if="props.item.state === 'Active' && props.item.responsible_waiter === $store.state.user.name">
@@ -46,14 +60,16 @@
                                     <v-icon>check</v-icon>
                                     &nbsp;Terminate meal
                                 </v-btn>
-                            </span>
+                            </span> -->
                         </td>
                     </tr>
                 </template>
             </v-data-table>
         </v-card>
-        <add-meal 
+
+        <add-meal
             :visible="showAddMeal"
+            @update="updateLists"
             @close="showAddMeal = false">
         </add-meal>
         <add-order
@@ -95,6 +111,7 @@
                 selectedMeal: null,
                 selectedMealInfo: {},
                 numberOfOrdersPending: null,
+                loadingMealInfo: false,
                 table: {
                     rowsPerPageItems: [5, 10, 15, 25, 50],
                     loading: true,
@@ -117,7 +134,7 @@
                     this.getDataFromApi();
                 },
                 deep: true
-            },
+            }
         },
         methods: {
             getDataFromApi() {
@@ -144,6 +161,7 @@
                 this.showAddOrder = true;
             },
             mealInfo($mealID) {
+                this.loadingMealInfo = true;
                 axios.get('/api/meals/' + $mealID)
                     .then((response) => {
                         this.selectedMealInfo = response.data.data;
@@ -155,6 +173,9 @@
                     })
                     .catch((error) => {
                         console.log(error);
+                    })
+                    .finally(() => {
+                        this.loadingMealInfo = false;
                     })
             },
             checkBeforeTerminateMeal($mealID) {
@@ -173,6 +194,7 @@
                 axios.patch('/api/meals/terminate/' + $mealID)
                     .then((response) => {
                         this.$toasted.show(response.data.message);
+                        this.$socket.emit("meal_terminated");
                         this.getDataFromApi();
                     })
                     .catch((error) => {
@@ -188,10 +210,8 @@
             AddMeal,
             AddOrder,
             MealInfo
-        },
+        }
     };
 </script>
 
-<style scoped>
 
-</style>

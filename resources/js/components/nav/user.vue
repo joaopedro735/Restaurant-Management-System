@@ -20,7 +20,7 @@
                         @click=""
                         :to="item.value"
                 >
-                    <v-list-tile-title >{{ item.title }}</v-list-tile-title>
+                    <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                 </v-list-tile>
             </v-list>
         </v-menu>
@@ -50,8 +50,8 @@
             }
         },
         computed: {
-          img() {
-              return this.$store.state.user.photo_url;
+            img() {
+                return this.$store.state.user.photo_url;
             }
         },
         mounted() {
@@ -60,7 +60,7 @@
 </script>
 
 <style scoped>
-    .margin{
+    .margin {
         margin-left: 2%;
     }
 </style>

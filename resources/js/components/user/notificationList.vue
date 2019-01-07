@@ -1,10 +1,7 @@
 <template>
     <v-chip>
         <v-menu open-on-hover bottom offset-y>
-            <v-btn
-                    slot="activator"
-                    icon
-            >
+            <v-btn slot="activator" icon>
                 <v-icon>notifications_active</v-icon>
             </v-btn>
 
@@ -12,8 +9,7 @@
                 <v-list-tile
                         v-for="(notification, i) in notifications"
                         :key="i"
-                        @click="goto(notification.where)"
-                >
+                        @click="goto(notification.where)">
                     <v-list-tile-content>
                         <v-list-tile-title><strong>{{ notification.name }}</strong> {{": " + notification.msg }}
                         </v-list-tile-title>
