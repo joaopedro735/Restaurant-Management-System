@@ -92,8 +92,12 @@ const changePassword = Vue.component('change-password', () =>
 const shiftOptions = Vue.component('shift-options', () =>
     import('./components/worker/shiftOptions.vue')
 );
-const tables = Vue.component('manage', () =>
+const tables = Vue.component('tables', () =>
     import('./components/manage/tables.vue')
+);
+
+const dashboard = Vue.component('dashboard', () =>
+    import('./components/manage/dashboard.vue')
 );
 
 // Orders
@@ -134,7 +138,8 @@ const routes = [
     { path: '/account/changePassword', component: changePassword },
     { path: '/management/tables', component: tables, name: 'tables' },
     { path: '/invoices', component: invoices, name: 'invoices'},
-    { path: "/meals", component: meals }
+    { path: "/meals", component: meals },
+    { path: "/management/dashboard", component: dashboard }
 ];
 
 const router = new VueRouter({
