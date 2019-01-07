@@ -1,13 +1,20 @@
 <template>
     <v-dialog persistent v-model="show" @click.stop="show = false" max-width="600px">
         <v-card>
-            <v-card-title class="headline blue darken-4 white--text">New meal</v-card-title>
+            <v-card-title class="headline blue darken-4 white--text">
+                New meal
+            </v-card-title>
 
             <v-card-text>
                 <v-container grid-list-md>
                     <v-layout wrap>
                         <v-flex xs12>
-                            <v-select :items="tables" v-model="tableNumber" label="Table number" solo></v-select>
+                            <v-select
+                                    :items="tables"
+                                    v-model="tableNumber"
+                                    label="Table number"
+                                    solo
+                            ></v-select>
                         </v-flex>
                     </v-layout>
                 </v-container>
@@ -25,21 +32,20 @@
     export default {
         name: "add-meal",
         props: {
-            visible: Boolean
+            visible: Boolean,
         },
         data() {
             return {
                 tableNumber: null,
-                tables: []
-            };
+                tables: [],
+            }
         },
         methods: {
             getTables() {
-                axios
-                    .get("/api/tables/available")
-                    .then(response => {
+                axios.get('/api/tables/available')
+                    .then((response) => {
                         this.tables = response.data.available.map(function (item) {
-                            return item["table_number"];
+                            return item['table_number'];
                         });
                     })
                     .catch(error => {
@@ -50,25 +56,24 @@
                 this.tableNumber = "";
             },
             addMeal() {
-                axios
-                    .post("/api/meals/", {
+                axios.post('/api/meals/', {
                         table_number: this.tableNumber
                     })
                     .then(() => {
                         this.show = false;
                         this.$toasted.success("Meal created successfully", {
                             position: "top-center",
-                            duration: 3000
+                            duration: 3000,
                         });
                         this.$emit("add");
                         this.clear();
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         console.dir(error);
                         this.$toasted.error(error.response.data.message, {
                             icon: "error_outline"
                         });
-                    });
+                    })
             }
         },
         computed: {
@@ -82,14 +87,13 @@
                 set(value) {
                     if (!value) {
                         this.$emit("close");
-                    } else {
-
                     }
                 }
-            }
+            },
         },
-        mounted() {
-        }
-    };
+    }
 </script>
 
+<style scoped>
+
+</style>

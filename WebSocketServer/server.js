@@ -84,7 +84,6 @@ io.on('connection', function (socket) {
     });
 
     socket.on('meal_terminated', () => {
-        console.log("meal");
         io.to('cashiers').emit('new_invoice');
     });
 
@@ -126,7 +125,7 @@ io.on('connection', function (socket) {
             socket.leave('global');
 
             if(user.type === 'cashier') {
-                socket.leave('cashiers');
+                socket.leave('cashier');
             }
 
             if(user.type === 'cook') {

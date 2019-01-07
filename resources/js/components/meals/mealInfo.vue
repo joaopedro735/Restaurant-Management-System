@@ -7,6 +7,7 @@
                 {{ mealInfo.start }}
             </v-card-title>
             <v-list two-line>
+
                 <v-list-tile>
                     <v-list-tile-action>
                         <v-icon color="indigo">person</v-icon>
@@ -38,17 +39,19 @@
                 </v-list-tile>
                 <v-divider></v-divider>
                 <template v-for="(order, index) in mealInfo.orders">
-                    <v-list-tile :key="order.id">
-                        <v-list-tile-content>
-                            <v-list-tile-title>{{ order.item }}</v-list-tile-title>
-                            <v-list-tile-sub-title class="text--primary">{{ order.state }}</v-list-tile-sub-title>
-                            <v-list-tile-sub-title>{{ order.responsible_cook || "No cook assigned" }}
-                            </v-list-tile-sub-title>
-                        </v-list-tile-content>
+                    <v-list-tile
+                            :key="order.id"
+                    >
+                    <v-list-tile-content>
+                        <v-list-tile-title>{{ order.item }}</v-list-tile-title>
+                        <v-list-tile-sub-title class="text--primary">{{ order.state }}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title>{{ order.responsible_cook || "No cook assigned" }}
+                        </v-list-tile-sub-title>
+                    </v-list-tile-content>
 
-                        <v-list-tile-action>
-                            <span class="font-weight-medium">€{{ order.price }}</span>
-                        </v-list-tile-action>
+                    <v-list-tile-action>
+                        <span class="font-weight-medium">€{{ order.price }}</span>
+                    </v-list-tile-action>
                     </v-list-tile>
                 </template>
             </v-list>
@@ -58,10 +61,10 @@
 
 <script>
     export default {
-        name: "meal-info",
+        name: 'meal-info',
         props: {
             visible: Boolean,
-            mealInfo: Object
+            mealInfo: Object,
         },
         computed: {
             show: {
@@ -73,9 +76,10 @@
                         this.$emit("close");
                     }
                 }
-            }
+            },
         }
-    };
+    }
 </script>
 
-
+<style scoped>
+</style>

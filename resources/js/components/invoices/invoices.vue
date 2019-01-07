@@ -1,22 +1,19 @@
 <template>
     <div>
-        <div class="text-xs-center pt-2">
-            <v-btn
-                    color="primary"
-                    :disabled="isTypeAll"
-                    @click="table.pagination.invoicesType = 'all'"
-            >All Invoices
+        <div class="text-xs-center pt-2 ">
+            <v-btn color="primary" :disabled="isTypeAll" @click="table.pagination.invoicesType = 'all'">
+                All Invoices
             </v-btn>
-            <v-btn
-                    color="primary"
-                    :disabled="!isTypeAll"
-                    @click="table.pagination.invoicesType = 'pending'"
-            >Pending Invoices
+            <v-btn color="primary" :disabled="!isTypeAll" @click="table.pagination.invoicesType = 'pending'">
+                Pending Invoices
             </v-btn>
         </div>
 
         <v-card>
-            <v-card-title class="headline info white--text" primary-title>Invoices</v-card-title>
+            <v-card-title class="headline info white--text"
+                          primary-title
+            >Invoices
+            </v-card-title>
 
             <v-data-table
                     :headers="table.headers"
@@ -37,23 +34,16 @@
                         <td>{{ props.item.state }}</td>
                         <td class="text-xs-right">
                             <!--<v-icon-->
-                            <!--@click="seeInvoice(props.item.id)"-->
+                                    <!--@click="seeInvoice(props.item.id)"-->
                             <!--&gt;-->
-                            <!--info-->
+                                <!--info-->
                             <!--</v-icon>-->
                             <span v-if="props.item.state === 'pending'">
-                <v-btn
-                        small
-                        round
-                        color="success"
-                        @click.stop="closeInvoice(props.item.id)"
-                >Close invoice</v-btn>
-              </span>
+                                <v-btn small round color="success" @click.stop="closeInvoice(props.item.id)">Close invoice</v-btn>
+                            </span>
                             <span v-if="props.item.state === 'paid'">
-                <v-btn small round color="success" @click.stop="downloadInvoice(props.item.id)">
-                  <v-icon>cloud_download</v-icon>&nbsp; Download invoice
-                </v-btn>
-              </span>
+                                <v-btn small round color="success" @click.stop="downloadInvoice(props.item.id)"><v-icon>cloud_download</v-icon> &nbsp; Download invoice</v-btn>
+                            </span>
                         </td>
                     </tr>
                 </template>
@@ -65,30 +55,35 @@
             </v-data-table>
         </v-card>
 
-        <v-dialog v-model="dialog" hide-overlay persistent width="300">
-            <v-card color="primary" dark>
-                <v-card-text>Please stand by
-                    <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+        <v-dialog
+                v-model="dialog"
+                hide-overlay
+                persistent
+                width="300"
+        >
+            <v-card
+                    color="primary"
+                    dark
+            >
+                <v-card-text>
+                    Please stand by
+                    <v-progress-linear
+                            indeterminate
+                            color="white"
+                            class="mb-0"
+                    ></v-progress-linear>
                 </v-card-text>
             </v-card>
         </v-dialog>
 
-        <invoices-info
-                :visible="showInvoiceInfoModal"
-                :invoiceInfo="selectedInvoice"
-                @close="showInvoiceInfoModal = false"
-        ></invoices-info>
-        <close-invoice
-                :visible="showCloseInvoiceModal"
-                :invoiceID="selectedInvoiceID"
-                @close="showCloseInvoiceModal = false"
-        ></close-invoice>
+        <invoices-info :visible="showInvoiceInfoModal" :invoiceInfo="selectedInvoice" @close="showInvoiceInfoModal = false"></invoices-info>
+        <close-invoice :visible="showCloseInvoiceModal" :invoiceID="selectedInvoiceID" @close="showCloseInvoiceModal = false"></close-invoice>
     </div>
 </template>
 
 <script>
-    import InvoicesInfo from "./invoicesInfo";
-    import CloseInvoice from "./closeInvoice";
+    import InvoicesInfo from './invoicesInfo';
+    import CloseInvoice from './closeInvoice';
 
     export default {
         data() {
@@ -105,26 +100,20 @@
                     rowsPerPageItems: [5, 10, 15, 25, 50],
                     loading: true,
                     pagination: {
-                        sortBy: "date",
-                        invoicesType: "pending"
+                        "sortBy": "date",
+                        invoicesType: "pending",
                     },
                     headers: [
-                        {
-                            text: "Invoice ID",
-                            value: "id",
-                            align: "left",
-                            sortable: false,
-                            width: "60px"
-                        },
+                        {text: "Invoice ID", value: "id", align: "left", sortable: false, width: "60px"},
                         {text: "Table Number", value: "table_number"},
                         {text: "Responsible Waiter", value: "waiter"},
                         {text: "Price", value: "price", width: "200px"},
                         {text: "Date", value: "date"},
                         {text: "State", value: "state"},
-                        {text: "", sortable: false}
-                    ]
-                }
-            };
+                        {text: "", sortable: false},
+                    ],
+                },
+            }
         },
         watch: {
             "table.pagination": {
@@ -137,13 +126,12 @@
                     this.getDataFromApi();
                 },
                 deep: true
-            }
+            },
         },
         methods: {
             getDataFromApi() {
                 this.table.loading = true;
-                axios
-                    .get(this.invoicesUrl, {
+                axios.get(this.invoicesUrl, {
                         params: {
                             page: this.table.pagination.page,
                             rowsPerPage: this.table.pagination.rowsPerPage
@@ -164,13 +152,12 @@
             seeInvoice($id) {
                 /*this.selectedInvoiceID = $id;*/
                 this.dialog = true;
-                axios
-                    .get("/api/invoices/" + $id)
-                    .then(response => {
+                axios.get('/api/invoices/' + $id)
+                    .then((response) => {
                         this.selectedInvoice = response.data.data;
                         this.showInvoiceInfoModal = true;
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         console.log(error);
                         this.$toasted.error("Some error occurred", {duration: 5000});
                     })
@@ -183,30 +170,30 @@
                 this.showCloseInvoiceModal = true;
             },
             downloadInvoice($id) {
-                axios
-                    .get("/api/invoices/download/" + $id, {responseType: "blob"})
-                    .then(response => {
+                axios.get('/api/invoices/download/' + $id, { responseType: 'blob'})
+                    .then((response) => {
                         const url = window.URL.createObjectURL(new Blob([response.data]));
-                        var tempLink = document.createElement("a");
-                        tempLink.style.display = "none";
+                        var tempLink = document.createElement('a');
+                        tempLink.style.display = 'none';
                         tempLink.href = url;
-                        tempLink.setAttribute("download", "Invoice" + $id + ".pdf");
+                        tempLink.setAttribute('download', "Invoice" + $id + ".pdf");
                         document.body.appendChild(tempLink);
                         tempLink.click();
                         document.body.removeChild(tempLink);
                         window.URL.revokeObjectURL(blobURL);
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         console.log(error);
-                    });
+                    })
             }
         },
         computed: {
             isTypeAll: {
                 get() {
                     return this.table.pagination.invoicesType === "all";
-                }
-            }
+                },
+            },
+
         },
         components: {
             CloseInvoice,
@@ -217,7 +204,9 @@
                 this.getDataFromApi();
             }
         }
-    };
+    }
 </script>
 
+<style scoped>
 
+</style>

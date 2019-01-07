@@ -2,7 +2,7 @@
     <v-card>
         <v-card-title class="headline info white--text" primary-title>Menu
             <v-spacer></v-spacer>
-            <v-btn fab dark v-if="showManagerOptions" slot="activator" @click="showCreateItem = true">
+            <v-btn fab dark  v-if="showManagerOptions" slot="activator" @click="showCreateItem = true">
                 <v-icon>add</v-icon>
             </v-btn>
         </v-card-title>
@@ -15,13 +15,13 @@
                             Drinks
                         </v-card-title>
                         <v-data-table
-                                :headers="headers"
-                                :items="drinks"
-                                :pagination.sync="paginationDrinks"
-                                :rows-per-page-items="rowsPerPageItemsDrinks"
-                                :total-items="totalDrinks"
-                                :loading="loadingDrinks"
-                                class="elevation-1">
+                            :headers="headers"
+                            :items="drinks"
+                            :pagination.sync="paginationDrinks"
+                            :rows-per-page-items="rowsPerPageItemsDrinks"
+                            :total-items="totalDrinks"
+                            :loading="loadingDrinks"
+                            class="elevation-1">
                             <template slot="items" slot-scope="props">
                                 <tr :key="props.item.id" @click="props.expanded = !props.expanded" :class="{
                                     'isExpanded': props.expanded }">
@@ -33,23 +33,19 @@
                                     <td class="text-xs-left">
                                         {{ props.item.name }}
                                     </td>
-                                    <td class="text-xs-left">{{ props.item.description.length > 100 ?
-                                        props.item.description.substr(0, 100) + (' ...') : props.item.description }}
-                                    </td>
+                                    <td class="text-xs-left">{{ props.item.description.length > 100 ? props.item.description.substr(0, 100) + (' ...') : props.item.description }}</td>
                                     <td class="text-xs-rigth">
                                         <h4>{{ appendSign(props.item.price) }}</h4>
                                     </td>
                                     <td class="text-xs-right">
                                         <span>
-                                            <v-btn small round color="info" v-if="showManagerOptions"
-                                                   @click="updateItem(props.index, props.item), props.expanded=!props.expanded">
+                                            <v-btn small round color="info" v-if="showManagerOptions" @click="updateItem(props.index, props.item), props.expanded=!props.expanded">
                                                 <v-icon>edit</v-icon>
                                                 &nbsp; Update
                                             </v-btn>
                                         </span>
                                         <span>
-                                            <v-btn small round color="error" v-if="showManagerOptions"
-                                                   @click="deleteItem(props.index, props.item), props.expanded=!props.expanded">
+                                            <v-btn small round color="error" v-if="showManagerOptions" @click="deleteItem(props.index, props.item), props.expanded=!props.expanded">
                                                 <v-icon>delete</v-icon>
                                                 &nbsp; Delete
                                             </v-btn>
@@ -81,16 +77,15 @@
                             Dishes
                         </v-card-title>
                         <v-data-table
-                                :headers="headers"
-                                :items="dishes"
-                                :pagination.sync="paginationDishes"
-                                :rows-per-page-items="rowsPerPageItemsDishes"
-                                :total-items="totalDishes"
-                                :loading="loadingDishes"
-                                class="elevation-1">
+                            :headers="headers"
+                            :items="dishes"
+                            :pagination.sync="paginationDishes"
+                            :rows-per-page-items="rowsPerPageItemsDishes"
+                            :total-items="totalDishes"
+                            :loading="loadingDishes"
+                            class="elevation-1">
                             <template slot="items" slot-scope="props">
-                                <tr :key="props.item.id" @click="props.expanded = !props.expanded"
-                                    :class="{'isExpanded' : props.expanded}">
+                                <tr :key="props.item.id" @click="props.expanded = !props.expanded" :class="{'isExpanded' : props.expanded}">
                                     <td>
                                         <v-list-tile-avatar>
                                             <img :src="getImagePath(props.item.photo_url)">
@@ -99,23 +94,19 @@
                                     <td class="text-xs-left">
                                         {{ props.item.name }}
                                     </td>
-                                    <td class="text-xs-left">{{ props.item.description.length > 100 ?
-                                        props.item.description.substr(0, 100) + (' ...') : props.item.description }}
-                                    </td>
+                                    <td class="text-xs-left">{{ props.item.description.length > 100 ? props.item.description.substr(0, 100) + (' ...') : props.item.description }}</td>
                                     <td class="text-xs-left">
                                         <h4>{{ appendSign(props.item.price) }}</h4>
                                     </td>
                                     <td class="text-xs-right">
                                         <span>
-                                            <v-btn small round color="info" slot="activator" v-if="showManagerOptions"
-                                                   @click="updateItem(props.index, props.item), props.expanded=!props.expanded">
+                                            <v-btn small round color="info" slot="activator" v-if="showManagerOptions" @click="updateItem(props.index, props.item), props.expanded=!props.expanded">
                                                 <v-icon>edit</v-icon>
                                                 &nbsp; Update
                                             </v-btn>
                                         </span>
                                         <span>
-                                            <v-btn small round color="error" v-if="showManagerOptions"
-                                                   @click="deleteItem(props.index, props.item), props.expanded=!props.expanded">
+                                            <v-btn small round color="error" v-if="showManagerOptions" @click="deleteItem(props.index, props.item), props.expanded=!props.expanded">
                                                 <v-icon>delete</v-icon>
                                                 &nbsp; Delete
                                             </v-btn>
@@ -144,8 +135,7 @@
             </v-layout>
         </v-container>
         <create-item :visible="showCreateItem" @close="showCreateItem = false" @update="newItemRow"></create-item>
-        <update-item :visible="showUpdateItem" @close="showUpdateItem = false" @update="updateItemRow"
-                     :item="currentItem"></update-item>
+        <update-item :visible="showUpdateItem" @close="showUpdateItem = false" @update="updateItemRow" :item="currentItem"></update-item>
     </v-card>
 </template>
 
@@ -179,11 +169,11 @@
                 rowsPerPageItemsDrinks: [15, 25, 50, 100],
                 rowsPerPageItemsDishes: [15, 25, 50, 100],
                 headers: [
-                    {text: '', value: 'photo_url', width: '1px'},
-                    {text: 'Name', value: 'name', width: this.showManagerOptions ? '180px' : '250px'},
-                    {text: 'Description', value: 'description', width: this.showManagerOptions ? '150px' : '550px'},
-                    {text: 'Price', value: 'price', width: '20px'},
-                    {text: '', value: 'actions', width: this.showManagerOptions ? '220px' : ''}
+                    { text: '', value: 'photo_url', width: '1px' },
+                    { text: 'Name', value: 'name', width: this.showManagerOptions ? '180px' : '250px' },
+                    { text: 'Description', value: 'description', width: this.showManagerOptions ? '150px' : '550px' },
+                    { text: 'Price', value: 'price', width: '20px' },
+                    { text: '', value: 'actions', width: this.showManagerOptions ? '220px' : ''}
                 ],
                 showCreateItem: false,
                 showUpdateItem: false
@@ -347,13 +337,13 @@
                             duration: 5000
                         }
                     ); */
-
+                
             }
         },
         mounted() {
             this.getInformationFromLoggedUser();
             this.isUserAWorker(this.user);
-
+            
         },
         components: {
             'create-item': CreateItem,
@@ -371,3 +361,6 @@
     }
 </script>
 
+<style scoped>
+
+</style>

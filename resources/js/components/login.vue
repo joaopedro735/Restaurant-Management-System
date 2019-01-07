@@ -11,8 +11,7 @@
                     transition="scale-transition"
                     dismissible
                     outline
-            >{{ alert.error }}
-            </v-alert>
+            >{{ alert.error }}</v-alert>
 
             <v-card-text>
                 <v-form ref="form" v-model="form.valid" lazy-validation>
@@ -42,8 +41,7 @@
 
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn small round color="info" :disabled="!form.valid" :loading="form.loading" @click="submit">Login
-                </v-btn>
+                <v-btn small round color="info" :disabled="!form.valid" :loading="form.loading" @click="submit">Login</v-btn>
                 <v-btn small round @click="clear">Clear</v-btn>
             </v-card-actions>
         </v-card>

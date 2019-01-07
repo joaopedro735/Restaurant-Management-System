@@ -64,27 +64,25 @@
             return {
                 client: {
                     name: "",
-                    nif: null
-                }
-            };
+                    nif: null,
+                },
+            }
         },
         methods: {
             saveInvoice() {
                 this.$v.$touch();
                 if (!this.$v.$invalid) {
-                    axios
-                        .patch("/api/invoices/close/" + this.invoiceID, this.client)
+                    axios.patch('/api/invoices/close/' + this.invoiceID, this.client)
                         .then(() => {
-                            this.$toasted.success("Invoice closed successfully", {
-                                position: "top-center",
-                                duration: 3000
-                            });
+                            this.$toasted.success("Invoice closed successfully",
+                                {
+                                    position: "top-center",
+                                    duration: 3000,
+                                });
                             this.show = false;
                         })
                         .catch(error => {
-                            this.$toasted.error(error.response.data.message, {
-                                duration: 5000
-                            });
+                            this.$toasted.error(error.response.data.message, {duration: 5000});
                             console.log(error);
                         });
                 }
@@ -110,19 +108,20 @@
                 const errors = [];
                 if (!this.$v.client.name.$dirty) return errors;
                 !this.$v.client.name.required && errors.push("Name is required");
-                !this.$v.client.name.alpha &&
-                errors.push("Name can only contain letters and spaces");
+                !this.$v.client.name.alpha && errors.push("Name can only contain letters and spaces");
                 return errors;
             },
             nifErrors() {
                 const errors = [];
                 if (!this.$v.client.nif.$dirty) return errors;
                 !this.$v.client.nif.required && errors.push("NIF is required");
-                !this.$v.client.nif.minLength | !this.$v.client.nif.maxLength &&
-                errors.push("NIF must be 9 digits");
+                !this.$v.client.nif.minLength | !this.$v.client.nif.maxLength && errors.push("NIF must be 9 digits");
                 return errors;
             }
         }
-    };
+    }
 </script>
 
+<style scoped>
+
+</style>

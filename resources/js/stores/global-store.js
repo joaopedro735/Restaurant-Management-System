@@ -20,7 +20,7 @@ export default new Vuex.Store({
             axios.defaults.headers.common.Authorization = undefined;
         },
         setToken: (state, token) => {
-            state.token = token;
+            state.token= token;
             localStorage.setItem('token', token);
             axios.defaults.headers.common.Authorization = "Bearer " + token;
         },
@@ -36,7 +36,7 @@ export default new Vuex.Store({
             localStorage.removeItem('user');
         },
         setUser: (state, user) => {
-            state.user = user;
+            state.user =  user;
             localStorage.setItem('user', JSON.stringify(user));
         },
         setBlock: (state, isBlocked) => {
@@ -58,7 +58,7 @@ export default new Vuex.Store({
         },
         setDuration: (state, duration) => {
             console.log(user);
-            state.duration = duration;
+            state.duration =  duration;
             sessionStorage.setItem('duration', JSON.stringify(duration));
         },
         clearDuration: (state) => {
