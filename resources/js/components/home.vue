@@ -6,7 +6,7 @@
                 align-center
                 v-if="isLogged === true">
 
-                <shift-options v-if="isLogged === true && worker === true && !store.state.user.blocked"></shift-options>
+                <shift-options v-if="isLogged === true && worker === true && !$store.state.user.blocked"></shift-options>
             </v-layout>
 
             <v-layout
