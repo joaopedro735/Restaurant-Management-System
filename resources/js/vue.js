@@ -39,7 +39,7 @@ Vue.use(store);
 Vue.use(Vuetify);
 Vue.use(new VueSocketIO({
     debug: false,
-    connection: 'http://127.0.0.1:8080'
+    connection: 'https://restaurantte.tk:8080'
 }));
 Vue.use(Vuelidate);
 

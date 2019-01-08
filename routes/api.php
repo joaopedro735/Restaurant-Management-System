@@ -13,7 +13,6 @@
 Route::group([
     'middleware' => ['auth:api', 'isBlocked']
 ], function () {
-    Route::post('logout', 'LoginControllerAPI@logout');
 
     Route::group([
         'prefix' => 'users'
@@ -90,7 +89,7 @@ Route::group([
         Route::get('/{id}', 'InvoiceControllerAPI@show');
     });
 
-    
+
 
     Route::group([
         'prefix' => 'meals',
@@ -122,6 +121,9 @@ Route::group([
         Route::delete('/{id}', 'ItemControllerAPI@destroy');
     });
 });
+
+Route::post('logout', 'LoginControllerAPI@logout')->middleware('auth:api');
+
 
 Route::group([
     'prefix' => 'menu'
