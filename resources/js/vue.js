@@ -244,7 +244,7 @@ const app = new Vue({
                 }
             );
 
-            store.commit('setBlock', true);
+            store.commit('clearUserAndToken');
 
             this.$router.push('/menu');
         },

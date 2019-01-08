@@ -7,6 +7,7 @@ define('YOUR_SERVER_URL', env('APP_URL'));
 define('CLIENT_ID', env('CLIENT_ID'));
 define('CLIENT_SECRET', env('CLIENT_SECRET'));
 
+use App\User;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,11 @@ class LoginControllerAPI extends Controller
     public function login(Request $request)
     {
         $http = new \GuzzleHttp\Client;
-
+        $user = User::where('email', $request->email)->first();
+        if ($user->blocked === 1) {
+            return response()->json(
+                ['msg'=>'User blocked'], 401);
+        }
         $response = $http->post(YOUR_SERVER_URL.'/oauth/token', [
             'form_params' => [
                 'grant_type' => 'password',
