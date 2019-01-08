@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 /*var fs = require('fs');
-var https = require('https').createServer();
+var https = require('https');
 var options = {
     key: fs.readFileSync('/etc/letsencrypt/live/restaurantte.tk/privkey.pem'),
     cert: fs.readFileSync('/etc/letsencrypt/live/restaurantte.tk/cert.pem'),
