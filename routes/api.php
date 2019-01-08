@@ -73,14 +73,24 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => 'invoices'
+        'prefix' => 'invoices',
+        'middleware' => 'manager'
+    ], function () {
+        Route::patch('/closeNotPaid/{id}', 'InvoiceControllerAPI@closeAsNotPaid');
+    });
+
+    Route::group([
+        'prefix' => 'invoices',
+        'middleware' => 'cashier.manager'
     ], function () {
         Route::get('/', 'InvoiceControllerAPI@index');
         Route::get('/pending', 'InvoiceControllerAPI@pending');
         Route::get('/download/{id}', 'InvoiceControllerAPI@downloadPDF');
-        Route::get('/{id}', 'InvoiceControllerAPI@show');
         Route::patch('/close/{id}', 'InvoiceControllerAPI@close');
+        Route::get('/{id}', 'InvoiceControllerAPI@show');
     });
+
+    
 
     Route::group([
         'prefix' => 'meals',

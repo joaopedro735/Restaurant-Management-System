@@ -128,6 +128,34 @@ class InvoiceControllerAPI extends Controller
         return $invoice;
     }
 
+    public function closeAsNotPaid(Request $request, $id)
+    {
+        $invoice = Invoice::findOrFail($id);
+        if ($invoice->state !== "pending") {
+            return response()->json([
+                "message" => "Not possible to change this invoice"
+            ], 400);
+        }
+
+        $meal = Meal::findOrFail($invoice->meal_id);
+
+        if ($meal->state !== "terminated") {
+            return response()->json([
+                "message" => "Associated meal isn't terminated"
+            ], 400);
+        }
+
+        $invoice->state = 'not paid';
+        $meal->state = "not paid";
+        $invoice->save();
+        $meal->save();
+
+        return response()->json([
+            "message" => "Invoice closed as not paid"
+        ]);
+    }
+    
+
     /**
      * Remove the specified resource from storage.
      *

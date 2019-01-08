@@ -173,6 +173,13 @@ io.on('connection', function (socket) {
     socket.on('invoice_closed', function (invoiceID) {
         const user = loggedUsers.userInfoBySocketID(socket.id).user;
         io.to('managers').emit('invoice_close', {msg:'Invoice #' + invoiceID + ' was paid', name: user.name, where: '/invoices'});
+        io.to('cashiers').emit('invoice_closed');
+    });
+
+    socket.on('update_invoices', function () {
+        io.to('cashiers').emit('invoice_closed');
+        io.to('managers').emit('invoice_closed');
+
     });
 
     socket.on('problems_Management', (msg, where) => {

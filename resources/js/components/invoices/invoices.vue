@@ -39,10 +39,22 @@
                                 <!--info-->
                             <!--</v-icon>-->
                             <span v-if="props.item.state === 'pending'">
-                                <v-btn small round color="success" @click.stop="closeInvoice(props.item.id)">Close invoice</v-btn>
+                                <v-btn small round color="success"
+                                    @click.stop="closeInvoice(props.item.id)">
+                                        Close invoice
+                                </v-btn>
+                                <v-btn small round color="error"
+                                    v-if="$store.state.user.type === 'manager'"
+                                    @click.stop="closeInvoiceAsNotPaid(props.item.id)">
+                                    Not paid
+                                </v-btn>
                             </span>
                             <span v-if="props.item.state === 'paid'">
-                                <v-btn small round color="success" @click.stop="downloadInvoice(props.item.id)"><v-icon>cloud_download</v-icon> &nbsp; Download invoice</v-btn>
+                                <v-btn small round color="success"
+                                    @click.stop="downloadInvoice(props.item.id)">
+                                        <v-icon>cloud_download</v-icon>
+                                        &nbsp;Download invoice
+                                </v-btn>
                             </span>
                         </td>
                     </tr>
@@ -84,6 +96,7 @@
         <close-invoice
             :visible="showCloseInvoiceModal"
             :invoiceID="selectedInvoiceID"
+            :notPaid="notPaid"
             @close="showCloseInvoiceModal = false"
             @update="updateList">
         </close-invoice>
@@ -103,6 +116,7 @@
                 selectedInvoiceID: null,
                 selectedInvoice: {},
                 dialog: false,
+                notPaid: false,
                 showInvoiceInfoModal: false,
                 showCloseInvoiceModal: false,
                 table: {
@@ -180,6 +194,38 @@
                 this.showCloseInvoiceModal = true;
                 this.getDataFromApi();
             },
+            closeInvoiceAsNotPaid($id) {
+                this.table.loading = true;
+
+                console.log($id);
+
+                axios.patch('/api/invoices/closeNotPaid/' + $id)
+                .then(() => {
+                    this.$emit('update');
+
+                    let message = 'Invoice closed';
+
+                    this.$socket.emit('update_invoices');
+
+                    this.$toasted.success("Invoice closed successfully",
+                        {
+                            icon: 'info'
+                        }
+                    );
+                })
+                .catch(error => {
+                    this.$toasted.error(error.response.data.message,
+                        {
+                            icon: 'error'
+                        }
+                    );
+                })
+                .finally(() => {
+                    this.table.loading = false;
+                });
+
+                this.getDataFromApi();
+            },
             downloadInvoice($id) {
                 axios.get('/api/invoices/download/' + $id, { responseType: 'blob'})
                     .then((response) => {
@@ -217,7 +263,7 @@
             new_invoice() {
                 this.getDataFromApi();
             },
-            invoice_close() {
+            invoice_closed() {
                 this.getDataFromApi();
             }
         }

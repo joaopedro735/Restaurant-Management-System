@@ -2,7 +2,7 @@
     <div>
         <meal-list></meal-list>
         <br/>
-        <orders-list></orders-list>
+        <orders-list v-if="$store.state.user.type === 'waiter'"></orders-list>
     </div>
 </template>
 <script>
