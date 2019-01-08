@@ -32,18 +32,21 @@
                         <td>{{ props.item.start }}</td>
                         <td>{{ props.item.state }}</td>
                         <td class="text-xs-right">
-                            <span v-if="props.item.state === 'Active' && props.item.responsible_waiter === $store.state.user.name">
+                            <span v-if="props.item.state === 'Active'">
                                 <v-btn small round color="success"
+                                    v-if="props.item.responsible_waiter === $store.state.user.name"
                                     :disbled="loadingMealInfo"
                                     @click.stop="addOrder(props.item.id)">
                                         Add order
                                 </v-btn>
                                 <v-btn small round color="primary"
+                                    v-if="props.item.responsible_waiter === $store.state.user.name || $store.state.user.type === 'manager'"
                                     :disbled="loadingMealInfo"
                                     @click.stop="mealInfo(props.item.id)">
                                         Meal Info
                                 </v-btn>
                                 <v-btn small round color="error"
+                                    v-if="props.item.responsible_waiter === $store.state.user.name"
                                     :disbled="loadingMealInfo"
                                     @click.stop="checkBeforeTerminateMeal(props.item.id)">
                                         Terminate meal

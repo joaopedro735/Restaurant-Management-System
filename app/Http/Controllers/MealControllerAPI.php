@@ -20,9 +20,9 @@ class MealControllerAPI extends Controller
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        return MealsResource::collection(Meal::paginate(10));
+        return MealsResource::collection(Meal::orderBy('updated_at', 'desc')->paginate($request->input('rowsPerPage', 15)));
     }
 
     public function active(Request $request)

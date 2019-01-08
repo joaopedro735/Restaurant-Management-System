@@ -20,10 +20,10 @@ class InvoiceControllerAPI extends Controller
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
         if (request()->has("page")) {
-            return InvoicesResource::collection(Invoice::orderBy('created_at', 'desc')->paginate(request()->input("rowsPerPage", 10)));
+            return InvoicesResource::collection(Invoice::orderBy('created_at', 'desc')->paginate(request()->input("rowsPerPage", 15)));
         }
         return response()->json([
             "message" => "Request needs page parameter",

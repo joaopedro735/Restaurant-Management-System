@@ -101,7 +101,6 @@ Route::group([
         Route::post('/addOrder/{id}', 'MealControllerAPI@addOrderToMeal');
         Route::get('/checkTerminate/{id}', 'MealControllerAPI@mealHasPendingOrders');
         Route::patch('/terminate/{id}', 'MealControllerAPI@terminateMeal');
-        Route::get('/{id}', 'MealControllerAPI@show');
         Route::get('/{id}/average', 'MealControllerAPI@waiterMealsPerDay');
     });
 
@@ -110,6 +109,7 @@ Route::group([
         'middleware' => 'waiter.manager'
     ], function () {
         Route::get('/', 'MealControllerAPI@index');
+        Route::get('/{id}', 'MealControllerAPI@show');
         Route::patch('/terminate/{id}', 'MealControllerAPI@terminateMeal');
     });
 

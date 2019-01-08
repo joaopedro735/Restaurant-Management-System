@@ -170,6 +170,8 @@ router.beforeEach((to, from, next) => {
         if (!store.state.user) {
             next('/login');
             return;
+        } else if(store.state.user.blocked) {
+            next('/');
         }
     }
     next();
@@ -202,6 +204,10 @@ const app = new Vue({
     },
     created() {
         store.commit('loadTokenAndUserFromSession');
+        axios.get("api/users/me")
+            .then(response => {
+                this.$store.commit("setUser", response.data.data);
+            })
     },
     sockets: {
         connect() {
@@ -371,6 +377,9 @@ const app = new Vue({
             });
             this.notifications.push(dataFromServer);
         }
+    },
+    mounted() {
+        
     },
 });
 

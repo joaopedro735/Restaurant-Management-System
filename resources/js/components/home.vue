@@ -2,19 +2,18 @@
     <div>
         <section>
             <v-layout
-                    column
-                    align-center
-                    v-if="isLogged === true">
+                column
+                align-center
+                v-if="isLogged === true">
 
-                <shift-options v-if="isLogged === true && worker === true"></shift-options>
-
+                <shift-options v-if="isLogged === true && worker === true && !store.state.user.blocked"></shift-options>
             </v-layout>
 
             <v-layout
                 column
                 align-center
                 v-if="isLogged === false || worker === false">
-                <h1>Sup y'all</h1>
+                    <h1>Sup y'all</h1>
             </v-layout>
         </section>
     </div>
