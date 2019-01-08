@@ -189,6 +189,7 @@ io.on('connection', function (socket) {
 
     socket.on('disconnect', function () {
         console.log("disconnected");
+        user.user.user;
         const user = loggedUsers.removeUserInfoBySocketID(socket.id);
     });
 });
