@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-define('YOUR_SERVER_URL', env('APP_URL'));
+define('YOUR_SERVER_URL', config('app.url'));
 // Check "oauth_clients" table for next 2 values:
-define('CLIENT_ID', env('CLIENT_ID'));
-define('CLIENT_SECRET', env('CLIENT_SECRET'));
+define('CLIENT_ID', config('app.client_id'));
+define('CLIENT_SECRET', config('app.client_secret'));
 
 use App\User;
 use Auth;
