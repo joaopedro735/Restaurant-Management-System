@@ -11,7 +11,7 @@
 |
 */
 Route::group([
-    'middleware' => 'auth:api'
+    'middleware' => ['auth:api', 'isBlocked']
 ], function () {
     Route::post('logout', 'LoginControllerAPI@logout');
 

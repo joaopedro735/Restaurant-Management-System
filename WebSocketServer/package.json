@@ -1,15 +1,14 @@
 {
   "private": true,
   "scripts": {
-    "preinstall": "npm install pm2 -g",
-    "dev": "cross-env NODE_ENV=development nodemon server.js",
-    "prod": "cross-env NODE_ENV=production"
+    "dev": "nodemon server.js",
+    "prod": "npx pm2 start ecosystem.config.js --env production"
   },
   "dependencies": {
+    "pm2": "^3.2.4",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
-    "cross-env": "^5.2.0",
     "nodemon": "^1.18.9"
   }
 }
