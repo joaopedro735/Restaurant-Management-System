@@ -1,12 +1,13 @@
 /*jshint esversion: 6 */
 /*var fs = require('fs');
-var app = require('https').createServer();
+var https = require('https').createServer();
 var options = {
     key: fs.readFileSync('/etc/letsencrypt/live/restaurantte.tk/privkey.pem'),
     cert: fs.readFileSync('/etc/letsencrypt/live/restaurantte.tk/cert.pem'),
     ca: fs.readFileSync('/etc/letsencrypt/live/restaurantte.tk/chain.pem'),
 };*/
 
+/*var app = https.createServer(options);*/
 var app = require('http').createServer();
 var io = require('socket.io')(app);
 var LoggedUsers = require('./loggedusers.js');
